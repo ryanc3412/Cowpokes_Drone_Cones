@@ -1,0 +1,143 @@
+
+body {
+	margin: 0px;
+	background-color:008080;
+}
+
+
+div.page-container {
+	margin: 20px;
+	background-color: #c0c0c0;
+	border-style: outset;
+	border-width: 4px;
+
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #c0c0c0;
+  border-style: outset;
+  border-width: thick;
+}
+
+.topnav a {
+	color: black;
+	float: left;
+	text-align: center;
+	padding: 15px;	
+	text-decoration: none;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+
+.topnav a:hover {
+	background-color: #cfcfcf;
+	color: white;
+}
+
+.topnav a:active {
+  background-color: #04AA6D;
+  color: black;
+
+}
+
+
+/* Column identifiers for making horizontal columns */
+.column {
+	float: left;
+	margin: 20px;
+	background-color: #c0c0c0;
+	border-style: inset;
+	border-width: thick;
+
+
+}
+
+.left {
+	width: 25%;
+	background-color: #dbdbdb;
+	padding: 4px;
+	border-style: inset;
+}
+
+.middle {
+	width: 25%;
+	background-color: white;
+}
+
+.right {
+	width: 25%;
+	background-color: white;
+}
+
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.spacer {
+	padding: 10px;
+}
+
+.margin {
+	padding: 10px;
+	background-color: white;
+}
+
+.bar {
+	background-color: #000083;
+	color: white;
+	padding: 4px;
+	font-family: sans-serif;
+	font-size: 10px;
+}
+
+.pad {
+
+
+}
+
+
+a.order {
+	margin: 30px;
+	padding: 5px;
+	background-color: white;
+	color: grey;
+	border-style: outset;
+	font-family: sans-serif;
+	font-size: 15px;
+}
+
+a.order:hover {
+	color: #c0c0c0;
+
+}
+
+
+div.outer-border {
+	background-color: #dbdbdb;
+	padding: 4px;
+
+}
+
+div.inner-border {
+	background-color: white;
+	padding: 10px;
+	border-style: inset;
+	border-width: 2px;
+	
+}
+
+.baricon {
+	position: fixed;
+	right: 15px;
+	top: 7px;
+}
+
+.peopleicon {
+	position: fixed;
+	left: 15px;
+	bottom: 15px;
+}
+
