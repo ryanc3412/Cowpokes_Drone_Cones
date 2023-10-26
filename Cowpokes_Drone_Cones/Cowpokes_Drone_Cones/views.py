@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from .models import *
+from ..drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
@@ -41,8 +41,12 @@ class UserView:
         return render(request, 'URL_GOES_HERE', context)
 
 class DroneView:
-    def drone_dash():
-        pass
+    def drone_dash(request):
+        drone_list = Drone.objects.order_by('-droneName')
+        context = {
+            'drone_list': drone_list,
+        }
+        return render(request, 'URL_GOES_HERE', context)
 
     def view_drones():
         pass
