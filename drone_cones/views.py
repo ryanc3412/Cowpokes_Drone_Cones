@@ -7,13 +7,14 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
 
 class LoginView:
-    def login(request, email, user_password):
-        user = authenticate(username=email, password=user_password)
-        context = UserView.userDash()
-        if user is not None:
-            return render(request, 'URL_GOES_HERE', context)
-        else:
-            return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
+    def login(request):
+        return render(request, 'drone_cones/login_page.html')
+        # user = authenticate(username=email, password=user_password)
+        # context = UserView.userDash()
+        # if user is not None:
+        #     return render(request, 'dronecones/login', context)
+        # else:
+        #     return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
 
 
     def register(first_name, last_name, email, password):
@@ -38,7 +39,7 @@ class UserView:
         context = {
             'flavor_list': flavor_list,
         }
-        return render(request, 'URL_GOES_HERE', context)
+        return render(request, 'drone_cones/home_page.html', context)
 
 class DroneView:
     def drone_dash(request):
