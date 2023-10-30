@@ -6,12 +6,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
 
+def homePage(request):
+    return render(request, 'drone_cones/home_page.html', {})
+
 class LoginView:
-    def login(request, email, user_password):
+    def loginPage(request, email, user_password):
         user = authenticate(username=email, password=user_password)
         context = UserView.userDash()
         if user is not None:
-            return render(request, 'URL_GOES_HERE', context)
+            return render(request, 'drone_cones/login.html', context)
         else:
             return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
 
