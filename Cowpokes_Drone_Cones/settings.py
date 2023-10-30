@@ -123,6 +123,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/dronecones/home/"
+LOGIN_REDIRECT_URL = "/dronecones/"
 
 LOGOUT_REDIRECT_URL = "/dronecones/accounts/login/"
