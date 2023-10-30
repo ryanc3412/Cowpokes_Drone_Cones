@@ -9,8 +9,6 @@
 	<head>
         	<meta charset="utf-8"/>
         	<title>Home Page</title>
-		<link rel="stylesheet" type="text/css" href="style.css"/>
-
 	</head>
 
 
@@ -20,8 +18,9 @@
 			<a href="order_page.html"> <u>O</u>rder </a>
 			<a href="drone_page.html"> <u>D</u>rones </a>
 			<a href="account_page.html"> <u>A</u>ccount </a>
-			<img class="baricon" src="../static/Cowpokes_Drone_Cones/computer.png" alt="test">
-			<img class="peopleicon" src="../static/Cowpokes_Drone_Cones/address_book_users.png" alt="test">
+			<a href="/dronecones/logout">Logout</a>
+			<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="computer">
+			<img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="address book">
 		</div>
 
 

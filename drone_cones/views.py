@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from .models import *
@@ -23,6 +23,10 @@ class LoginView:
         user.last_name = last_name
         user.save()
         return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
+    
+    def redirect_view(request):
+        response = redirect('/dronecones/accounts/logout/')
+        return response
         
     def logout():
         pass

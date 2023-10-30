@@ -1,12 +1,16 @@
 
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'drone_cones'
 
 urlpatterns = [
-    path('login/', views.LoginView.login, name='login'),
+    # path('login/', views.LoginView.login, name='login'),
     path('home/', views.UserView.user_dash, name='home'),
+    path('', views.UserView.user_dash, name='home'),
+    path('accounts/', include("django.contrib.auth.urls")),
+    path('logout/', views.LoginView.redirect_view, name='redirect'),
+
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
 
