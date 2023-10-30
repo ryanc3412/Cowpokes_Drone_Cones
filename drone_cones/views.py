@@ -5,9 +5,20 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
+from django.template import loader
+
+
+def dronePage(request):
+    return render(request, "drone_cones/drone_page.html", {})
+
+def orderPage(request):
+    return render(request, "drone_cones/order_page.html", {})
 
 def homePage(request):
     return render(request, 'drone_cones/home_page.html', {})
+
+def accountPage(request):
+    return render(request, 'drone_cones/account_page.html', {})
 
 class LoginView:
     def loginPage(request, email, user_password):
@@ -41,7 +52,7 @@ class UserView:
         context = {
             'flavor_list': flavor_list,
         }
-        return render(request, 'URL_GOES_HERE', context)
+        #return render(request, 'URL_GOES_HERE', context)
 
 class DroneView:
     def drone_dash(request):
