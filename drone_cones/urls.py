@@ -8,7 +8,10 @@ urlpatterns = [
     # fill in here with urls
 
     path("", views.homePage, name='home'),
-    path("home", views.homePage, name='home')
+    path("home", views.homePage, name='home'),
+    path("order", views.orderPage, name="order"),
+    path("drones", views.dronePage, name="drones"),
+    path("account", views.accountPage, name="accounts")
     # path('login/', views.loginPage, name='login'),
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
