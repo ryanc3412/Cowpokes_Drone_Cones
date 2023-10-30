@@ -8,6 +8,9 @@ from django.contrib.auth.views import redirect_to_login
 from django.template import loader
 
 
+def createAccount(request):
+    return render(request, "drone_cones/create_account_page.html")
+
 def droneRegister(request):
     return render(request, "drone_cones/drone_register_page.html")
 
