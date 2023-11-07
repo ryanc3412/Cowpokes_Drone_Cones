@@ -16,16 +16,17 @@ class Account(models.Model):
 
 class Drone(models.Model):
     id = models.AutoField(primary_key=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     droneName = models.CharField(max_length=100)
     size = models.CharField(max_length=100)
     scoops = models.IntegerField()
-    account = models.IntegerField()
     isActive = models.BooleanField(default = False)
     dateRegistered = models.DateField()
 
 class Orders(models.Model):
     id = models.AutoField(primary_key=True)
     account = models.IntegerField()
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
     address2 = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
@@ -40,7 +41,7 @@ class Orders(models.Model):
 
 class Admins(models.Model):
     id = models.AutoField(primary_key=True)
-    account = models.IntegerField()
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     accessLevel = models.CharField(max_length=100)
 
 class Products(models.Model):
