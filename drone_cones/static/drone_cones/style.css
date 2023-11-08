@@ -141,3 +141,34 @@ div.inner-border {
 	bottom: 15px;
 }
 
+.orderBar {
+	font-size: x-large;
+	text-align: center;
+}
+
+.productDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.productDisplay:hover {
+	background-color: 008080;
+}
+
+.productBox {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.warning {
+	color: red;
+	display: inline;
+}
+
+.checkoutButton {
+	text-align: right;
+}
