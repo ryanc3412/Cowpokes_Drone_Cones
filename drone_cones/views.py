@@ -29,6 +29,9 @@ def homePage(request):
 def accountPage(request):
     return render(request, 'drone_cones/account_page.html', {})
 
+def orderConfirmation(request): 
+    return render(request, 'drone_cones/confirmation_page.html', {})
+
 class LoginView:
     def loginPage(request, email, user_password):
         user = authenticate(username=email, password=user_password)
