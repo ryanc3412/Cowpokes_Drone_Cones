@@ -10,7 +10,10 @@ div.page-container {
 	background-color: #c0c0c0;
 	border-style: outset;
 	border-width: 4px;
+}
 
+h1.center {
+    text-align: center;
 }
 
 .topnav {
@@ -172,3 +175,5 @@ div.inner-border {
 .checkoutButton {
 	text-align: right;
 }
+
+

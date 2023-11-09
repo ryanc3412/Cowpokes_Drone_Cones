@@ -1,12 +1,13 @@
 {% load static %}
 
-<DOCTYPE html
+<DOCTYPE html>
 
 <html lang="en">
 	<head>
         	<meta charset="utf-8"/>
         	<title>Confirmation Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}"/>
+		<script src="{% static 'drone_cones/static.js' %}"></script>
 
 	</head>
 
@@ -22,7 +23,18 @@
 
 
 		<div class="page-container">
-			<div> FEATURED CONES </div>
+			<div> FEATURED CONES 
+				<p>
+					Delivery In:
+				</p>
+				<h1 class ="center" id = "count"> 
+				</h1>
+			<script>
+        		window.onload = function() {
+            		timer(); // Displays 10 minute timer
+        		};
+    		</script>
+    		</div>
 
 		</div>
     </body>
