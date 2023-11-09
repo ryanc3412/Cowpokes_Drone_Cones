@@ -14,8 +14,9 @@ urlpatterns = [
     path("account", views.accountPage, name="accounts"),
     path("drone_register", views.droneRegister, name="drone_register"),
     path("create_account", views.createAccount, name="create_account"),
-    path("order_confirmation/", views.orderConfirmation, name="order_confirmation"),
-    # path('login/', views.loginPage, name='login'),
+    path("order_confirmation", views.orderConfirmation, name="order_confirmation"),
+
+    #path('login/', views.loginPage, name='login'),
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
 
