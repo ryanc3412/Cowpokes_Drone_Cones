@@ -29,7 +29,7 @@ def homePage(request):
 def accountPage(request):
     return render(request, 'drone_cones/account_page.html', {})
 
-def confirmationPage(request): 
+def orderConfirmation(request): 
     return render(request, 'drone_cones/confirmation_page.html', {})
 
 class LoginView:
