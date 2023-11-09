@@ -5,6 +5,7 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.decorators import login_required
 
 class LoginView:
     def login(request):
@@ -38,6 +39,7 @@ class UserView:
     def view_profile():
         pass
 
+    @login_required
     def user_dash(request):
         flavor_list = Products.objects.order_by('-type')
         context = {
