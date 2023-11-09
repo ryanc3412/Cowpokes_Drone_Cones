@@ -1,12 +1,13 @@
 {% load static %}
 
-<DOCTYPE html
+<DOCTYPE html>
 
 <html lang="en">
 	<head>
         	<meta charset="utf-8"/>
         	<title>Confirmation Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}"/>
+		<script src="{% static 'drone_cones/static.js' %}"></script>
 
 	</head>
 
@@ -34,6 +35,18 @@
 			{% else %}
 			<div>No products available</div>
 			{% endif %}
+
+			<div> Confirmation 
+				<p>
+					Delivery In:
+				</p>
+				<h1 id = "count"></h1>
+			<script>
+        		window.onload = function() {
+            		timer(); // Displays 10 minute timer
+        		};
+    		</script>
+    		</div>
 
 		</div>
     </body>

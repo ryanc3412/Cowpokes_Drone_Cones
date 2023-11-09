@@ -6,7 +6,6 @@ app_name = 'drone_cones'
 urlpatterns = [
 
     # fill in here with urls
-
     path("", views.homePage, name="home"),
     path("home", views.homePage, name="home"),
     path("order", views.orderPage, name="order"),
@@ -17,6 +16,7 @@ urlpatterns = [
     path("order_confirmation", views.orderConfirmation, name="order_confirmation"),
 
     #path('login/', views.loginPage, name='login'),
+    # path('login/', views.loginPage, name='login'),
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
 
