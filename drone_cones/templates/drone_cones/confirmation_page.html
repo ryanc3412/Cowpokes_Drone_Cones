@@ -23,19 +23,16 @@
                         <img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="test">
 		</div>
 
-
+		{% if orders %}
+		{% for order in orders %}
 		<div class="page-container">
-			<div> FEATURED CONES </div>
-			{% if orders %}
-			{% for order in orders %}
-			<div class="productDisplay">
-				 Your order is being sent to {{order.address}}</div>
+			<div> YOUR ORDER IS ON THE WAY! </div>
+			<div class="page-container">
+				 Your order is being sent to {{order.address}} in {{order.city}}, {{order.state}}</div>
 			</div>
-			{% endfor %}
-			{% else %}
-			<div>No products available</div>
-			{% endif %}
-
+		{% endfor %}
+		{% endif %}
+			<div class="page-container">
 			<div> Confirmation 
 				<p>
 					Delivery In:
@@ -47,7 +44,7 @@
         		};
     		</script>
     		</div>
-
+			</div>
 		</div>
     </body>
 </html>
