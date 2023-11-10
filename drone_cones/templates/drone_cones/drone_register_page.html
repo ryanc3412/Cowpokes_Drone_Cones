@@ -25,23 +25,26 @@
 		<div class="page-container">
 			<div> REGISTER YOUR DRONE </div>
 
-			<div class="shift"> Enter your drone info below </div>
-			<label class="spacer"> Drone Name </label>
-			<input type="text"> </input> 	
-			<div></div>
-			<label class="spacer"> Drone Type </label>
-			<input type="text"> </input> 
-			<div></div>
-			<label class="spacer"> Drone Size </label>
-			<input type="text"> </input> 
-			<div></div>
-			<label class="spacer"> Carrying Capacity </label>
-			<input type="text"> </input> 
-			<div></div>
-			<label class="spacer"> Cone Capacity </label>
-			<input type="text"> </input> 
-			<div></div>
-			<input class="shift" type="submit" value="Submit">
+
+			<form action="{% url 'drone_cones:add_drone'%}" method = "post">
+
+				{% csrf_token %}
+   				{{ form }}
+
+                                <div class="shift"> Enter your drone info below </div>
+
+                                <label class="spacer" for="Drone Name">DRONE NAME </label>
+                                <input id="Drone Name" type="text" name="drone_name" maxlength = "100" required>
+				<div></div>
+                                <label class="spacer" for="Size"> SIZE </label>
+                                <input id="Size" type="text" name="size" maxlength = "100" required>
+             			<div></div> 
+                                <label class="spacer" for="Scoops"> SCOOPS </label> 
+                                <input id="Scoops" type="number" name="scoops" maxlength = "100" required>                   
+                                <div></div>
+                                <input type="submit" value="ADD">
+
+			</form>
 		</div>
 	</body>
 </html>
