@@ -10,7 +10,12 @@ div.page-container {
 	background-color: #c0c0c0;
 	border-style: outset;
 	border-width: 4px;
+}
 
+h1.center {
+    text-align: center;
+    margin: 0; /* Reset the default margin */
+    padding: 0; /* Reset the default padding */
 }
 
 .topnav {
@@ -140,4 +145,37 @@ div.inner-border {
 	left: 15px;
 	bottom: 15px;
 }
+
+.orderBar {
+	font-size: x-large;
+	text-align: center;
+}
+
+.productDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.productDisplay:hover {
+	background-color: 008080;
+}
+
+.productBox {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.warning {
+	color: red;
+	display: inline;
+}
+
+.checkoutButton {
+	text-align: right;
+}
+
 

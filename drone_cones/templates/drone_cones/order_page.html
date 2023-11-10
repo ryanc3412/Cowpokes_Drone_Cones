@@ -28,9 +28,26 @@
 			<div class="outer-border">
 				<div class="inner-border">
 					<div class="margin">
-						hahaahah
-
-					<div>
+						<div class="orderBar">
+							Order from our wide variety of ice cream flavors ranging from vanilla to mint chocolate chip!
+						</div>
+						<div class="productBox">
+							{% if productList %}
+								{% for product in productList %}
+									<div class="productDisplay">
+										{{ product.flavor }} - <div class="warning"> Only {{product.stockAvailable}} available !! </div>
+									</div>
+								{% endfor %}
+							{% else %}
+								<div>No products available</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="checkoutButton">
+						<button>
+							<a href="order_confirmation">Checkout</a>
+						</button>
+					</div>
 				</div>
 			</div>
 

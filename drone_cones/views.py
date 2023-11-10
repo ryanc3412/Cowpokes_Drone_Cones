@@ -48,13 +48,21 @@ def dronePage(request):
     return render(request, "drone_cones/drone_page.html", {})
 
 def orderPage(request):
-    return render(request, "drone_cones/order_page.html", {})
+    product_list = reversed(Products.objects.order_by("-id"))
+    stock_list = reversed(Products.objects.order_by("-stockAvailable"))
+    context = {'productList': product_list, 'stockAvailable': stock_list}
+    return render(request, "drone_cones/order_page.html", context)
 
 def homePage(request):
     return render(request, 'drone_cones/home_page.html', {})
 
 def accountPage(request):
     return render(request, 'drone_cones/account_page.html', {})
+
+def orderConfirmation(request):
+    orders = reversed(Orders.objects.order_by("-id"))
+    context = {'orders': orders}
+    return render(request, 'drone_cones/confirmation_page.html', context)
 
 class LoginView:
     def loginPage(request, email, user_password):
