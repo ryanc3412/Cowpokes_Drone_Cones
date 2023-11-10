@@ -23,7 +23,9 @@ function timer() {
 }
 
 
-//lines 27-40 are for getting latitude/longitude if we want to do that
+
+
+//possible lat/lon if we wanna do that
 const x = document.getElementById("latLon");
 
 function getLocation() {
@@ -35,11 +37,35 @@ function getLocation() {
 }
 
 function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude + 
-  "<br>Longitude: " + position.coords.longitude;
+	//enter whatever the id is into this querySelector
+    const addressElement = document.querySelector("#address");
+
+    if (addressElement) {
+        const apiKey = 'AIzaSyBpj4Qb9-d2AJjcgXKE1WCr1eEsC-DzoWw';
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(json => {
+                if (json.error) {
+                    addressElement.textContent = "Error Fetching Location";
+                } else {
+                    theData = json;
+                    const addy = theData.results[0].formatted_address;
+                    addressElement.textContent = addy;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching geolocation data:', error);
+            });
+    } else {
+        console.error('Element with ID "address" not found.');
+    }
 }
 
 
-//following is for using latitude/longitude 
-// <button onclick="getLocation()">Location</button>
-// <p id="latLon"></p>
+
+
