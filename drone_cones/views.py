@@ -82,13 +82,18 @@ class UserView:
         }
         return render(request, 'drone_cones/home_page.html', context)
 
+    @login_required
+    def account_page(request):
+        return render (request, 'drone_cones/account_page.html', {})
+    
 class DroneView:
+    @login_required
     def drone_dash(request):
         drone_list = Drone.objects.order_by('-droneName')
         context = {
             'drone_list': drone_list,
         }
-        return render(request, 'URL_GOES_HERE', context)
+        return render(request, 'drone_cones/drone_page.html', context)
 
     def view_drones():
         pass
@@ -109,6 +114,13 @@ class AdminView:
 class OrderView:
     def order_view():
         pass
+
+    @login_required
+    def order_page(request):
+        product_list = reversed(Products.objects.order_by("-id"))
+        stock_list = reversed(Products.objects.order_by("-stockAvailable"))
+        context = {'productList': product_list, 'stockAvailable': stock_list}
+        return render(request, 'drone_cones/order_page.html', context)
 
     def edit_address():
         pass

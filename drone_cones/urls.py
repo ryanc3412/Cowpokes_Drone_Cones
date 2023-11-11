@@ -9,6 +9,9 @@ urlpatterns = [
     path('', views.UserView.user_dash, name='home'),
     path('accounts/', include("django.contrib.auth.urls")),
     path('logout/', views.LoginView.redirect_view, name='redirect'),
+    path('order/', views.OrderView.order_page, name='order'),
+    path('drones/', views.DroneView.drone_dash, name='drones'),
+    path('account/', views.UserView.account_page, name='account'),
 
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
