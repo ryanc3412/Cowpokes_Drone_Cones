@@ -42,6 +42,11 @@ from django.template import loader
 
 from django.contrib.auth.decorators import login_required
 
+def orderConfirmation(request):
+    orders = reversed(Orders.objects.order_by("-id"))
+    context = {'orders': orders}
+    return render(request, 'drone_cones/confirmation_page.html', context)
+
 class LoginView:
     def login(request):
         return render(request, 'drone_cones/login_page.html')
