@@ -12,6 +12,9 @@ urlpatterns = [
     path('order/', views.OrderView.order_page, name='order'),
     path('drones/', views.DroneView.drone_dash, name='drones'),
     path('account/', views.UserView.account_page, name='account'),
+    path('drone_register', views.DroneView.drone_register, name='drone_register'),
+    path('create_account', views.LoginView.create_account, name='create_account'),
+    path('order_confirmation', views.OrderView.order_confirmation, name='order_confirmation'),
 
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),
@@ -34,9 +37,6 @@ urlpatterns = [
     # path("order", views.orderPage, name="order"),
     # path("drones", views.dronePage, name="drones"),
     # path("account", views.accountPage, name="accounts"),
-    # path("drone_register", views.droneRegister, name="drone_register"),
-    # path("create_account", views.createAccount, name="create_account"),
-    # path("order_confirmation", views.orderConfirmation, name="order_confirmation"),
 
     #path('login/', views.loginPage, name='login'),
     # path('login/', views.loginPage, name='login'),

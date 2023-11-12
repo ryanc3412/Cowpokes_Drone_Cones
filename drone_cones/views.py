@@ -3,31 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from .models import *
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.forms import UserCreationForm
 from django.template import loader
+from django.contrib.auth.decorators import login_required
 
-### larnold ###
-# def createAccount(request):
-#     return render(request, "drone_cones/create_account_page.html")
-
-# def droneRegister(request):
-#     return render(request, "drone_cones/drone_register_page.html")
-
-# def dronePage(request):
-#     return render(request, "drone_cones/drone_page.html", {})
-
-# def orderPage(request):
-#     product_list = reversed(Products.objects.order_by("-id"))
-#     stock_list = reversed(Products.objects.order_by("-stockAvailable"))
-#     context = {'productList': product_list, 'stockAvailable': stock_list}
-#     return render(request, "drone_cones/order_page.html", context)
-
-# def homePage(request):
-#     return render(request, 'drone_cones/home_page.html', {})
-
-# def accountPage(request):
-#     return render(request, 'drone_cones/account_page.html', {})
 
 # class LoginView:
 #     def loginPage(request, email, user_password):
@@ -38,25 +19,11 @@ from django.template import loader
 #         else:
 #             return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
 
-### end larnold ###
 
-from django.contrib.auth.decorators import login_required
-
-def orderConfirmation(request):
-    orders = reversed(Orders.objects.order_by("-id"))
-    context = {'orders': orders}
-    return render(request, 'drone_cones/confirmation_page.html', context)
 
 class LoginView:
     def login(request):
         return render(request, 'drone_cones/login_page.html')
-        # user = authenticate(username=email, password=user_password)
-        # context = UserView.userDash()
-        # if user is not None:
-        #     return render(request, 'dronecones/login', context)
-        # else:
-        #     return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
-
 
     def register(first_name, last_name, email, password):
         user = User.objects.create_user(email, email, password)
@@ -71,6 +38,20 @@ class LoginView:
         
     def logout():
         pass
+
+    def create_account(request):
+        if request.method == 'POST':
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                raw_password = form.cleaned_data.get('password1')
+                user = authenticate(username=username, password=raw_password)
+                login(request, user=user)
+                return redirect('/dronecones/home/')
+        else:
+            form = UserCreationForm()
+        return render(request, "drone_cones/create_account_page.html", {'form': form})
 
 class UserView:
     def view_cart():
@@ -103,6 +84,10 @@ class DroneView:
     def view_drones():
         pass
 
+    @login_required
+    def drone_register(request):
+        return render(request, "drone_cones/drone_register_page.html")
+
     def edit_drones():
         pass
 
@@ -126,6 +111,12 @@ class OrderView:
         stock_list = reversed(Products.objects.order_by("-stockAvailable"))
         context = {'productList': product_list, 'stockAvailable': stock_list}
         return render(request, 'drone_cones/order_page.html', context)
+
+    @login_required
+    def order_confirmation(request):
+        orders = reversed(Orders.objects.order_by("-id"))
+        context = {'orders': orders}
+        return render(request, 'drone_cones/confirmation_page.html', context)
 
     def edit_address():
         pass
