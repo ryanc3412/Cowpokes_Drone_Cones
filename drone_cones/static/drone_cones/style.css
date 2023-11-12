@@ -152,7 +152,25 @@ div.inner-border {
 	text-align: center;
 }
 
-.productDisplay {
+.flavorDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.coneDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.scoopDisplay {
 	display: inline;
 	background-color: darkgrey;
 	margin-right: 50px;
