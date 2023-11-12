@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -48,4 +49,6 @@ class Products(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=100)
     flavor = models.CharField(max_length=100)
+    coneFlavor = models.CharField(max_length=100)
+    scoopCount = models.IntegerField()
     stockAvailable = models.IntegerField()

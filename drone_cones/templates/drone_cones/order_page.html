@@ -32,15 +32,51 @@
 							Order from our wide variety of ice cream flavors ranging from vanilla to mint chocolate chip!
 						</div>
 						<div class="productBox">
-							{% if productList %}
-								{% for product in productList %}
-									<div class="productDisplay">
-										{{ product.flavor }} - <div class="warning"> Only {{product.stockAvailable}} available !! </div>
-									</div>
-								{% endfor %}
-							{% else %}
-								<div>No products available</div>
-							{% endif %}
+							<div class="flavors" id="flavors">
+							</div>
+							<div class="orderBar">
+								Amount of scoops?
+							</div>
+							<div class="scoops" id="scoops">
+							</div>
+							<div class="orderBar">
+								Cone flavors?
+							</div>
+							<div class="coneflavors" id="coneflavors">
+							</div>
+							<div class="border-line"></div>
+							<div class="deliverBar">
+								Where would you like this delivered ?
+							</div>
+							<div>
+								<div class="input">
+									<label for="address"> Address (Home): </label>
+									<input type="text" name="address" id="address1">
+									<label for="sameAddress" class="sameAddress"> Is this address the same as your second address ?</label>
+									<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
+								</div>
+								<div class="input">
+									<label for="address2"> Address 2 (Other): </label>
+									<input type="text" name="address2" id="address2">
+								</div>
+								<div class="input">
+									<label for="city"> City: </label>
+									<input type="text" name="city">
+								</div>
+								<div class="input">
+									<label for="state"> State: </label>
+									<input type="text" name="state">
+								</div>
+								<div class="input">
+									<label for="zip"> Zip Code: </label>
+									<input type="text" name="zip">
+								</div>
+							</div>
+							<script>
+								window.onload = function() {
+            						populate();
+        						};
+							</script>
 						</div>
 					</div>
 					<div class="checkoutButton">
@@ -51,12 +87,8 @@
 				</div>
 			</div>
 
-
-
-				
-
 			</div>
-
 		</div>
+		<script src="{% static 'drone_cones/static.js' %}"></script>
     </body>
 </html>
