@@ -4,10 +4,9 @@
 
 <html lang="en">
 	<head>
-        	<meta charset="utf-8"/>
-        	<title>Confirmation Page</title>
+        <meta charset="utf-8"/>
+        <title>Confirmation Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}"/>
-		<script src="{% static 'drone_cones/static.js' %}"></script>
 
 	</head>
 
@@ -34,17 +33,19 @@
 		{% endif %}
 			<div class="page-container">
 			<div> Confirmation 
-				<p>
-					Delivery In:
-				</p>
+				<p>Delivery In:</p>
 				<h1 id = "count"></h1>
-			<script>
-        		window.onload = function() {
-            		timer(); // Displays 10 minute timer
-        		};
-    		</script>
+				<button onclick="getLocation()">Location</button>
+ 				<p id="latLon"></p>
+ 				<p id = "address">Change Me</p>
+				<script>
+	        		window.onload = function() {
+	            		timer(); // Displays 10 minute timer
+	        		};
+ 	 	  		</script>
     		</div>
 			</div>
 		</div>
+		<script src="{% static 'drone_cones/static.js' %}"></script>
     </body>
 </html>
