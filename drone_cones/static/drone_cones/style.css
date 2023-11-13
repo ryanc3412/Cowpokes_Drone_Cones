@@ -147,11 +147,30 @@ div.inner-border {
 }
 
 .orderBar {
+	margin-top: 20px;
 	font-size: x-large;
 	text-align: center;
 }
 
-.productDisplay {
+.flavorDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.coneDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+}
+
+.scoopDisplay {
 	display: inline;
 	background-color: darkgrey;
 	margin-right: 50px;
@@ -164,9 +183,10 @@ div.inner-border {
 	background-color: 008080;
 }
 
+
 .productBox {
 	text-align: center;
-	margin-top: 20px;
+	margin-top: 40px;
 }
 
 .warning {
@@ -178,4 +198,36 @@ div.inner-border {
 	text-align: right;
 }
 
+.flavors {
+	margin-bottom:80px;
+}
+
+.scoops {
+	margin-top: 40px;
+	margin-bottom: 80px;
+}
+
+.coneflavors {
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+
+.border-line {
+	margin-top: 50px;
+	border-bottom: 2px solid black;
+}
+
+.input {
+	margin-top: 20px;
+}
+
+.sameAddress {
+	margin-left: 20px;
+}
+
+.deliverBar {
+	margin-top: 30px;
+	font-size: x-large;
+	text-align: center;
+}
 
