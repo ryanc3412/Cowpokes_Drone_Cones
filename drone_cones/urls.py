@@ -13,9 +13,13 @@ urlpatterns = [
     path("account", views.accountPage, name="accounts"),
     path("drone_register", views.droneRegister, name="drone_register"),
     path("create_account", views.createAccount, name="create_account"),
+<<<<<<< HEAD
+    path("add_drone", views.addDrone, name="add_drone")
+=======
     path("order_confirmation", views.orderConfirmation, name="order_confirmation"),
 
     #path('login/', views.loginPage, name='login'),
+>>>>>>> ed4c885028160904d56a34c372a2a1f43b58b4a0
     # path('login/', views.loginPage, name='login'),
     # path('account/', views.accountPage, name='account'),
     # path('order/', views.orderPage, name='order'),

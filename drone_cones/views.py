@@ -1,17 +1,47 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from .models import *
+from drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import redirect_to_login
 from django.template import loader
+from django.shortcuts import redirect
+from datetime import date
 
+from drone_cones.forms import DroneRegisterForm
 
 def createAccount(request):
     return render(request, "drone_cones/create_account_page.html")
 
-def droneRegister(request):
+def addDrone(request):
+
+    if request.method == 'POST':
+        
+        form = DroneRegisterForm(request.POST)
+        print(f"FORM IS VALID: {form.is_valid()}")
+
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            print("boy howdy")
+
+            form_drone_name = form.cleaned_data['drone_name']
+            form_size = form.cleaned_data['size']
+            form_scoops = form.cleaned_data['scoops']
+          
+            account = Account.objects.filter(pk = 1)[0]
+
+            account.drone_set.create(droneName = form_drone_name, size = form_size, scoops = form_scoops, isActive = True, dateRegistered=date.today())
+
+            response = redirect("drone_cones/drones/")
+
+            return HttpResponseRedirect("drones")
+	
+
+
+def droneRegister(request):    
     return render(request, "drone_cones/drone_register_page.html")
 
 def dronePage(request):
