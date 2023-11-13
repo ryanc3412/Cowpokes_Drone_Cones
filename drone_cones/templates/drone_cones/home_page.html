@@ -1,25 +1,31 @@
 {% load static %}
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Home Page</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}" />
-  </head>
+<link rel="stylesheet" href="{% static 'drone_cones/style.css' %}">
 
-  <body>
-    <div class="topnav">
-      <a href="home"> <u>H</u>ome </a>
-      <a href="order"> <u>O</u>rder </a>
-      <a href="drones"> <u>D</u>rones </a>
-      <a href="account"> <u>A</u>ccount </a>
-      <img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="test"/>
-      <img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="test"/>
-    </div>
+
+<DOCTYPE html>
+
+<html lang="en">
+	<head>
+        	<meta charset="utf-8"/>
+        	<title>Home Page</title>
+          <div class="topnav">
+            <a href="{% url 'drone_cones:home' %}"> <u>H</u>ome </a>
+            <a href="{% url 'drone_cones:order' %}"> <u>O</u>rder </a>
+            <a href="{% url 'drone_cones:drones' %}"> <u>D</u>rones </a>
+            <a href="{% url 'drone_cones:account' %}"> <u>A</u>ccount </a>
+            <a href="/dronecones/logout">Logout</a>
+            <img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="computer">
+            <img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="address book">
+          </div>
+	</head>
 
     <div class="page-container">
       <div class="bar">HOME PAGE</div>
       <div class="outer-border">
+        
+        <body>
+          
         <div class="inner-border">
           <div>
             Hello and welcome to drone cones, the hottest spot web to get an ice
@@ -27,9 +33,6 @@
             couple clicks of a computer mouse, you can have a cone delivered
             straight to you! Click the button below to get started!
           </div>
-
-          <a class="order" href="order"> ORDER </a>
-
           <div>
             Getting ice cream delivered not your style? We also have a wide
             fleet of drones, owned by users like YOU which deliver ice cream.
