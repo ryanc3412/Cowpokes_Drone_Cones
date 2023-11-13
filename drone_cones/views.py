@@ -31,13 +31,13 @@ def addDrone(request):
             form_size = form.cleaned_data['size']
             form_scoops = form.cleaned_data['scoops']
           
-            account = Account.objects.filter(pk = 1)
+            account = Account.objects.filter(pk = 1)[0]
 
-            account.drone_set.create(droneName = form_drone_name, size = form_size, scoops = form_scoops, isActive = True, dateRegistered=datetime.today())
+            account.drone_set.create(droneName = form_drone_name, size = form_size, scoops = form_scoops, isActive = True, dateRegistered=date.today())
 
-            reponse = redirect("drone_cones/drones")
+            response = redirect("drone_cones/drones/")
 
-            return HttpResponseRedirect(response)
+            return HttpResponseRedirect("drones")
 	
 
 
