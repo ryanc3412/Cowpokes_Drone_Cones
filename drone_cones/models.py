@@ -1,13 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 
 class Account(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     Id = models.AutoField(primary_key=True)
     lastName = models.CharField(max_length=100)
     firstName = models.CharField(max_length=100)
     email = models.EmailField()
-    password = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     address2 = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100)

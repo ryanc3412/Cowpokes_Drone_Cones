@@ -8,6 +8,9 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.forms import UserCreationForm
 from django.template import loader
 from django.contrib.auth.decorators import login_required
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from drone_cones.core.forms import SignUpForm
 
 
 # class LoginView:
@@ -39,18 +42,19 @@ class LoginView:
     def logout():
         pass
 
+    # @receiver(post_save, sender=User)
     def create_account(request):
         if request.method == 'POST':
-            form = UserCreationForm(request.POST)
+            form = SignUpForm(request.POST)
             if form.is_valid():
-                form.save()
                 username = form.cleaned_data.get('username')
                 raw_password = form.cleaned_data.get('password1')
+                firstname = form.cleaned_data.get('firstname')
                 user = authenticate(username=username, password=raw_password)
                 login(request, user=user)
                 return redirect('/dronecones/home/')
         else:
-            form = UserCreationForm()
+            form = SignUpForm()
         return render(request, "drone_cones/create_account_page.html", {'form': form})
 
 class UserView:
