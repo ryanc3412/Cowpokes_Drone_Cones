@@ -22,7 +22,129 @@ function timer() {
 	}, 1000);
 }
 
+function writeAddress(checkAddress) {
+    var addressOne = document.getElementById("address1");
+    var addressTwo = document.getElementById("address2");
 
+    // Use checkAddress.checked to check if the checkbox is checked
+    addressTwo.value = checkAddress.checked ? addressOne.value : "";
+}
+
+
+function populate() {
+    const flavorList = [
+        "Chocolate",
+        "Vanilla",
+        "Mint Chocolate Chip",
+        "Rocky Road",
+        "Cookie Dough"
+    ];
+
+    const scoopList = [1, 2, 3];
+    const coneList = ["Waffle", "Fudge", "Original"];
+
+    // Get the "flavors" div
+    var flavorsDiv = document.getElementById("flavors");
+    var scoopsDiv = document.getElementById("scoops");
+    var conesDiv = document.getElementById("coneflavors");
+
+    // Create a div for each flavor and append it to the "flavors" div
+    for (var i = 0; i < flavorList.length; i++) {
+        var flavorDiv = document.createElement("div");
+        flavorDiv.setAttribute("class", "flavorDisplay");
+        flavorDiv.setAttribute("onclick", `selectFlavors(this, event)`);
+        flavorDiv.textContent = flavorList[i];
+        flavorsDiv.appendChild(flavorDiv);
+    }
+
+    for (var i = 0; i < scoopList.length; i++) {
+        var scoopDiv = document.createElement("div");
+        scoopDiv.setAttribute("class", "scoopDisplay");
+		scoopDiv.setAttribute("onclick", "selectScoops(this, event)");
+        scoopDiv.textContent = scoopList[i];
+        scoopsDiv.appendChild(scoopDiv);
+    }
+
+    for (var i = 0; i < coneList.length; i++) {
+        var coneDiv = document.createElement("div");
+        coneDiv.setAttribute("class", "coneDisplay");
+		coneDiv.setAttribute("onclick", "selectCones(this, event)");
+        coneDiv.textContent = coneList[i];
+        conesDiv.appendChild(coneDiv);
+    }
+}
+
+var selectedItems = {
+	flavor: "",
+	scoop: "",
+	cone: "",
+}
+
+var completedFunctions = 0;
+
+function logSelectedItems() {
+	completedFunctions++;
+	
+	if( completedFunctions % 3 == 0) {
+		console.log(selectedItems);
+	}
+}
+
+function selectFlavors(item, event) {
+    if (event && event.type == 'click') {
+        var flavorItems = document.querySelectorAll('.flavorDisplay');
+        flavorItems.forEach(function (el) {
+            el.style.backgroundColor = '';  // Reset background color to default (empty string)
+        });
+		item.style.backgroundColor = "#008080";
+		selectedItems.flavor = item.textContent;
+
+		logSelectedItems();
+    }
+}
+
+function sendToDatabase(data) {
+    const apiUrl = 'your-api-endpoint';
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Data sent to the database:', result);
+        // Handle the server response if needed
+    })
+    .catch(error => {
+        console.error('Error sending data to the database:', error);
+        // Handle the error
+    });
+}
+
+function selectScoops(item, event) {
+	var scoopItems = document.querySelectorAll('.scoopDisplay');
+	scoopItems.forEach(function (el) {
+		el.style.backgroundColor = '';
+	})
+	item.style.backgroundColor = "#008080"
+	selectedItems.scoop = item.textContent;
+
+	logSelectedItems();
+}
+
+function selectCones(item,event) {
+	var coneItems = document.querySelectorAll('.coneDisplay');
+	coneItems.forEach(function (el) {
+		el.style.backgroundColor = '';
+	})
+	item.style.backgroundColor = "#008080"
+	selectedItems.cone = item.textContent;
+
+	logSelectedItems();
+}
 
 
 //possible lat/lon if we wanna do that

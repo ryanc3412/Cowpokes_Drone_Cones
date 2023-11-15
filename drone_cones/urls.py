@@ -15,6 +15,7 @@ urlpatterns = [
     path('drone_register', views.DroneView.drone_register, name='drone_register'),
     path('create_account', views.LoginView.create_account, name='create_account'),
     path('order_confirmation', views.OrderView.order_confirmation, name='order_confirmation'),
+    path("add_drone", views.addDrone, name="add_drone"),
 
     # path('admin/', views.adminPage, name='admin'),
 ]
