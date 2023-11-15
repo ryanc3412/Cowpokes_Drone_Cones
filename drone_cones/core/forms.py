@@ -11,3 +11,8 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+
+class DroneRegisterForm(forms.Form):
+    drone_name = forms.CharField(label = "Drone Name", max_length=100)
+    size = forms.CharField(label = "Size", max_length=100)
+    scoops = forms.IntegerField(label = "Scoops")
