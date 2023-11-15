@@ -13,7 +13,7 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date
-# from drone_cones.core.forms import DroneRegisterForm
+from drone_cones.core.forms import DroneRegisterForm
 
 def addDrone(request):
     if request.method == 'POST':
