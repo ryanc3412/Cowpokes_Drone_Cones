@@ -12,18 +12,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm
 
-
-# class LoginView:
-#     def loginPage(request, email, user_password):
-#         user = authenticate(username=email, password=user_password)
-#         context = UserView.userDash()
-#         if user is not None:
-#             return render(request, 'drone_cones/login.html', context)
-#         else:
-#             return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
-
-
-
 class LoginView:
     def login(request):
         return render(request, 'drone_cones/login_page.html')
