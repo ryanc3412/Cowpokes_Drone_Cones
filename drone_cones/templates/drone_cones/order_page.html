@@ -34,7 +34,25 @@
 						<div class="orderBar">
 							Order from our wide variety of ice cream flavors ranging from vanilla to mint chocolate chip!
 						</div>
-						<div class="productBox">
+						{% block content %}
+							<form method="post">
+							{% csrf_token %}
+							{% for field in form %}
+								<p>
+								{{ field.label_tag }}<br>
+								{{ field }}
+								{% if field.help_text %}
+									<small style="color: grey">{{ field.help_text }}</small>
+								{% endif %}
+								{% for error in field.errors %}
+									<p style="color: red">{{ error }}</p>
+								{% endfor %}
+								</p>
+							{% endfor %}
+							<button type="submit">Checkout</button>
+							</form>
+						{% endblock %}
+						<!-- <div class="productBox">
 							<div class="flavors" id="flavors">
 							</div>
 							<div class="orderBar">
@@ -75,11 +93,6 @@
 									<input type="text" name="zip">
 								</div>
 							</div>
-							<script>
-								window.onload = function() {
-            						populate();
-        						};
-							</script>
 						</div>
 					</div>
 					<div class="checkoutButton">
@@ -87,7 +100,7 @@
 							<a href="{% url 'drone_cones:order_confirmation' %}">Checkout</a>
 						</button>
 					</div>
-				</div>
+				</div> -->
 			</div>
 
 			</div>

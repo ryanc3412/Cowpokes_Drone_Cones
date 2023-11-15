@@ -10,10 +10,10 @@ from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from drone_cones.core.forms import SignUpForm
+from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date
-from drone_cones.forms import DroneRegisterForm
+# from drone_cones.core.forms import DroneRegisterForm
 
 def addDrone(request):
     if request.method == 'POST':
@@ -38,6 +38,25 @@ def addDrone(request):
             response = redirect("drone_cones/drones/")
 
             return HttpResponseRedirect("drones")
+
+def addOrder(request):
+    if request.method == 'POST':
+        
+        form = OrderForm(request.POST)
+        print(f"FORM IS VALID: {form.is_valid()}")
+
+        if form.is_valid():
+            form_items = form.clean_jsonfield['items']
+            form_address = form.cleaned_data['address']
+            form_address2 = form.cleaned_data['address2']
+            form_city = form.cleaned_data['city']
+            form_state = form.cleaned_data['state']
+            form_zip = form.cleaned_data['zip']
+
+            return redirect('/dronecones/confirmation_page.html', {'form': form})
+        else:
+            form = OrderForm()
+        return render(request, "drone_cones/order_page.html")
 	
 def droneRegister(request):    
     return render(request, "drone_cones/drone_register_page.html")
