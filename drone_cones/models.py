@@ -2,14 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
 class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     Id = models.AutoField(primary_key=True)
-    lastName = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, null=True)
     firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=100)
     address2 = models.CharField(max_length=100, blank=True, null=True)
@@ -28,6 +30,7 @@ class Drone(models.Model):
     dateRegistered = models.DateField()
 
 class Orders(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     id = models.AutoField(primary_key=True)
     account = models.IntegerField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE)

@@ -2,16 +2,23 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from drone_cones.models import *
+import json
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    username = forms.CharField(max_length=46, required=True, help_text='Optional.')
+    first_name = forms.CharField(max_length=46, required=True, help_text='Optional.')
+    last_name = forms.CharField(max_length=46, required=True, help_text='Optional.')
+    email = forms.EmailField(max_length=254, required=True, help_text='Required. Inform a valid email address.')
+    address = forms.CharField(max_length=150, required=True, help_text='Optional.')
+    address2 = forms.CharField(max_length=150, required=False, help_text='Optional.')
+    city = forms.CharField(max_length=189, required=True, help_text='Optional.')
+    state = forms.CharField(max_length=189, required=True, help_text='Optional.')
+    zip = forms.CharField(max_length=18, required=True, help_text='Optional.')
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'address', 'address2', 'city', 'state', 'zip', 'password1')
 
 class DroneRegisterForm(forms.Form):
     drone_name = forms.CharField(label = "Drone Name", max_length=100)
