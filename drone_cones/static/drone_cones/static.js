@@ -37,16 +37,11 @@ function populate() {
         "Vanilla",
         "Mint Chocolate Chip",
         "Rocky Road",
-        "Cookie Dough"
+        "Cookies and Cream"
     ];
-
-    const scoopList = [1, 2, 3];
-    const coneList = ["Waffle", "Fudge", "Original"];
 
     // Get the "flavors" div
     var flavorsDiv = document.getElementById("flavors");
-    var scoopsDiv = document.getElementById("scoops");
-    var conesDiv = document.getElementById("coneflavors");
 
     // Create a div for each flavor and append it to the "flavors" div
     for (var i = 0; i < flavorList.length; i++) {
@@ -56,28 +51,10 @@ function populate() {
         flavorDiv.textContent = flavorList[i];
         flavorsDiv.appendChild(flavorDiv);
     }
-
-    for (var i = 0; i < scoopList.length; i++) {
-        var scoopDiv = document.createElement("div");
-        scoopDiv.setAttribute("class", "scoopDisplay");
-		scoopDiv.setAttribute("onclick", "selectScoops(this, event)");
-        scoopDiv.textContent = scoopList[i];
-        scoopsDiv.appendChild(scoopDiv);
-    }
-
-    for (var i = 0; i < coneList.length; i++) {
-        var coneDiv = document.createElement("div");
-        coneDiv.setAttribute("class", "coneDisplay");
-		coneDiv.setAttribute("onclick", "selectCones(this, event)");
-        coneDiv.textContent = coneList[i];
-        conesDiv.appendChild(coneDiv);
-    }
 }
 
 var selectedItems = {
 	flavor: "",
-	scoop: "",
-	cone: "",
 }
 
 var completedFunctions = 0;
@@ -85,9 +62,7 @@ var completedFunctions = 0;
 function logSelectedItems() {
 	completedFunctions++;
 	
-	if( completedFunctions % 3 == 0) {
-		console.log(selectedItems);
-	}
+	console.log(selectedItems);
 }
 
 function selectFlavors(item, event) {
@@ -99,51 +74,10 @@ function selectFlavors(item, event) {
 		item.style.backgroundColor = "#008080";
 		selectedItems.flavor = item.textContent;
 
+        document.getElementById('selected_flavor_input').value = selectedItems.flavor;
+
 		logSelectedItems();
     }
-}
-
-function sendToDatabase(data) {
-    const apiUrl = 'your-api-endpoint';
-
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Data sent to the database:', result);
-        // Handle the server response if needed
-    })
-    .catch(error => {
-        console.error('Error sending data to the database:', error);
-        // Handle the error
-    });
-}
-
-function selectScoops(item, event) {
-	var scoopItems = document.querySelectorAll('.scoopDisplay');
-	scoopItems.forEach(function (el) {
-		el.style.backgroundColor = '';
-	})
-	item.style.backgroundColor = "#008080"
-	selectedItems.scoop = item.textContent;
-
-	logSelectedItems();
-}
-
-function selectCones(item,event) {
-	var coneItems = document.querySelectorAll('.coneDisplay');
-	coneItems.forEach(function (el) {
-		el.style.backgroundColor = '';
-	})
-	item.style.backgroundColor = "#008080"
-	selectedItems.cone = item.textContent;
-
-	logSelectedItems();
 }
 
 

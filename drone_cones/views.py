@@ -26,6 +26,7 @@ def addDrone(request):
             # ...
             # redirect to a new URL:
             print("boy howdy")
+            form.save()
 
             form_drone_name = form.cleaned_data['drone_name']
             form_size = form.cleaned_data['size']
@@ -37,26 +38,45 @@ def addDrone(request):
 
             response = redirect("drone_cones/drones/")
 
-            return HttpResponseRedirect("drones")
+            return HttpResponseRedirect("drone")
 
 def addOrder(request):
     if request.method == 'POST':
-        
         form = OrderForm(request.POST)
-        print(f"FORM IS VALID: {form.is_valid()}")
 
         if form.is_valid():
-            form_items = form.clean_jsonfield['items']
-            form_address = form.cleaned_data['address']
-            form_address2 = form.cleaned_data['address2']
-            form_city = form.cleaned_data['city']
-            form_state = form.cleaned_data['state']
-            form_zip = form.cleaned_data['zip']
+            # Process other form fields
+            address = form.cleaned_data['address']
+            address2 = form.cleaned_data['address2']
+            city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+            zip_code = form.cleaned_data['zip']
 
-            return redirect('/dronecones/confirmation_page.html', {'form': form})
+            # Get selected flavor from the JavaScript
+            selected_flavor = request.POST.get('selected_flavor', '')
+
+            # Process the selected flavor as needed
+
+            # Save the order to the database
+            order = Orders.objects.create(
+                address=address,
+                address2=address2,
+                city=city,
+                state=state,
+                zip=zip_code,
+                items={'flavor': selected_flavor},  # Store selected flavor in JSONField
+                # Add other fields as needed
+            )
+
+            return JsonResponse({'message': 'Order added successfully'})
         else:
-            form = OrderForm()
-        return render(request, "drone_cones/order_page.html")
+            return JsonResponse({'error': 'Form is not valid'}, status=400)
+
+    return render(request, 'drone_cones/order_page.html', {'form': OrderForm()})
+
+
+
+
 	
 def droneRegister(request):    
     return render(request, "drone_cones/drone_register_page.html")
@@ -84,6 +104,7 @@ class LoginView:
         if request.method == 'POST':
             form = SignUpForm(request.POST)
             if form.is_valid():
+                form.save()
                 username = form.cleaned_data.get('username')
                 raw_password = form.cleaned_data.get('password1')
                 firstname = form.cleaned_data.get('firstname')
