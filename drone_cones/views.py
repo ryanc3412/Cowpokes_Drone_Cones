@@ -13,7 +13,7 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date
-from drone_cones.core.forms import DroneRegisterForm
+from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm
 
 def addDrone(request):
     if request.method == 'POST':
@@ -136,20 +136,39 @@ class UserView:
     @login_required
     def account_page(request):
         user = request.user
-        user_account = Account.objects.get(user=user)	
+        user_account = Account.objects.get(user=user)
         date_joined = user.date_joined.strftime("%m/%d/%Y")	
 
-        context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
+        context = {
+            'first_name':user_account.firstName, 
+            'last_name':user_account.lastName,
+            'username':user.username, 
+            'date_joined':date_joined,
+            'address_1': user_account.address,
+            'address_2': user_account.address2,
+            'city': user_account.city,
+            'state': user_account.state,
+            'zip': user_account.zip}
         return render (request, 'drone_cones/account_page.html', context)
 
     @login_required
     def edit_account(request):
-	
+
         if request.method == 'POST':
-            form = OrderForm(request.POST)
+            form = EditAccountForm(request.POST)
             if form.is_valid():
-                print("boy howdy")
-                return HttpResponseRedirect("account")                
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                
+                user = request.user
+                associated_account = Account.objects.get(user=user)
+                
+                associated_account.firstName = first_name
+                associated_account.lastName = last_name
+
+                associated_account.save()
+
+                return HttpResponseRedirect("../account")                
         else:
             user = request.user
             user_account = Account.objects.get(user=user)
@@ -157,7 +176,42 @@ class UserView:
 
             context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
             return render (request, 'drone_cones/edit_account.html', context)
+    @login_required
+    def edit_address(request):
 
+        user = request.user
+        user_account = Account.objects.get(user=user)
+
+
+        if request.method == 'POST':
+            form = EditAddressForm(request.POST)
+            if form.is_valid():
+                address_1 = form.cleaned_data.get('address_1')
+                address_2 = form.cleaned_data.get('address_2')
+                city = form.cleaned_data.get('city')
+                state = form.cleaned_data.get('state')
+                zip = form.cleaned_data.get('zip')
+
+                user_account.address = address_1
+                user_account.address2 = address_2
+                user_account.city = city
+                user_account.state = state
+                user_account.zip = zip
+
+                user_account.save()                
+ 
+                return HttpResponseRedirect("../account")
+
+        else:
+            context = {
+                'address_1': user_account.address,
+                'address_2': user_account.address2,
+                'city': user_account.city,
+                'state': user_account.state,
+                'zip': user_account.zip
+            }
+            return render(request, 'drone_cones/edit_address.html', context)
+            
     
 class DroneView:
     @login_required
