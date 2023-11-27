@@ -22,10 +22,6 @@ def addDrone(request):
         print(f"FORM IS VALID: {form.is_valid()}")
 
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            print("boy howdy")
             form.save()
 
             form_drone_name = form.cleaned_data['drone_name']
@@ -107,8 +103,14 @@ class LoginView:
                 form.save()
                 username = form.cleaned_data.get('username')
                 raw_password = form.cleaned_data.get('password1')
-                firstname = form.cleaned_data.get('firstname')
+                firstname = form.cleaned_data.get('first_name')
+                lastname = form.cleaned_data.get('last_name')
+                email = form.cleaned_data.get('email')
                 user = authenticate(username=username, password=raw_password)
+                user_account = Account(user=user, firstName=firstname, lastName=lastname, email=email)
+
+                user_account.save()
+
                 login(request, user=user)
                 return redirect('/dronecones/home/')
         else:
@@ -132,7 +134,15 @@ class UserView:
 
     @login_required
     def account_page(request):
-        return render (request, 'drone_cones/account_page.html', {})
+        user = request.user
+        user_account = Account.objects.get(user=user)	
+
+        print(f"The first name is {user_account.firstName}")
+        print(f"the last name is {user_account.lastName}")
+	
+	
+        context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username}
+        return render (request, 'drone_cones/account_page.html', {'user': user})
     
 class DroneView:
     @login_required

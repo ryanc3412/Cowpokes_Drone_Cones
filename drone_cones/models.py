@@ -6,16 +6,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     Id = models.AutoField(primary_key=True)
-    lastName = models.CharField(max_length=100)
-    firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100, blank=True, null=True)
+    firstName = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField()
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, blank=True, null=True)
     address2 = models.CharField(max_length=100, blank=True, null=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    zip = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    zip = models.CharField(max_length=100, blank=True, null=True)
     cart = models.JSONField(blank=True, null=True)
 
 class Drone(models.Model):
