@@ -22,19 +22,20 @@ def addDrone(request):
         print(f"FORM IS VALID: {form.is_valid()}")
 
         if form.is_valid():
-            form.save()
+            #form.save()
 
             form_drone_name = form.cleaned_data['drone_name']
             form_size = form.cleaned_data['size']
             form_scoops = form.cleaned_data['scoops']
-          
-            account = Account.objects.filter(pk = 1)[0]
+         
+            user = request.user 
+            account = Account.objects.get(user=user)
 
             account.drone_set.create(droneName = form_drone_name, size = form_size, scoops = form_scoops, isActive = True, dateRegistered=date.today())
 
             response = redirect("drone_cones/drones/")
 
-            return HttpResponseRedirect("drone")
+            return HttpResponseRedirect("drones")
 
 def addOrder(request):
     if request.method == 'POST':
@@ -136,13 +137,27 @@ class UserView:
     def account_page(request):
         user = request.user
         user_account = Account.objects.get(user=user)	
+        date_joined = user.date_joined.strftime("%m/%d/%Y")	
 
-        print(f"The first name is {user_account.firstName}")
-        print(f"the last name is {user_account.lastName}")
+        context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
+        return render (request, 'drone_cones/account_page.html', context)
+
+    @login_required
+    def edit_account(request):
 	
-	
-        context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username}
-        return render (request, 'drone_cones/account_page.html', {'user': user})
+        if request.method == 'POST':
+            form = OrderForm(request.POST)
+            if form.is_valid():
+                print("boy howdy")
+                return HttpResponseRedirect("account")                
+        else:
+            user = request.user
+            user_account = Account.objects.get(user=user)
+            date_joined = user.date_joined.strftime("%m/%d/%Y")
+
+            context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
+            return render (request, 'drone_cones/edit_account.html', context)
+
     
 class DroneView:
     @login_required
