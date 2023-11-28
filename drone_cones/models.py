@@ -25,7 +25,7 @@ class Drone(models.Model):
     size = models.CharField(max_length=100)
     scoops = models.IntegerField()
     isActive = models.BooleanField(default = False)
-    dateRegistered = models.DateField()
+    dateRegistered = models.DateTimeField(auto_now_add=True)
 
 class Orders(models.Model):
     id = models.AutoField(primary_key=True)

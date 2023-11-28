@@ -25,3 +25,15 @@ class OrderForm(forms.Form):
     city = forms.CharField(label = "city", max_length=30)
     state = forms.CharField(label = "state", max_length=30)
     zip = forms.CharField(label = "zip", max_length=30)
+
+class EditAccountForm(forms.Form):
+    username = forms.CharField(label = "username", max_length=100)
+    first_name = forms.CharField(label = "first_name", max_length=100)
+    last_name = forms.CharField(label = "last_name", max_length=100)
+
+class EditAddressForm(forms.Form):
+    address_1 = forms.CharField(label="address_1", max_length = 100)
+    address_2 = forms.CharField(label="address_2", max_length = 100, required=False)
+    city = forms.CharField(label="city", max_length = 100)
+    state = forms.CharField(label="state", max_length=100)
+    zip = forms.CharField(label="zip", max_length = 100)
