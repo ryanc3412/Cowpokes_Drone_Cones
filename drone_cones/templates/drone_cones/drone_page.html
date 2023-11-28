@@ -26,41 +26,18 @@
 		</div>
 
 		<div class="row">
-			<div class="column left">
-					<div> Drone 0 </div>
-					<div></div>
-					<div> Drone Name: Tug's little monster </div>
-					<div> Date Registered: </div>
-					<div> Drone Account #: </div>
-					<div> Weight:  </div>
-					<div> Carrying Capacity: </div>
-					<div> Cone Capacity: </div>
-					<div> Status: inactive </div>
-			</div>
 
-			<div class="column middle">
-				<div> Drone 1 </div>
-				<div></div>
-				<div> Drone Name: Tug's little beauty </div>
-				<div> Date Registered: </div>
-				<div> Drone Account #: </div>
-				<div> Weight:  </div>
-				<div> Carrying Capacity: </div>
-				<div> Cone Capacity: </div>
-				<div> Status: inactive </div>
-			</div>
+			{% for drone in drone_list %}
+				<div class="column left">
+					<div> Drone \t{{forloop.counter}} </div>
+ 	                        	<div> Drone Name: {{drone.droneName}} </div>
+					<div> Date Registered: {{drone.dateRegistered}} </div>
+					<div> Size: {{drone.size}} </div>
+  					<div> Carrying Capacity: {{drone.scoops}} </div>
+					<div> Status: {{drone.isActive}} </div>
+                        	</div>
+                        {% endfor %}
 
-			<div class="column right">
-				<div> Drone 1 </div>
-				<div></div>
-				<div> Drone Name: Tug's little love </div>
-				<div> Date Registered: </div>
-				<div> Drone Account #: </div>
-				<div> Weight:  </div>
-				<div> Carrying Capacity: </div>
-				<div> Cone Capacity: </div>
-				<div> Status: inactive </div>
-			</div>
 		</div>
 
 		<div class="page-container"> 

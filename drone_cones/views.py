@@ -222,7 +222,10 @@ class UserView:
 class DroneView:
     @login_required
     def drone_dash(request):
-        drone_list = Drone.objects.order_by('-droneName')
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+        drone_list = associated_account.drone_set.all()
+
         context = {
             'drone_list': drone_list,
         }
