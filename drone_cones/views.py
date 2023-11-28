@@ -157,11 +157,17 @@ class UserView:
         if request.method == 'POST':
             form = EditAccountForm(request.POST)
             if form.is_valid():
+
+                user_name = form.cleaned_data.get('username')
                 first_name = form.cleaned_data.get('first_name')
                 last_name = form.cleaned_data.get('last_name')
                 
                 user = request.user
                 associated_account = Account.objects.get(user=user)
+
+                if user.username != user_name:
+                   user.username = user_name
+                   user.save()
                 
                 associated_account.firstName = first_name
                 associated_account.lastName = last_name
