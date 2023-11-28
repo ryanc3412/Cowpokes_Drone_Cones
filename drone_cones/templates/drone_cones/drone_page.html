@@ -23,10 +23,8 @@
 		<div class="page-container">
 			<div class="bar"> DRONE PAGE </div>
 			<div> My Drones </div>
-		</div>
-
 		<div class="row">
-
+		
 			{% for drone in drone_list %}
 				<div class="column left">
 					<div> Drone: {{forloop.counter}} </div>
@@ -37,7 +35,7 @@
 					<div> Status: {{drone.isActive}} </div>
                         	</div>
                         {% endfor %}
-
+		</div>
 		</div>
 
 		<div class="page-container"> 
