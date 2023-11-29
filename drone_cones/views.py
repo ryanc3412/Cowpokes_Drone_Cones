@@ -252,25 +252,18 @@ class AdminView:
     #@login_required
     def admin_dash(request):
         # Get data for stock and drones
-        stock_list = Products.objects.order_by('-stockAvailable')
-        drone_list = Drone.objects.order_by('-droneName')
+        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+        drone_list = reversed(Drone.objects.order_by('-droneName'))
+        user_list = reversed(Account.objects.all())
 
         context = {
             'stock_list': stock_list,
             'drone_list': drone_list,
+            'user_list': user_list,
         }
 
         return render(request, 'drone_cones/admin_page.html', context)
 
-# class AdminView:
-#     def admin_dash():
-#         pass
-
-#     def view_users():
-#         pass
-
-#     def edit_users():
-#         pass
 
 class OrderView:
     def order_view():
