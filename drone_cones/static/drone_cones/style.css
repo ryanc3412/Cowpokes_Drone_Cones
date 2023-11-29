@@ -185,8 +185,8 @@ div.inner-border {
 
 
 .productBox {
-	text-align: center;
-	margin-top: 40px;
+	text-align: left;
+	margin-top: 20px;
 }
 
 .warning {
@@ -199,12 +199,20 @@ div.inner-border {
 }
 
 .flavors {
-	margin-bottom:80px;
+	margin-bottom:25px;
 }
 
 .scoops {
 	margin-top: 40px;
 	margin-bottom: 80px;
+}
+
+.scoopText {
+	margin-left: 30px;
+}
+
+.coneFlavText {
+	margin-left: 30px;
 }
 
 .coneflavors {

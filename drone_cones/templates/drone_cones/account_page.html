@@ -29,10 +29,34 @@
 			<div class="outer-border">
 				<div class="inner-border">
 					<div> Account Page </div>
-					<div> Account Name: tug bogarth </div>
-					<div> Nick Name: mama's little tug machine </div>
-					<div> Birth Date: 10/11/1987 </div>
-					<div> Date Joined: 09/24/2023 </div>
+					<div> ------------ </div>
+				
+					<div> Username: {{username}} </div>
+					<div> First Name: {{first_name}} </div>
+					<div> Last Name: {{last_name}}  </div>
+					<div> Date Joined: {{date_joined}}  </div>
+                                        <div style="margin-top: 5px; margin-bottom: 1em"></div>
+
+					<div>
+						<a class="order" style="margin-left:0"  href="{% url 'drone_cones:edit_account' %}">EDIT</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="outer-border">
+				<div class="inner-border">
+					<div> Shipping Info </div>
+					<div> ------------  </div>
+				
+					<div> Address 1: {{address_1}} </div>
+					<div> Address 2: {{address_2}} </div>
+					<div> City:	 {{city}}      </div>
+                   			<div> State:     {{state}}     </div>
+                                        <div> ZIP:       {{zip}}       </div>
+					<div style="margin-top: 5px; margin-bottom: 1em"></div>
+					<div>
+						<a class="order" style="margin-left:0" href="{% url 'drone_cones:edit_address' %}">EDIT</a>
+					</div>
 				</div>
 			</div>
 		</div>

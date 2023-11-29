@@ -26,24 +26,21 @@ class DroneRegisterForm(forms.Form):
     scoops = forms.IntegerField(label = "Scoops")
 
 class OrderForm(forms.Form):
-    items = forms.CharField(max_length=1024)
-    address = forms.CharField(max_length=30)
-    address2 = forms.CharField(max_length=30)
-    city = forms.CharField(max_length=30)
-    state = forms.CharField(max_length=30)
-    zip = forms.CharField(max_length=30)
+    items = forms.CharField(label = "Items", max_length=1024)
+    address = forms.CharField(label = "address", max_length=30)
+    address2 = forms.CharField(label = "address2", max_length=30)
+    city = forms.CharField(label = "city", max_length=30)
+    state = forms.CharField(label = "state", max_length=30)
+    zip = forms.CharField(label = "zip", max_length=30)
 
-    def clean_jsonfield(self):
-         jdata = self.cleaned_data['jsonfield']
-         try:
-             json_data = json.loads(jdata) #loads string as json
-             #validate json_data
-         except:
-             raise forms.ValidationError("Invalid data in jsonfield")
-         #if json data not valid:
-            #raise forms.ValidationError("Invalid data in jsonfield")
-         return jdata
+class EditAccountForm(forms.Form):
+    username = forms.CharField(label = "username", max_length=100)
+    first_name = forms.CharField(label = "first_name", max_length=100)
+    last_name = forms.CharField(label = "last_name", max_length=100)
 
-    class Meta:
-        model = Orders
-        fields = ('address', 'address2', 'city', 'state', 'zip', 'items')
+class EditAddressForm(forms.Form):
+    address_1 = forms.CharField(label="address_1", max_length = 100)
+    address_2 = forms.CharField(label="address_2", max_length = 100, required=False)
+    city = forms.CharField(label="city", max_length = 100)
+    state = forms.CharField(label="state", max_length=100)
+    zip = forms.CharField(label="zip", max_length = 100)
