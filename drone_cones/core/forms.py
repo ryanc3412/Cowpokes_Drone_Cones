@@ -19,12 +19,12 @@ class DroneRegisterForm(forms.Form):
     scoops = forms.IntegerField(label = "Scoops")
 
 class OrderForm(forms.Form):
-    items = forms.CharField(label = "Items", max_length=1024)
+    #items = forms.CharField(label = "items", max_length=1024)
     address = forms.CharField(label = "address", max_length=30)
     address2 = forms.CharField(label = "address2", max_length=30)
     city = forms.CharField(label = "city", max_length=30)
     state = forms.CharField(label = "state", max_length=30)
-    zip = forms.CharField(label = "zip", max_length=30)
+    zip = forms.IntegerField(label = "zip")
 
 class EditAccountForm(forms.Form):
     username = forms.CharField(label = "username", max_length=100)
@@ -37,3 +37,8 @@ class EditAddressForm(forms.Form):
     city = forms.CharField(label="city", max_length = 100)
     state = forms.CharField(label="state", max_length=100)
     zip = forms.CharField(label="zip", max_length = 100)
+
+class EditDroneForm(forms.Form):
+    drone_name = forms.CharField(label="drone_name", max_length = 100)
+    drone_size = forms.CharField(label="drone_size", max_length = 100)
+    drone_capacity = forms.IntegerField(label="drone_capacity")
