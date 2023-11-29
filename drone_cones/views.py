@@ -238,8 +238,12 @@ class DroneView:
     def drone_register(request):
         return render(request, "drone_cones/drone_register_page.html")
 
-    def edit_drones():
-        pass
+    @login_required
+    def edit_drone(request, drone_id):
+        drone = Drone.objects.get(id = int(drone_id))
+        print(f"Drone name is {drone.droneName}")
+        context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
+        return render(request, "drone_cones/edit_drone_page.html", context)
 
 class AdminView:
     def admin_dash():

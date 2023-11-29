@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', views.LoginView.redirect_view, name='redirect'),
     path('order/', views.OrderView.order_page, name='order'),
     path('drones/', views.DroneView.drone_dash, name='drones'),
+    path('drones/edit_drone/<int:drone_id>', views.DroneView.edit_drone, name='edit_drone'),
     path('account/', views.UserView.account_page, name='account'),
     path('edit_account/', views.UserView.edit_account, name='edit_account'),
     path('edit_address/', views.UserView.edit_address, name='edit_address'),
