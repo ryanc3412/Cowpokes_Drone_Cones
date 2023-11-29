@@ -115,7 +115,7 @@ class LoginView:
                 lastname = form.cleaned_data.get('last_name')
                 email = form.cleaned_data.get('email')
                 user = authenticate(username=username, password=raw_password)
-                user_account = Account(user=user, firstName=firstname, lastName=lastname, email=email)
+                user_account = Account(user=user, firstName=firstname, lastName=lastname, email=email, is_admin = False)
 
                 user_account.save()
 
@@ -258,12 +258,14 @@ class DroneView:
                 drone_name = form.cleaned_data.get('drone_name')
                 drone_size = form.cleaned_data.get('drone_size')
                 drone_capacity = form.cleaned_data.get('drone_capacity')
+                is_active = form.cleaned_data.get('is_active')
 
                 drone = Drone.objects.get(id = int(drone_id))
 
                 drone.droneName = drone_name
                 drone.size = drone_size
                 drone.scoops = drone_capacity
+                drone.isActive = is_active
                
                 drone.save()
 
@@ -272,7 +274,7 @@ class DroneView:
 
             drone = Drone.objects.get(id = int(drone_id))
             print(f"Drone name is {drone.droneName}")
-            context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
+            context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops, 'is_active': drone.isActive}
             return render(request, "drone_cones/edit_drone_page.html", context)
 
 class AdminView:

@@ -42,3 +42,4 @@ class EditDroneForm(forms.Form):
     drone_name = forms.CharField(label="drone_name", max_length = 100)
     drone_size = forms.CharField(label="drone_size", max_length = 100)
     drone_capacity = forms.IntegerField(label="drone_capacity")
+    is_active = forms.BooleanField(label="is_active", required=False)
