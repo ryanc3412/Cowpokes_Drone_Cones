@@ -32,7 +32,12 @@
 					<div> Date Registered: {{drone.dateRegistered}} </div>
 					<div> Size: {{drone.size}} </div>
   					<div> Carrying Capacity: {{drone.scoops}} </div>
-					<div> Status: {{drone.isActive}} </div>
+
+                                        {% if drone.isActive %}
+						<div> Status: Active </div>
+					{% else %}
+						<div> Status: Disabled </div>
+					{% endif %}
 
 					<div style="margin-top: 1em; margin-bottom:1em; user-select: none;">
 						<a class="order" style="cursor: pointer; margin-left: 0" href="edit_drone/{{drone.id}}"/>EDIT </a>
