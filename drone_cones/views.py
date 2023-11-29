@@ -82,20 +82,12 @@ class LoginView:
         response = redirect('/dronecones/accounts/logout/')
         return response
         
-    def create_user(request):
+    def create_account(request):
         if request.method == 'POST':
             form = SignUpForm(request.POST)
             if form.is_valid():
                 form.save()
                 username = form.cleaned_data.get('username')
-                firstname = form.cleaned_data.get('first_name')
-                lastname = form.cleaned_data.get('last_name')
-                email = form.cleaned_data.get('email')
-                address = form.cleaned_data.get('address')
-                address2 = form.cleaned_data.get('address2')
-                city = form.cleaned_data.get('city')
-                state = form.cleaned_data.get('state')
-                zip = form.cleaned_data.get('zip')
                 raw_password = form.cleaned_data.get('password1')
                 firstname = form.cleaned_data.get('first_name')
                 lastname = form.cleaned_data.get('last_name')
@@ -106,22 +98,10 @@ class LoginView:
                 user_account.save()
 
                 login(request, user=user)
-  
-                # account = get_object_or_404(Account, username=username, firstName=firstname)
-
-                # account.address = address
-
                 return redirect('/dronecones/home/')
         else:
             form = SignUpForm()
         return render(request, "drone_cones/create_account_page.html", {'form': form})
-    
-    @receiver(post_save, sender=User)
-    def account_create(sender, instance=None, created=False, **kwargs):
-        if created:
-            Account.objects.create(user=instance, lastName=User.last_name, firstName=User.first_name, email=User.email, username=User.username)
-
-### don't start by inputing the address field... do that in the account page, and that way we can modify later with less security...
 
 class UserView:
     def view_cart():
