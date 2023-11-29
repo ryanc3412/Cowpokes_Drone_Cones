@@ -15,6 +15,9 @@ from django.shortcuts import redirect
 from datetime import date
 from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm
 
+from django.shortcuts import render
+from drone_cones.models import Products, Drone
+
 def addDrone(request):
     if request.method == 'POST':
         
@@ -125,7 +128,7 @@ class UserView:
     def view_profile():
         pass
 
-    @login_required
+    #@login_required
     def user_dash(request):
         flavor_list = Products.objects.order_by('-type')
         context = {
@@ -133,7 +136,7 @@ class UserView:
         }
         return render(request, 'drone_cones/home_page.html', context)
 
-    @login_required
+    #@login_required
     def account_page(request):
         user = request.user
         user_account = Account.objects.get(user=user)
@@ -220,7 +223,7 @@ class UserView:
             
     
 class DroneView:
-    @login_required
+    #@login_required
     def drone_dash(request):
         user = request.user
         associated_account = Account.objects.get(user=user)
@@ -234,7 +237,7 @@ class DroneView:
     def view_drones():
         pass
 
-    @login_required
+    #@login_required
     def drone_register(request):
         return render(request, "drone_cones/drone_register_page.html")
 
@@ -246,27 +249,41 @@ class DroneView:
         return render(request, "drone_cones/edit_drone_page.html", context)
 
 class AdminView:
-    def admin_dash():
-        pass
+    #@login_required
+    def admin_dash(request):
+        # Get data for stock and drones
+        stock_list = Products.objects.order_by('-stockAvailable')
+        drone_list = Drone.objects.order_by('-droneName')
 
-    def view_users():
-        pass
+        context = {
+            'stock_list': stock_list,
+            'drone_list': drone_list,
+        }
 
-    def edit_users():
-        pass
+        return render(request, 'drone_cones/admin_page.html', context)
+
+# class AdminView:
+#     def admin_dash():
+#         pass
+
+#     def view_users():
+#         pass
+
+#     def edit_users():
+#         pass
 
 class OrderView:
     def order_view():
         pass
 
-    @login_required
+    #@login_required
     def order_page(request):
         product_list = reversed(Products.objects.order_by("-id"))
         stock_list = reversed(Products.objects.order_by("-stockAvailable"))
         context = {'productList': product_list, 'stockAvailable': stock_list}
         return render(request, 'drone_cones/order_page.html', context)
 
-    @login_required
+    #@login_required
     def order_confirmation(request):
         orders = reversed(Orders.objects.order_by("-id"))
         context = {'orders': orders}

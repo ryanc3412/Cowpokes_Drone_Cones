@@ -1,11 +1,11 @@
 {% load static %}
 
-<DOCTYPE html
+<DOCTYPE html>
 
 <html lang="en">
 	<head>
-        	<meta charset="utf-8"/>
-        	<title>Admin Page</title>
+        <meta charset="utf-8"/>
+        <title>Admin Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}"/>
 
 	</head>
@@ -23,7 +23,23 @@
 
 
 		<div class="page-container">
-			<div> FEATURED CONES </div>
+			<div>
+            <h2>Stock Information</h2>
+            <ul>
+                {% for product in product_stock_list %}
+                    <li>{{ product.type }} - Stock: {{ product.stockAvailable }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h2>Drone Information</h2>
+            <ul>
+                {% for drone in drone_list %}
+                    <li>{{ drone.droneName }} - Size: {{ drone.size }}, Scoops: {{ drone.scoops }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 		</div>
     </body>
 </html>
