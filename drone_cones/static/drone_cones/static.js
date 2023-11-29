@@ -74,7 +74,7 @@ function selectFlavors(item, event) {
 		item.style.backgroundColor = "#008080";
 		selectedItems.flavor = item.textContent;
 
-        document.getElementById('selected_flavor_input').value = selectedItems.flavor;
+        document.getElementById('items').value = selectedItems.flavor;
 
 		logSelectedItems();
     }

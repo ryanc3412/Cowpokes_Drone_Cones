@@ -13,7 +13,7 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date
-from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm
+from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm, EditDroneForm
 
 def addDrone(request):
     if request.method == 'POST':
@@ -41,8 +41,12 @@ def addOrder(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
 
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
         if form.is_valid():
             # Process other form fields
+            account_id = associated_account.Id
             address = form.cleaned_data['address']
             address2 = form.cleaned_data['address2']
             city = form.cleaned_data['city']
@@ -56,6 +60,7 @@ def addOrder(request):
 
             # Save the order to the database
             order = Orders.objects.create(
+                
                 address=address,
                 address2=address2,
                 city=city,
@@ -64,6 +69,8 @@ def addOrder(request):
                 items={'flavor': selected_flavor},  # Store selected flavor in JSONField
                 # Add other fields as needed
             )
+
+            order.save()
 
             return JsonResponse({'message': 'Order added successfully'})
         else:
@@ -240,10 +247,33 @@ class DroneView:
 
     @login_required
     def edit_drone(request, drone_id):
-        drone = Drone.objects.get(id = int(drone_id))
-        print(f"Drone name is {drone.droneName}")
-        context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
-        return render(request, "drone_cones/edit_drone_page.html", context)
+
+        user = request.user
+        user_account = Account.objects.get(user=user)
+
+        if request.method == 'POST':
+            form = EditDroneForm(request.POST)
+            if form.is_valid():
+               
+                drone_name = form.cleaned_data.get('drone_name')
+                drone_size = form.cleaned_data.get('drone_size')
+                drone_capacity = form.cleaned_data.get('drone_capacity')
+
+                drone = Drone.objects.get(id = int(drone_id))
+
+                drone.droneName = drone_name
+                drone.size = drone_size
+                drone.scoops = drone_capacity
+               
+                drone.save()
+
+                return HttpResponseRedirect("../../drones")
+        else:
+
+            drone = Drone.objects.get(id = int(drone_id))
+            print(f"Drone name is {drone.droneName}")
+            context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
+            return render(request, "drone_cones/edit_drone_page.html", context)
 
 class AdminView:
     def admin_dash():
