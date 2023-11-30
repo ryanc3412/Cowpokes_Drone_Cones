@@ -2,16 +2,18 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from drone_cones.models import *
+import json
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    username = forms.CharField(max_length=46, required=True, help_text='Enter your unique username.')
+    first_name = forms.CharField(max_length=46, required=True)
+    last_name = forms.CharField(max_length=46, required=True)
+    email = forms.EmailField(max_length=254, required=True, help_text='Input a valid email address.')
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1')
 
 class DroneRegisterForm(forms.Form):
     drone_name = forms.CharField(label = "Drone Name", max_length=100)
