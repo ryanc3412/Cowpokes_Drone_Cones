@@ -17,7 +17,7 @@ class Account(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
     cart = models.JSONField(blank=True, null=True)
-    is_admin = models.BooleanField()
+    is_admin = models.BooleanField(default=False)
 
 class Drone(models.Model):
     id = models.AutoField(primary_key=True)
@@ -39,9 +39,9 @@ class Orders(models.Model):
     items = models.JSONField(blank=True, null=True)
     drone = models.IntegerField(blank=True, null=True)
     deliverySuccessful = models.BooleanField(blank=True, null=True)
-    timeOrdered = models.DateField(blank=True, null=True)
-    timeDelivered = models.DateField(blank=True, null=True)
-    timeToDeliver = models.DateField(blank=True, null=True)
+    timeOrdered = models.TimeField(blank=True, null=True)
+    timeDelivered = models.TimeField(blank=True, null=True)
+    timeToDeliver = models.TimeField(blank=True, null=True)
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)

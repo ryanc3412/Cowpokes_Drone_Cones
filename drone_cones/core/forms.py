@@ -25,6 +25,10 @@ class OrderForm(forms.Form):
     city = forms.CharField(label = "city", max_length=30)
     state = forms.CharField(label = "state", max_length=30)
     zip = forms.IntegerField(label = "zip")
+    drone = forms.IntegerField(label = "droneID")
+    timeOrdered = models.TimeField()
+    timeDelivered = models.TimeField()
+    timeToDeliver = models.TimeField()
 
 class EditAccountForm(forms.Form):
     username = forms.CharField(label = "username", max_length=100)
