@@ -9,7 +9,10 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date
-from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm
+from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm, EditDroneForm
+
+from django.shortcuts import render
+from drone_cones.models import Products, Drone
 
 def addDrone(request):
     if request.method == 'POST':
@@ -35,8 +38,12 @@ def addOrder(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
 
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
         if form.is_valid():
             # Process other form fields
+            account_id = associated_account.Id
             address = form.cleaned_data['address']
             address2 = form.cleaned_data['address2']
             city = form.cleaned_data['city']
@@ -50,6 +57,7 @@ def addOrder(request):
 
             # Save the order to the database
             order = Orders.objects.create(
+                
                 address=address,
                 address2=address2,
                 city=city,
@@ -58,6 +66,8 @@ def addOrder(request):
                 items={'flavor': selected_flavor},  # Store selected flavor in JSONField
                 # Add other fields as needed
             )
+
+            order.save()
 
             return JsonResponse({'message': 'Order added successfully'})
         else:
@@ -91,7 +101,7 @@ class LoginView:
                 lastname = form.cleaned_data.get('last_name')
                 email = form.cleaned_data.get('email')
                 user = authenticate(username=username, password=raw_password)
-                user_account = Account(user=user, firstName=firstname, lastName=lastname, email=email)
+                user_account = Account(user=user, firstName=firstname, lastName=lastname, email=email, is_admin = False)
 
                 user_account.save()
 
@@ -108,7 +118,7 @@ class UserView:
     def view_profile():
         pass
 
-    @login_required
+    #@login_required
     def user_dash(request):
         flavor_list = Products.objects.order_by('-type')
         context = {
@@ -116,7 +126,7 @@ class UserView:
         }
         return render(request, 'drone_cones/home_page.html', context)
 
-    @login_required
+    #@login_required
     def account_page(request):
         user = request.user
         user_account = Account.objects.get(user=user)
@@ -203,7 +213,7 @@ class UserView:
             
     
 class DroneView:
-    @login_required
+    #@login_required
     def drone_dash(request):
         user = request.user
         associated_account = Account.objects.get(user=user)
@@ -217,16 +227,41 @@ class DroneView:
     def view_drones():
         pass
 
-    @login_required
+    #@login_required
     def drone_register(request):
         return render(request, "drone_cones/drone_register_page.html")
 
     @login_required
     def edit_drone(request, drone_id):
-        drone = Drone.objects.get(id = int(drone_id))
-        print(f"Drone name is {drone.droneName}")
-        context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
-        return render(request, "drone_cones/edit_drone_page.html", context)
+
+        user = request.user
+        user_account = Account.objects.get(user=user)
+
+        if request.method == 'POST':
+            form = EditDroneForm(request.POST)
+            if form.is_valid():
+               
+                drone_name = form.cleaned_data.get('drone_name')
+                drone_size = form.cleaned_data.get('drone_size')
+                drone_capacity = form.cleaned_data.get('drone_capacity')
+                is_active = form.cleaned_data.get('is_active')
+
+                drone = Drone.objects.get(id = int(drone_id))
+
+                drone.droneName = drone_name
+                drone.size = drone_size
+                drone.scoops = drone_capacity
+                drone.isActive = is_active
+               
+                drone.save()
+
+                return HttpResponseRedirect("../../drones")
+        else:
+
+            drone = Drone.objects.get(id = int(drone_id))
+            print(f"Drone name is {drone.droneName}")
+            context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops, 'is_active': drone.isActive}
+            return render(request, "drone_cones/edit_drone_page.html", context)
 
 class ManagerView:
     def manager_dash(request):
@@ -240,19 +275,42 @@ class ManagerView:
 
     def view_finances(request):
         return render(request, "drone_cones/stock_page.html")
+class AdminView:
+    #@login_required
+    def admin_dash(request):
+        # Get data for stock and drones
+        stock_list = Products.objects.order_by('-stockAvailable')
+        drone_list = Drone.objects.order_by('-droneName')
+
+        context = {
+            'stock_list': stock_list,
+            'drone_list': drone_list,
+        }
+
+        return render(request, 'drone_cones/admin_page.html', context)
+
+# class AdminView:
+#     def admin_dash():
+#         pass
+
+#     def view_users():
+#         pass
+
+#     def edit_users():
+#         pass
 
 class OrderView:
     def order_view():
         pass
 
-    @login_required
+    #@login_required
     def order_page(request):
         product_list = reversed(Products.objects.order_by("-id"))
         stock_list = reversed(Products.objects.order_by("-stockAvailable"))
         context = {'productList': product_list, 'stockAvailable': stock_list}
         return render(request, 'drone_cones/order_page.html', context)
 
-    @login_required
+    #@login_required
     def order_confirmation(request):
         orders = reversed(Orders.objects.order_by("-id"))
         context = {'orders': orders}

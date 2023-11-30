@@ -18,6 +18,7 @@ class Account(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
     cart = models.JSONField(blank=True, null=True)
+    is_admin = models.BooleanField()
 
 class Drone(models.Model):
     id = models.AutoField(primary_key=True)
@@ -31,24 +32,18 @@ class Drone(models.Model):
 class Orders(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     id = models.AutoField(primary_key=True)
-    account = models.IntegerField()
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    zip = models.CharField(max_length=100)
-    items = models.JSONField()
-    drone = models.IntegerField()
-    deliverySuccessful = models.BooleanField()
-    timeOrdered = models.DateField()
-    timeDelivered = models.DateField()
-    timeToDeliver = models.DateField()
-
-class Admins(models.Model):
-    id = models.AutoField(primary_key=True)
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)
-    accessLevel = models.CharField(max_length=100)
+    account_id = models.IntegerField(blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    address2 = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    zip = models.CharField(max_length=100, blank=True, null=True)
+    items = models.JSONField(blank=True, null=True)
+    drone = models.IntegerField(blank=True, null=True)
+    deliverySuccessful = models.BooleanField(blank=True, null=True)
+    timeOrdered = models.DateField(blank=True, null=True)
+    timeDelivered = models.DateField(blank=True, null=True)
+    timeToDeliver = models.DateField(blank=True, null=True)
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
