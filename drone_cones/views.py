@@ -175,6 +175,7 @@ class UserView:
 
             context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
             return render (request, 'drone_cones/edit_account.html', context)
+
     @login_required
     def edit_address(request):
 
