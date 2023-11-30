@@ -41,9 +41,9 @@ class Orders(models.Model):
     items = models.JSONField(blank=True, null=True)
     drone = models.IntegerField(blank=True, null=True)
     deliverySuccessful = models.BooleanField(blank=True, null=True)
-    timeOrdered = models.DateField(blank=True, null=True)
-    timeDelivered = models.DateField(blank=True, null=True)
-    timeToDeliver = models.DateField(blank=True, null=True)
+    timeOrdered = models.TimeField(blank=True, null=True)
+    timeDelivered = models.TimeField(blank=True, null=True)
+    timeToDeliver = models.TimeField(blank=True, null=True)
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)

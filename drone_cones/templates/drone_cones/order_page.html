@@ -42,7 +42,7 @@
 									ITEMS
 								</label>
 
-                                				<div class="productBox">
+                                <div class="productBox">
 									<div class="flavors" id="flavors">
 										{% for product in product_list %}
 											<div>
@@ -52,6 +52,13 @@
 									</div>
 								</div>
 								<script>
+									function setTimeOrdered() {
+        								var currentTime = new Date();
+										var formattedTime = currentTime.toISOString(); // Convert to ISO format
+
+										// Set the formatted time in the hidden field
+										document.getElementById('timeOrdered').value = formattedTime;
+									}
 									window.onload = function() {
 										populate();
 									};
@@ -75,7 +82,16 @@
                                 <label class="spacer" for="zip"> ZIP </label> 
                                 <input id="zip" type="number" name="zip" maxlength = "100" required>                   
                                 <div></div>
-        
+								<label class="spacer" for="drone"> DRONE </label>
+								<select name="drone" id="drone" name="drone">
+									{% for drone in drone_list %}
+										<option id="droneID" name="droneID" value="{{drone.id}}">
+											{{drone.droneName}}
+										</option>
+									{% endfor %}
+								</select>
+								<div></div>
+								
                                 <input type="submit" value="ADD">
 						</form>
 			</div>
