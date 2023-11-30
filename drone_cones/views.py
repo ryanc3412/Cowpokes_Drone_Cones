@@ -1,12 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.urls import reverse
 from drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.views import redirect_to_login
-from django.contrib.auth.forms import UserCreationForm
-from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -25,8 +21,6 @@ def addDrone(request):
         print(f"FORM IS VALID: {form.is_valid()}")
 
         if form.is_valid():
-            #form.save()
-
             form_drone_name = form.cleaned_data['drone_name']
             form_size = form.cleaned_data['size']
             form_scoops = form.cleaned_data['scoops']
@@ -92,21 +86,10 @@ class LoginView:
     def login(request):
         return render(request, 'drone_cones/login_page.html')
 
-    def register(first_name, last_name, email, password):
-        user = User.objects.create_user(email, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
-        return redirect_to_login('URL_GOES_HERE', 'LOGIN_URL')
-    
     def redirect_view(request):
         response = redirect('/dronecones/accounts/logout/')
         return response
         
-    def logout():
-        pass
-
-    # @receiver(post_save, sender=User)
     def create_account(request):
         if request.method == 'POST':
             form = SignUpForm(request.POST)
@@ -135,7 +118,7 @@ class UserView:
     def view_profile():
         pass
 
-    #@login_required
+    @login_required
     def user_dash(request):
         flavor_list = Products.objects.order_by('-type')
         context = {
@@ -143,7 +126,7 @@ class UserView:
         }
         return render(request, 'drone_cones/home_page.html', context)
 
-    #@login_required
+    @login_required
     def account_page(request):
         user = request.user
         user_account = Account.objects.get(user=user)
@@ -192,6 +175,7 @@ class UserView:
 
             context = {'first_name':user_account.firstName, 'last_name':user_account.lastName, 'username':user.username, 'date_joined':date_joined}
             return render (request, 'drone_cones/edit_account.html', context)
+
     @login_required
     def edit_address(request):
 
@@ -230,7 +214,7 @@ class UserView:
             
     
 class DroneView:
-    #@login_required
+    @login_required
     def drone_dash(request):
         user = request.user
         associated_account = Account.objects.get(user=user)
@@ -244,7 +228,7 @@ class DroneView:
     def view_drones():
         pass
 
-    #@login_required
+    @login_required
     def drone_register(request):
         return render(request, "drone_cones/drone_register_page.html")
 
@@ -280,8 +264,24 @@ class DroneView:
             context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops, 'is_active': drone.isActive}
             return render(request, "drone_cones/edit_drone_page.html", context)
 
+class ManagerView:
+    def manager_dash(request):
+        return render(request, "drone_cones/manager_home.html")
+
+    def view_users(request):
+        return render(request, "drone_cones/all_users.html")
+
+    def view_stock(request):
+        return render(request, "drone_cones/stock_page.html")
+
+    def view_finances(request):
+        return render(request, "drone_cones/stock_page.html")
+    
+    def view_drones(request):
+        return render(request, "drone_cones/all_drones.html")
+    
 class AdminView:
-    #@login_required
+    @login_required
     def admin_dash(request):
         # Get data for stock and drones
         stock_list = Products.objects.order_by('-stockAvailable')
@@ -294,28 +294,18 @@ class AdminView:
 
         return render(request, 'drone_cones/admin_page.html', context)
 
-# class AdminView:
-#     def admin_dash():
-#         pass
-
-#     def view_users():
-#         pass
-
-#     def edit_users():
-#         pass
-
 class OrderView:
     def order_view():
         pass
 
-    #@login_required
+    @login_required
     def order_page(request):
         product_list = reversed(Products.objects.order_by("-id"))
         stock_list = reversed(Products.objects.order_by("-stockAvailable"))
         context = {'productList': product_list, 'stockAvailable': stock_list}
         return render(request, 'drone_cones/order_page.html', context)
 
-    #@login_required
+    @login_required
     def order_confirmation(request):
         orders = reversed(Orders.objects.order_by("-id"))
         context = {'orders': orders}
