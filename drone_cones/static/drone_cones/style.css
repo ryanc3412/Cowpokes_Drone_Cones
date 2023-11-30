@@ -1,7 +1,6 @@
-
 body {
 	margin: 0px;
-	background-color:008080;
+	background-color: 008080;
 }
 
 
@@ -13,23 +12,26 @@ div.page-container {
 }
 
 h1.center {
-    text-align: center;
-    margin: 0; /* Reset the default margin */
-    padding: 0; /* Reset the default padding */
+	text-align: center;
+	margin: 0;
+	/* Reset the default margin */
+	padding: 0;
+	/* Reset the default padding */
 }
 
 .topnav {
-  overflow: hidden;
-  background-color: #c0c0c0;
-  border-style: outset;
-  border-width: thick;
+	overflow: hidden;
+	background-color: #c0c0c0;
+	border-style: outset;
+	border-width: thick;
 }
+
 
 .topnav a {
 	color: black;
 	float: left;
 	text-align: center;
-	padding: 15px;	
+	padding: 15px;
 	text-decoration: none;
 	font-family: sans-serif;
 	font-size: 20px;
@@ -41,9 +43,36 @@ h1.center {
 }
 
 .topnav a:active {
-  background-color: #04AA6D;
-  color: black;
+	background-color: #04AA6D;
+	color: black;
+	
+}
 
+.sidenav {
+	overflow: hidden;
+	background-color: #c0c0c0;
+	border-style: outset;
+	border-width: thick;
+}
+
+.sidenav a:hover {
+	background-color: #cfcfcf;
+	color: white;
+}
+
+.sidenav a {
+	color: black;
+	float: left;
+	text-align: center;
+	padding: 15px;
+	text-decoration: none;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+
+.sidenav a:active {
+	background-color: #04AA6D;
+	color: black;
 }
 
 
@@ -58,21 +87,63 @@ h1.center {
 
 }
 
+.manager-left {
+	width: 45%;
+	background-color: #dbdbdb;
+	/* padding: 4px; */
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 2px;
+	border-style: inset;
+	float: left;
+	text-align: center;
+}
+
+.manager-right {
+	width: 45%;
+	background-color: #dbdbdb;
+	/* padding: 4px; */
+	padding-left: 2px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 4px;
+	border-style: inset;
+	float: right;
+	text-align: center;
+}
+
+.manager-bottom {
+	width: 96%;
+	background-color: #dbdbdb;
+	padding: 4px;
+	text-align: center;
+}
+
 .left {
-	width: 25%;
+	width: 33%;
 	background-color: #dbdbdb;
 	padding: 4px;
 	border-style: inset;
 }
 
 .middle {
-	width: 25%;
-	background-color: white;
+	width: 33%;
+	background-color: #dbdbdb;
 }
 
 .right {
-	width: 25%;
-	background-color: white;
+	width: 33%;
+	background-color: #dbdbdb;
+	padding: 4px;
+	border-style: inset;
+	float: right;
+}
+
+.bottom {
+	box-sizing: border-box;
+	width: auto;
+	background-color: #dbdbdb;
 }
 
 .row:after {
@@ -97,12 +168,6 @@ h1.center {
 	font-family: sans-serif;
 	font-size: 10px;
 }
-
-.pad {
-
-
-}
-
 
 a.order {
 	margin: 30px;
@@ -131,7 +196,7 @@ div.inner-border {
 	padding: 10px;
 	border-style: inset;
 	border-width: 2px;
-	
+
 }
 
 .baricon {
@@ -199,7 +264,7 @@ div.inner-border {
 }
 
 .flavors {
-	margin-bottom:25px;
+	margin-bottom: 25px;
 }
 
 .scoops {
@@ -238,4 +303,3 @@ div.inner-border {
 	font-size: x-large;
 	text-align: center;
 }
-
