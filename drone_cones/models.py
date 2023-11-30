@@ -47,7 +47,7 @@ class Orders(models.Model):
 
 class Admins(models.Model):
     id = models.AutoField(primary_key=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
     accessLevel = models.CharField(max_length=100)
 
 class Products(models.Model):

@@ -18,8 +18,6 @@ def addDrone(request):
         print(f"FORM IS VALID: {form.is_valid()}")
 
         if form.is_valid():
-            #form.save()
-
             form_drone_name = form.cleaned_data['drone_name']
             form_size = form.cleaned_data['size']
             form_scoops = form.cleaned_data['scoops']
@@ -230,15 +228,18 @@ class DroneView:
         context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops}
         return render(request, "drone_cones/edit_drone_page.html", context)
 
-class AdminView:
-    def admin_dash():
-        pass
+class ManagerView:
+    def manager_dash(request):
+        return render(request, "drone_cones/manager_home.html")
 
-    def view_users():
-        pass
+    def view_users(request):
+        return render(request, "drone_cones/all_users.html")
 
-    def edit_users():
-        pass
+    def view_stock(request):
+        return render(request, "drone_cones/stock_page.html")
+
+    def view_finances(request):
+        return render(request, "drone_cones/stock_page.html")
 
 class OrderView:
     def order_view():

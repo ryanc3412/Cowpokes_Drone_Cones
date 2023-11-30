@@ -6,10 +6,10 @@ import json
 
 
 class SignUpForm(UserCreationForm):
-    username = forms.CharField(max_length=46, required=True, help_text='Optional.')
-    first_name = forms.CharField(max_length=46, required=True, help_text='Optional.')
-    last_name = forms.CharField(max_length=46, required=True, help_text='Optional.')
-    email = forms.EmailField(max_length=254, required=True, help_text='Required. Inform a valid email address.')
+    username = forms.CharField(max_length=46, required=True, help_text='Enter your unique username.')
+    first_name = forms.CharField(max_length=46, required=True)
+    last_name = forms.CharField(max_length=46, required=True)
+    email = forms.EmailField(max_length=254, required=True, help_text='Input a valid email address.')
 
     class Meta:
         model = User

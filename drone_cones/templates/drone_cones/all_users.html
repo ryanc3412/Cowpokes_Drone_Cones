@@ -1,0 +1,36 @@
+{% load static %}
+
+<DOCTYPE html>
+
+	<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>Admin Page</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}" />
+
+	</head>
+
+
+	<body>
+
+		<div class="topnav">
+			<a href="{% url 'drone_cones:home' %}"> <u>H</u>ome </a>
+			<a href="{% url 'drone_cones:order' %}"> <u>O</u>rder </a>
+			<a href="{% url 'drone_cones:drones' %}"> <u>D</u>rones </a>
+			<a href="{% url 'drone_cones:account' %}"> <u>A</u>ccount </a>
+			<a href="{% url 'drone_cones:manager' %}"> <u>M</u>anager</a>
+			<a href="/dronecones/logout">Logout</a>
+			<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="test">
+			<img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="test">
+		</div>
+
+		<div class="topnav">
+			<a href="{% url 'drone_cones:all_users' %}"> <u>U</u>sers </a>
+			<a href="{% url 'drone_cones:stock' %}"> <u>S</u>tock </a>
+			<a href="{% url 'drone_cones:finance' %}"> <u>F</u>inances </a>
+		</div>
+
+	</body>
+
+	</html>
