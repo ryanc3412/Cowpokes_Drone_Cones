@@ -298,8 +298,8 @@ class AdminView:
     @login_required
     def admin_dash(request):
         # Get data for stock and drones
-        stock_list = Products.objects.order_by('-stockAvailable')
-        drone_list = Drone.objects.order_by('-droneName')
+        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+        drone_list = reversed(Drone.objects.order_by('-droneName'))
 
         context = {
             'stock_list': stock_list,
