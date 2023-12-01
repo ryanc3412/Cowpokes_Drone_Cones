@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -17,6 +18,7 @@ class Account(models.Model):
     state = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
     cart = models.JSONField(blank=True, null=True)
+    is_admin = models.BooleanField(default=False)
 
 class Drone(models.Model):
     id = models.AutoField(primary_key=True)
@@ -28,6 +30,7 @@ class Drone(models.Model):
     dateRegistered = models.DateTimeField(auto_now_add=True)
 
 class Orders(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     id = models.AutoField(primary_key=True)
     account_id = models.IntegerField(blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
@@ -38,14 +41,9 @@ class Orders(models.Model):
     items = models.JSONField(blank=True, null=True)
     drone = models.IntegerField(blank=True, null=True)
     deliverySuccessful = models.BooleanField(blank=True, null=True)
-    timeOrdered = models.DateField(blank=True, null=True)
-    timeDelivered = models.DateField(blank=True, null=True)
-    timeToDeliver = models.DateField(blank=True, null=True)
-
-class Admins(models.Model):
-    id = models.AutoField(primary_key=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    accessLevel = models.CharField(max_length=100)
+    timeOrdered = models.TimeField(blank=True, null=True)
+    timeDelivered = models.TimeField(blank=True, null=True)
+    timeToDeliver = models.TimeField(blank=True, null=True)
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
