@@ -23,7 +23,7 @@
 
 
 		<div class="page-container">
-			<div>
+		<div>
             <h2>Stock Information</h2>
             <ul>
                 {% for product in stock_list %}
@@ -39,6 +39,14 @@
                     <li>{{ drone.droneName }} - Size: {{ drone.size }}, Scoops: {{ drone.scoops }}</li>
                 {% endfor %}
             </ul>
+        </div>
+        <div>
+        	<h2>User Information</h2>
+        	<ul>
+            {% for user in user_list %}
+                <li>{{ user.firstName }} {{ user.lastName }} - Email: {{ user.email }}, Address: {{ user.address }}, City: {{ user.city }}</li>
+            {% endfor %}
+        </ul>
         </div>
 		</div>
     </body>

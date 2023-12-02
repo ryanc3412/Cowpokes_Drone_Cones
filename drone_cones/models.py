@@ -27,6 +27,7 @@ class Drone(models.Model):
     size = models.CharField(max_length=100)
     scoops = models.IntegerField()
     isActive = models.BooleanField(default = False)
+    isDelivering = models.BooleanField(default = False)
     dateRegistered = models.DateTimeField(auto_now_add=True)
 
 class Orders(models.Model):
@@ -48,5 +49,6 @@ class Orders(models.Model):
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=100)
+    image = models.ImageField(null=True, blank=True)
     flavor = models.CharField(max_length=100)
     stockAvailable = models.IntegerField()

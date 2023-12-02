@@ -217,13 +217,24 @@ div.inner-border {
 	text-align: center;
 }
 
-.flavorDisplay {
+.flavor1Display {
 	display: inline;
 	background-color: darkgrey;
 	margin-right: 50px;
 	border-radius: 25px;
 	padding: 10px;
 	text-align: center;
+	cursor: grab;
+}
+
+.flavor2Display {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+	cursor: grab;
 }
 
 .coneDisplay {
@@ -233,6 +244,17 @@ div.inner-border {
 	border-radius: 25px;
 	padding: 10px;
 	text-align: center;
+	cursor: grab;
+}
+
+.toppingsDisplay {
+	display: inline;
+	background-color: darkgrey;
+	margin-right: 50px;
+	border-radius: 25px;
+	padding: 10px;
+	text-align: center;
+	cursor: grab;
 }
 
 .scoopDisplay {
@@ -264,6 +286,14 @@ div.inner-border {
 }
 
 .flavors {
+	margin-bottom: 25px;
+}
+
+.cones {
+	margin-bottom: 25px;
+}
+
+.toppings {
 	margin-bottom: 25px;
 }
 
@@ -303,3 +333,26 @@ div.inner-border {
 	font-size: x-large;
 	text-align: center;
 }
+
+/* body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
+  } */
+  
+  .product-container {
+	display: flex;
+	gap: 20px; /* Adjust the gap as needed */
+  }
+  
+  .product-card {
+	flex: 1;
+	border: 1px solid black;
+	margin: 10px; /* Adjust the margin as needed */
+	padding: 20px;
+	text-align: center;
+	max-width: 300px; /* Adjust the max-width as needed */
+  }
+  

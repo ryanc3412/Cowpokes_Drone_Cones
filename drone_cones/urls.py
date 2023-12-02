@@ -27,5 +27,8 @@ urlpatterns = [
     path('manager/users/', views.ManagerView.view_users, name='all_users'),
     path('manager/finance/', views.ManagerView.view_finances, name='finance'),
     path('manager/stock/', views.ManagerView.view_stock, name='stock'),
-    path('manager/all_drones/', views.ManagerView.view_drones, name='all_drones')
+    path('manager/all_drones/', views.ManagerView.view_drones, name='all_drones'),
+
+    path('get_products/', views.OrderView.get_products, name='get_products'),
+    path('save_order/', views.OrderView.save_order, name='save_order'),
 ]
