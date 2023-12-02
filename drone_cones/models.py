@@ -49,5 +49,6 @@ class Orders(models.Model):
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=100)
+    image = models.ImageField(null=True, blank=True)
     flavor = models.CharField(max_length=100)
     stockAvailable = models.IntegerField()
