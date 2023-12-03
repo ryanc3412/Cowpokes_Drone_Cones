@@ -30,5 +30,8 @@ urlpatterns = [
     path('manager/all_drones/', views.ManagerView.view_drones, name='all_drones'),
 
     path('get_products/', views.OrderView.get_products, name='get_products'),
-    path('save_order/', views.OrderView.save_order, name='save_order'),
+    path('add_to_cart/', views.OrderView.add_to_cart, name='add_to_cart'),
+    path('send_order/', views.OrderView.send_order, name='send_order'),
+    path('remove_from_order/', views.OrderView.remove_from_order, name='remove_from_order'),
+    
 ]

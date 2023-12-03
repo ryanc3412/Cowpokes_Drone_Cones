@@ -17,7 +17,7 @@ class Account(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
-    cart = models.JSONField(blank=True, null=True)
+    cart = models.JSONField(default=list)
     is_admin = models.BooleanField(default=False)
 
 class Drone(models.Model):
