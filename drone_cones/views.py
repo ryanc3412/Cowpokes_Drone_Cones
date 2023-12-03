@@ -37,7 +37,6 @@ def addDrone(request):
             return HttpResponseRedirect("drones")
 
 def addOrder(request):
-    print("THIS WAS REACHED")
     if request.method == 'POST':
         form = OrderForm(request.POST)
 
@@ -347,6 +346,7 @@ class OrderView:
             'product_list': product_list, 
             'cart': cart,
         }
+
         return render(request, 'drone_cones/order_page.html', context)
 
     @login_required
@@ -394,16 +394,38 @@ class OrderView:
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
                     Orders.objects.create(user=user, account_id=account.Id, items=account.cart)
-
-                    response = JsonResponse({'status': 'success'})
-                    response['X-Redirect'] = redirect_url
-
+                    ## empty cart
                     account.cart = []
                     account.save()
                     
+                response = JsonResponse({'status': 'success'})
                 redirect_url = '/dronecones/order/'
+                response['X-Redirect'] = redirect_url
 
                 return redirect(redirect_url)
+            except json.JSONDecodeError:
+                return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+    def remove_from_order(request):
+        if request.method == 'POST':
+            try:
+                item_number = int(request.body)
+
+                user = request.user
+                account = Account.objects.get(user=user)
+                if (len(account.cart) >= item_number):
+                    account.cart.pop(item_number - 1)
+                    account.save()
+
+                redirect_url = '/dronecones/order/'
+
+                response = JsonResponse({'status': 'success'})
+                redirect_url = '/dronecones/order/'
+                response['X-Redirect'] = redirect_url
+                
+                return response
             except json.JSONDecodeError:
                 return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
         else:

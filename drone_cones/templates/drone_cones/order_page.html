@@ -104,13 +104,15 @@
 							<div>Cart is empty. Order now to get started!</div>
 							{% else %}
 							{% for item in cart %}
-							<div class="column left">
+							<div class="column left" id="{{forloop.counter}}">
+								<label for="column left">{{forloop.counter}}</label>
 								<p>Scoop 1: {{ item.flavor1 }}</p>
 								<p>Scoop 2: {{ item.flavor2 }}</p>
 								<p>Cone: {{ item.cone }}</p>
 								<p>Topping 1: {{ item.toppings.first }}</p>
 								<p>Topping 2: {{ item.toppings.second }}</p>
 								<p>Topping 3: {{ item.toppings.third }}</p>
+								<button onclick="removeItemFromOrder('{{forloop.counter}}')">REMOVE</button>
 							</div>
 							{% endfor %}
 							{% endif %}

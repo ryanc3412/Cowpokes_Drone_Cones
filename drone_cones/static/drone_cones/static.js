@@ -303,4 +303,29 @@ document.getElementById('addToCart').addEventListener('click', function () {
         });
 });
 
-
+function removeItemFromOrder(itemId) {
+    console.log(itemId);
+    fetch('/dronecones/remove_from_order/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain',
+            'X-CSRFToken': csrftoken,
+        },
+        body: itemId
+    })
+        .then(response => {
+            if (response.headers.get('X-Redirect')) {
+                window.location.href = response.headers.get('X-Redirect');
+            } else {
+                return response.json();
+            }
+        })
+        .then(data => {
+            console.log('Success:', data);
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+}
