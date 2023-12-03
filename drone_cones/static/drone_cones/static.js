@@ -95,6 +95,8 @@ function populate() {
 
 }
 
+var cart = [];
+
 var selectedItems = {
     flavor1: "",
     flavor2: "",
@@ -275,8 +277,8 @@ function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken');
 
-document.getElementById('saveOrder').addEventListener('click', function () {
-    fetch('/dronecones/save_order/', {
+document.getElementById('addToCart').addEventListener('click', function () {
+    fetch('/dronecones/add_to_cart/', {
         method: 'POST',
         headers: {
             'X-CSRFToken': csrftoken,
@@ -284,10 +286,11 @@ document.getElementById('saveOrder').addEventListener('click', function () {
         body: JSON.stringify(selectedItems),
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            if (response.headers.get('X-Redirect')) {
+                window.location.href = response.headers.get('X-Redirect');
+            } else {
+                return response.json();
             }
-            return response.json();
         })
         .then(data => {
             console.log('Success:', data);
