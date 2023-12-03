@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -280,19 +280,58 @@ class DroneView:
 
 class ManagerView:
     def manager_dash(request):
-        return render(request, "drone_cones/manager_home.html")
+	
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/manager_home.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_users(request):
-        return render(request, "drone_cones/all_users.html")
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        context = {'accounts': Account.objects.all()}
+
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/all_users.html", context)
+        else:
+            return HttpResponseForbidden()
 
     def view_stock(request):
-        return render(request, "drone_cones/stock_page.html")
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_finances(request):
-        return render(request, "drone_cones/stock_page.html")
-    
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
+ 
     def view_drones(request):
-        return render(request, "drone_cones/all_drones.html")
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        context = {'drones': Drone.objects.all()}
+
+
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/all_drones.html", context)
+        else:
+            return HttpResponseForbidden()
+
     
 class AdminView:
     @login_required
