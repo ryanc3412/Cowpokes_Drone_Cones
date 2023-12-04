@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -256,13 +256,22 @@ class DroneView:
                
                 drone_name = form.cleaned_data.get('drone_name')
                 drone_size = form.cleaned_data.get('drone_size')
-                drone_capacity = form.cleaned_data.get('drone_capacity')
                 is_active = form.cleaned_data.get('is_active')
 
+                if drone_size == "Large":
+                    drone.scoops = 10
+
+                elif drone_size == "Medium":
+                    drone.scoops = "7"
+
+                elif drone_size == "Small":
+                    drone.scoops = "5"
+
+                else:
+                    return HttpResponseNotAllowed()
 
                 drone.droneName = drone_name
                 drone.size = drone_size
-                drone.scoops = drone_capacity
                 drone.isActive = is_active
                
                 drone.save()
@@ -382,12 +391,22 @@ class ManagerView:
 
                     drone_name = form.cleaned_data.get('drone_name')
                     drone_size = form.cleaned_data.get('drone_size')
-                    drone_capacity = form.cleaned_data.get('drone_capacity')
                     is_active = form.cleaned_data.get('is_active')
+     
+                    if drone_size == "Large":
+                        drone.scoops = 10
+
+                    elif drone_size == "Medium":
+                        drone.scoops = "7"
+
+                    elif drone_size == "Small":
+                        drone.scoops = "5"
+
+                    else:
+                        return HttpResponseNotAllowed()
 
                     drone.droneName = drone_name
                     drone.size = drone_size
-                    drone.scoops = drone_capacity
                     drone.isActive = is_active
 
                     drone.save()
