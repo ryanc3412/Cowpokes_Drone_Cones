@@ -138,6 +138,8 @@ class UserView:
         user_account = Account.objects.get(user=user)
         date_joined = user.date_joined.strftime("%m/%d/%Y")	
 
+        order_list = Orders.objects.filter(account_id=user_account.Id)
+
         context = {
             'first_name':user_account.firstName, 
             'last_name':user_account.lastName,
@@ -147,7 +149,9 @@ class UserView:
             'address_2': user_account.address2,
             'city': user_account.city,
             'state': user_account.state,
-            'zip': user_account.zip}
+            'zip': user_account.zip,
+            'orderList': order_list}
+            
         return render (request, 'drone_cones/account_page.html', context)
 
     @login_required
