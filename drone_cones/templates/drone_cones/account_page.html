@@ -78,33 +78,23 @@
 									</div>
 							</div>
                         <div class="orderHistoryToppings"> TOPPINGS </div>
-						{% if order.item.0.toppings %}
-							<div class="orderItems">
-								<div class="orderItem" id="topping1">
-									{{ order.items.0.toppings.first }}
-								</div>
-								<div class="orderItem" id="topping2">
-									{{ order.items.0.toppings.second }}
-								</div>
-								<div class="orderItem" id="topping3">
-									{{ order.items.0.toppings.third }}
-								</div>
-							</div>
-						{% endif %}
-						<div class="orderItems">
-							No toppings were ordered.
-						</div>
-                        <div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
-						{% if order.items.0.cone %}
                         <div class="orderItems">
-							<div class="orderItem" id="cone">
-								{{ order.items.0.cone }}
-							</div>
+                            <div class="orderItem" id="topping1">
+                                {{ order.items.0.toppings.first }}
+                            </div>
+                            <div class="orderItem" id="topping2">
+                                {{ order.items.0.toppings.second }}
+                            </div>
+                            <div class="orderItem" id="topping3">
+                                {{ order.items.0.toppings.third }}
+                            </div>
                         </div>
-						{% endif %}
-						<div class="orderItems" id="cone">
-							No cones were ordered
-						</div>
+                        <div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
+                        <div class="orderItems">
+                            <div class="orderItem" id="cone">
+                                {{ order.items.0.cone }}
+                            </div>
+                        </div>
                         <div class="spacer"></div>
                     </div>
                 {% endfor %}
