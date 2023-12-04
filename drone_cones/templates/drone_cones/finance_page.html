@@ -6,7 +6,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>Admin Page</title>
+		<title>Finance Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}" />
 
 	</head>
@@ -33,19 +33,17 @@
 		</div>
 
 
-      	<div class="page-container">
-	    	<div class="bar">HOME PAGE</div>
-	    	<div class="outer-border">
-	    	<div class="inner-border">
-        	<div style="margin-bottom: 10px">
-	            <p>Total Scoops: {{ total_scoops }}</p>
-    			<p>Total Cones: {{ total_cones }}</p>
-    			<p>Total Toppings: {{ total_toppings }}</p>
-        	</div>
-        	</div>
-	    	</div>
+		<div class="page-container">
+		<div>
+            <h3>Finance Information</h3>
+            <ul>
+                {% for product in stock_list %}
+                    <li>{{ product.type }} - {{ product.flavor }}: {{ product.stockAvailable }}</li>
+                {% endfor %}
+                <li>{{ total_scoops }}</li>
+            </ul>
+        </div>
 		</div>
-
 	</body>
 
 	</html>

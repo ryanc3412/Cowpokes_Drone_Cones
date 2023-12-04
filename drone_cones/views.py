@@ -289,7 +289,7 @@ class ManagerView:
 	
         user = request.user
         associated_account = Account.objects.get(user=user)
-
+ 
         if associated_account.is_admin:
             return render(request, "drone_cones/manager_home.html")
         else:
@@ -317,13 +317,12 @@ class ManagerView:
 
             toggled_account = Account.objects.get(Id = account_id)
 
-            toggled_user = toggled_account.user
-        
+            toggled_user = toggled_account.user  
 
             if request.method == 'POST':
                 form = EditUserManagerForm(request.POST)
                 if form.is_valid():
-			
+    		
                     username = form.cleaned_data.get('username')
                     first_name = form.cleaned_data.get('first_name')
                     last_name = form.cleaned_data.get('last_name')
@@ -370,7 +369,6 @@ class ManagerView:
         associated_account = Account.objects.get(user=user)
 
         context = {'drones': Drone.objects.all()}
-
 
         if associated_account.is_admin:
             return render(request,  "drone_cones/all_drones.html", context)
