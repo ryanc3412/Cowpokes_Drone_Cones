@@ -25,9 +25,25 @@ function timer() {
 function writeAddress(checkAddress) {
     var addressOne = document.getElementById("address1");
     var addressTwo = document.getElementById("address2");
+    var city = document.getElementById("city");
+    var state = document.getElementById("state")
+    var zip = document.getElementById("zip")
+
+    if (checkAddress.checked) {
+        fetch('/dronecones/get_account_address/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                addressOne.value = data['address1'];
+                addressTwo.value = data['address2'];
+                city.value = data['city'];
+                state.value = data['state'];
+                zip.value = data['zip'];
+            })
+    }
 
     // Use checkAddress.checked to check if the checkbox is checked
-    addressTwo.value = checkAddress.checked ? addressOne.value : "";
+    // addressTwo.value = checkAddress.checked ? addressOne.value : "";
 }
 
 
@@ -275,19 +291,27 @@ function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken');
 
-document.getElementById('saveOrder').addEventListener('click', function () {
-    fetch('/dronecones/save_order/', {
+document.getElementById('addToCart').addEventListener('click', function () {
+    var selectedItemsCopy;
+    if (selectedItems.cone == "") {
+        alert("You must at least order a cone if you want your order!")
+        selectedItemsCopy = 'Invalid Order';
+    } else {
+        selectedItemsCopy = selectedItems;
+    }
+    fetch('/dronecones/add_to_cart/', {
         method: 'POST',
         headers: {
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify(selectedItems),
+        body: JSON.stringify(selectedItemsCopy),
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            if (response.headers.get('X-Redirect')) {
+                window.location.href = response.headers.get('X-Redirect');
+            } else {
+                return response.json();
             }
-            return response.json();
         })
         .then(data => {
             console.log('Success:', data);
@@ -300,4 +324,29 @@ document.getElementById('saveOrder').addEventListener('click', function () {
         });
 });
 
-
+function removeItemFromOrder(itemId) {
+    console.log(itemId);
+    fetch('/dronecones/remove_from_order/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain',
+            'X-CSRFToken': csrftoken,
+        },
+        body: itemId
+    })
+        .then(response => {
+            if (response.headers.get('X-Redirect')) {
+                window.location.href = response.headers.get('X-Redirect');
+            } else {
+                return response.json();
+            }
+        })
+        .then(data => {
+            console.log('Success:', data);
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+}

@@ -17,7 +17,7 @@ class Account(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     zip = models.CharField(max_length=100, blank=True, null=True)
-    cart = models.JSONField(blank=True, null=True)
+    cart = models.JSONField(default=list)
     is_admin = models.BooleanField(default=False)
 
 class Drone(models.Model):
@@ -47,8 +47,14 @@ class Orders(models.Model):
     timeToDeliver = models.TimeField(blank=True, null=True)
 
 class Products(models.Model):
+    TYPE_CHOICES = [
+        ('Ice Cream', 'Ice Cream'),
+        ('Cone', 'Cone'),
+        ('Topping', 'Topping')
+    ]
     id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES)
     image = models.ImageField(null=True, blank=True)
     flavor = models.CharField(max_length=100)
     stockAvailable = models.IntegerField()
+    cost = models.IntegerField(blank=True, null=True)

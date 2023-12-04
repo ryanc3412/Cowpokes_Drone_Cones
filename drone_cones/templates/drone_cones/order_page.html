@@ -10,7 +10,6 @@
 		<meta charset="utf-8" />
 		<title>Order Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}" />
-
 	</head>
 
 
@@ -39,7 +38,7 @@
 							chip!
 						</div>
 
-						{% csrf_token %}
+						<!-- {% csrf_token %} -->
 
 						<label class="spacer" for="Items">
 							Choose your flavor of ice cream:
@@ -86,40 +85,73 @@
 						</script>
 						<input type="hidden" id="items" name="items" value="" required />
 						<div></div>
-						<label class="spacer" for="address"> ADDRESS </label>
-						<input id="address1" type="text" name="address" maxlength="30" required>
-						<label for="sameAddress" class="sameAddress"> Is this address the same as your second
-							address ?</label>
-						<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
-						<div></div>
-						<label class="spacer" for="address2"> ADDRESS TWO </label>
-						<input id="address2" type="text" name="address2" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="city"> CITY </label>
-						<input id="city" type="text" name="city" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="state"> STATE </label>
-						<input id="state" type="text" name="state" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="zip"> ZIP </label>
-						<input id="zip" type="number" name="zip" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="drone"> DRONE </label>
-						<select name="drone" id="drone" name="drone">
-							{% for drone in drone_list %}
-							<option id="droneID" name="droneID" value="{{drone.id}}">
-								{{drone.droneName}}
-							</option>
-							{% endfor %}
-						</select>
-						<div></div>
-
-						<button id="saveOrder">SUBMIT</button>
+						<button id="addToCart">ADD TO CART</button>
 					</div>
 
 				</div>
 			</div>
 			<script src="{% static 'drone_cones/static.js' %}"></script>
+		</div>
+		<div class="page-container">
+			<div class="bar">CART</div>
+			<div class="outer-border">
+				<div class="inner-border">
+					<div class="margin">
+						<div class="row">
+							{% if cart == null %}
+							<div>Cart is empty. Order now to get started!</div>
+							{% elif cart|length == 0 %}
+							<div>Cart is empty. Order now to get started!</div>
+							{% else %}
+							{% for item in cart %}
+							<div class="column left" id="{{forloop.counter}}">
+								<label for="column left">{{forloop.counter}}</label>
+								<p>Scoop 1: {{ item.flavor1 }}</p>
+								<p>Scoop 2: {{ item.flavor2 }}</p>
+								<p>Cone: {{ item.cone }}</p>
+								<p>Topping 1: {{ item.toppings.first }}</p>
+								<p>Topping 2: {{ item.toppings.second }}</p>
+								<p>Topping 3: {{ item.toppings.third }}</p>
+								<button onclick="removeItemFromOrder('{{forloop.counter}}')">REMOVE</button>
+							</div>
+							{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-container">
+			<div class="bar">DELIVERY INFO</div>
+			<div class="outer-border">
+				<div class="inner-border">
+					<div class="margin">
+						<form action="{% url 'drone_cones:send_order' %}" method="post">
+							{% csrf_token %}
+							{{ form.as_p }}
+							<label for="sameAddress" class="sameAddress"> Use account address? </label>
+							<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
+							<br>
+							<label class="spacer" for="address"> ADDRESS </label>
+							<input id="address1" type="text" name="address" maxlength="30" required>
+							<div></div>
+							<label class="spacer" for="address2"> ADDRESS 2 </label>
+							<input id="address2" type="text" name="address2" maxlength="100">
+							<div></div>
+							<label class="spacer" for="city"> CITY </label>
+							<input id="city" type="text" name="city" maxlength="100" required>
+							<div></div>
+							<label class="spacer" for="state"> STATE </label>
+							<input id="state" type="text" name="state" maxlength="100" required>
+							<div></div>
+							<label class="spacer" for="zip"> ZIP </label>
+							<input id="zip" type="number" name="zip" maxlength="100" required><br><br>
+							<button id="order">CONFIRM ORDER</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 
 	</html>

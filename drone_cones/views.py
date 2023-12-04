@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from drone_cones.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -9,9 +9,8 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date, datetime, timedelta
-from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm, EditDroneForm
+from drone_cones.core.forms import *
 import json
-
 from django.shortcuts import render
 from drone_cones.models import Products, Drone
 from django.utils import timezone
@@ -37,7 +36,6 @@ def addDrone(request):
             return HttpResponseRedirect("drones")
 
 def addOrder(request):
-    print("THIS WAS REACHED")
     if request.method == 'POST':
         form = OrderForm(request.POST)
 
@@ -92,10 +90,6 @@ def addOrder(request):
 
     return render(request, 'drone_cones/order_page.html', {'form': OrderForm()})
 
-
-
-
-	
 def droneRegister(request):    
     return render(request, "drone_cones/drone_register_page.html")
 
@@ -129,12 +123,6 @@ class LoginView:
         return render(request, "drone_cones/create_account_page.html", {'form': form})
 
 class UserView:
-    def view_cart():
-        pass
-
-    def view_profile():
-        pass
-
     @login_required
     def user_dash(request):
         flavor_list = Products.objects.order_by('-type')
@@ -149,6 +137,8 @@ class UserView:
         user_account = Account.objects.get(user=user)
         date_joined = user.date_joined.strftime("%m/%d/%Y")	
 
+        order_list = Orders.objects.filter(account_id=user_account.Id)
+
         context = {
             'first_name':user_account.firstName, 
             'last_name':user_account.lastName,
@@ -158,7 +148,9 @@ class UserView:
             'address_2': user_account.address2,
             'city': user_account.city,
             'state': user_account.state,
-            'zip': user_account.zip}
+            'zip': user_account.zip,
+            'orderList': order_list}
+            
         return render (request, 'drone_cones/account_page.html', context)
 
     @login_required
@@ -229,7 +221,6 @@ class UserView:
             }
             return render(request, 'drone_cones/edit_address.html', context)
             
-    
 class DroneView:
     @login_required
     def drone_dash(request):
@@ -242,9 +233,6 @@ class DroneView:
         }
         return render(request, 'drone_cones/drone_page.html', context)
 
-    def view_drones():
-        pass
-
     @login_required
     def drone_register(request):
         return render(request, "drone_cones/drone_register_page.html")
@@ -255,6 +243,13 @@ class DroneView:
         user = request.user
         user_account = Account.objects.get(user=user)
 
+        drone = Drone.objects.get(id = int(drone_id))
+
+        # if requested drone does not belong to signed in user, terminate
+        if drone not in user_account.drone_set.all():
+           return HttpResponseForbidden()
+
+
         if request.method == 'POST':
             form = EditDroneForm(request.POST)
             if form.is_valid():
@@ -264,7 +259,6 @@ class DroneView:
                 drone_capacity = form.cleaned_data.get('drone_capacity')
                 is_active = form.cleaned_data.get('is_active')
 
-                drone = Drone.objects.get(id = int(drone_id))
 
                 drone.droneName = drone_name
                 drone.size = drone_size
@@ -283,20 +277,131 @@ class DroneView:
 
 class ManagerView:
     def manager_dash(request):
-        return render(request, "drone_cones/manager_home.html")
+	
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/manager_home.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_users(request):
-        return render(request, "drone_cones/all_users.html")
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        context = {'accounts': Account.objects.all()}
+
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/all_users.html", context)
+        else:
+            return HttpResponseForbidden()
+
+    def edit_user(request, account_id):
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+
+            toggled_account = Account.objects.get(Id = account_id)
+
+            toggled_user = toggled_account.user
+        
+
+            if request.method == 'POST':
+                form = EditUserManagerForm(request.POST)
+                if form.is_valid():
+			
+                    username = form.cleaned_data.get('username')
+                    first_name = form.cleaned_data.get('first_name')
+                    last_name = form.cleaned_data.get('last_name')
+                    is_manager = form.cleaned_data.get('is_manager')
+
+                    toggled_user.username = username
+                    toggled_account.firstName = first_name
+                    toggled_account.lastName = last_name
+                    toggled_account.is_admin = is_manager
+
+                    toggled_account.save()
+
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
+
+            context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
+
+            return render(request, "drone_cones/edit_user_manager.html", context)
+        else:
+            return HttpResponseForbidden()
 
     def view_stock(request):
-        return render(request, "drone_cones/stock_page.html")
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_finances(request):
-        return render(request, "drone_cones/finance_page.html")
-    
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
+ 
     def view_drones(request):
-        return render(request, "drone_cones/all_drones.html")
-    
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        context = {'drones': Drone.objects.all()}
+
+
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/all_drones.html", context)
+        else:
+            return HttpResponseForbidden()
+
+    def edit_drone(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+
+            drone = Drone.objects.get(id = drone_id)
+
+            if request.method == 'POST':
+                form = EditDroneForm(request.POST)
+                if form.is_valid():
+
+                    drone_name = form.cleaned_data.get('drone_name')
+                    drone_size = form.cleaned_data.get('drone_size')
+                    drone_capacity = form.cleaned_data.get('drone_capacity')
+                    is_active = form.cleaned_data.get('is_active')
+
+                    drone.droneName = drone_name
+                    drone.size = drone_size
+                    drone.scoops = drone_capacity
+                    drone.isActive = is_active
+
+                    drone.save()
+
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
+
+            context = {'drone': Drone.objects.get(id=drone_id), 'drone_id':drone_id, 'account':drone.account, 'username':drone.account.user.username}
+
+            return render(request, "drone_cones/edit_drone_manager.html", context)
+        else:
+            return HttpResponseForbidden()
+
 class AdminView:
     @login_required
     def admin_dash(request):
@@ -323,15 +428,16 @@ class AdminView:
         return render(request, 'drone_cones/admin_page.html', context)
 
 class OrderView:
-    def order_view():
-        pass
-
     @login_required
     def order_page(request):
         product_list = reversed(Products.objects.order_by("-id"))
+        cart = Account.objects.get(user=request.user).cart
+
         context = {
             'product_list': product_list, 
+            'cart': cart,
         }
+
         return render(request, 'drone_cones/order_page.html', context)
 
     @login_required
@@ -340,17 +446,11 @@ class OrderView:
         context = {'order': order}
         return render(request, 'drone_cones/confirmation_page.html', context)
 
-    def edit_address():
-        pass
-
-    def add_address():
-        pass
-
     def get_products(request):
         products = list(Products.objects.values())
         return JsonResponse(products, safe=False)
 
-    def save_order(request):
+    def add_to_cart(request):
         if request.method == 'POST':
             try:
                 data = json.loads(request.body)
@@ -358,10 +458,105 @@ class OrderView:
                 user = request.user
                 account = Account.objects.get(user=user)
 
-                Orders.objects.create(user=user, account_id=account.Id, items=data)
+                response = JsonResponse({'status': 'success'})
+                redirect_url = '/dronecones/order/'
+                response['X-Redirect'] = redirect_url
 
-                return JsonResponse({'status': 'success'})
+                ## if there is no cone ordered, we drone can't carry, thus we don't add to cart.
+                if data == 'Invalid Order':
+                    return response
+                if account.cart is None:
+                    account.cart = []
+                    account.save()
+
+                account.cart.append(data)
+                account.save()
+
+                return response
             except json.JSONDecodeError:
                 return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
         else:
             return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+    def send_order(request):
+        if request.method == 'POST':
+            form = OrderForm(request.POST)
+            try: 
+                user = request.user
+                account = Account.objects.get(user=user)
+                if (account.cart != []):
+                    if (form.is_valid()):
+                        address = form.cleaned_data['address']
+                        address2 = form.cleaned_data['address2']
+                        city = form.cleaned_data['city']
+                        state = form.cleaned_data['state']
+                        zip_code = form.cleaned_data['zip']
+
+                        time_ordered = datetime.now()
+
+                        time_to_deliver = (datetime.min + timedelta(minutes=10)).time()
+
+                        time_delivered = time_ordered + timedelta(minutes=10)
+
+                        Orders.objects.create(user=user, 
+                                                account_id=account.Id, items=account.cart, 
+                                                address=address,
+                                                address2=address2,
+                                                city=city,
+                                                state=state,
+                                                zip=zip_code,
+                                                timeOrdered=time_ordered,
+                                                timeDelivered= time_delivered,
+                                                timeToDeliver= time_to_deliver)
+                    else:
+                        # Form is not valid, return form errors
+                        return JsonResponse({'status': 'error', 'message': 'Invalid form data', 'errors': form.errors}, status=400)
+                    ## empty cart
+                    account.cart = []
+                    account.save()
+                    
+                response = JsonResponse({'status': 'success'})
+                redirect_url = '/dronecones/order/'
+                response['X-Redirect'] = redirect_url
+
+                return redirect(redirect_url)
+            except json.JSONDecodeError:
+                return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+    def remove_from_order(request):
+        if request.method == 'POST':
+            try:
+                item_number = int(request.body)
+
+                user = request.user
+                account = Account.objects.get(user=user)
+                if (len(account.cart) >= item_number):
+                    account.cart.pop(item_number - 1)
+                    account.save()
+
+                redirect_url = '/dronecones/order/'
+
+                response = JsonResponse({'status': 'success'})
+                redirect_url = '/dronecones/order/'
+                response['X-Redirect'] = redirect_url
+                
+                return response
+            except json.JSONDecodeError:
+                return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+    def get_account_address(request):
+        account = Account.objects.get(user=request.user)
+
+        user_address_one = account.address
+        user_address_two = account.address2
+        user_city = account.city
+        user_state = account.state
+        user_zip = account.zip
+
+        account_address_info = {'address1': user_address_one, 'address2': user_address_two, 'city': user_city, 'state': user_state, 'zip': user_zip}
+
+        return JsonResponse(account_address_info, safe=False)
