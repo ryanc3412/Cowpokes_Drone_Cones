@@ -33,5 +33,6 @@ urlpatterns = [
     path('add_to_cart/', views.OrderView.add_to_cart, name='add_to_cart'),
     path('send_order/', views.OrderView.send_order, name='send_order'),
     path('remove_from_order/', views.OrderView.remove_from_order, name='remove_from_order'),
-    
+    path('get_account_address/', views.OrderView.get_account_address, name='get_account_address'),
+
 ]

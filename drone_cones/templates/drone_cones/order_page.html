@@ -117,26 +117,35 @@
 							{% endfor %}
 							{% endif %}
 						</div>
-						<br><br>
-						<label class="spacer" for="address"> ADDRESS </label>
-						<input id="address1" type="text" name="address" maxlength="30" required>
-						<label for="sameAddress" class="sameAddress"> Is this address the same as your second
-							address ?</label>
-						<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
-						<div></div>
-						<label class="spacer" for="address2"> ADDRESS TWO </label>
-						<input id="address2" type="text" name="address2" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="city"> CITY </label>
-						<input id="city" type="text" name="city" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="state"> STATE </label>
-						<input id="state" type="text" name="state" maxlength="100" required>
-						<div></div>
-						<label class="spacer" for="zip"> ZIP </label>
-						<input id="zip" type="number" name="zip" maxlength="100" required><br><br>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-container">
+			<div class="bar">DELIVERY INFO</div>
+			<div class="outer-border">
+				<div class="inner-border">
+					<div class="margin">
 						<form action="{% url 'drone_cones:send_order' %}" method="post">
 							{% csrf_token %}
+							{{ form.as_p }}
+							<label for="sameAddress" class="sameAddress"> Use account address? </label>
+							<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
+							<br>
+							<label class="spacer" for="address"> ADDRESS </label>
+							<input id="address1" type="text" name="address" maxlength="30" required>
+							<div></div>
+							<label class="spacer" for="address2"> ADDRESS 2 </label>
+							<input id="address2" type="text" name="address2" maxlength="100">
+							<div></div>
+							<label class="spacer" for="city"> CITY </label>
+							<input id="city" type="text" name="city" maxlength="100" required>
+							<div></div>
+							<label class="spacer" for="state"> STATE </label>
+							<input id="state" type="text" name="state" maxlength="100" required>
+							<div></div>
+							<label class="spacer" for="zip"> ZIP </label>
+							<input id="zip" type="number" name="zip" maxlength="100" required><br><br>
 							<button id="order">CONFIRM ORDER</button>
 						</form>
 					</div>
