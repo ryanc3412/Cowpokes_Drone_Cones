@@ -9,9 +9,8 @@ from django.db.models.signals import post_save
 from drone_cones.core.forms import SignUpForm, OrderForm
 from django.shortcuts import redirect
 from datetime import date, datetime, timedelta
-from drone_cones.core.forms import DroneRegisterForm, EditAccountForm, EditAddressForm, EditDroneForm
+from drone_cones.core.forms import *
 import json
-
 from django.shortcuts import render
 from drone_cones.models import Products, Drone
 from django.utils import timezone
@@ -244,6 +243,13 @@ class DroneView:
         user = request.user
         user_account = Account.objects.get(user=user)
 
+        drone = Drone.objects.get(id = int(drone_id))
+
+        # if requested drone does not belong to signed in user, terminate
+        if drone not in user_account.drone_set.all():
+           return HttpResponseForbidden()
+
+
         if request.method == 'POST':
             form = EditDroneForm(request.POST)
             if form.is_valid():
@@ -253,7 +259,6 @@ class DroneView:
                 drone_capacity = form.cleaned_data.get('drone_capacity')
                 is_active = form.cleaned_data.get('is_active')
 
-                drone = Drone.objects.get(id = int(drone_id))
 
                 drone.droneName = drone_name
                 drone.size = drone_size
@@ -294,6 +299,44 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
+    def edit_user(request, account_id):
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+
+            toggled_account = Account.objects.get(Id = account_id)
+
+            toggled_user = toggled_account.user
+        
+
+            if request.method == 'POST':
+                form = EditUserManagerForm(request.POST)
+                if form.is_valid():
+			
+                    username = form.cleaned_data.get('username')
+                    first_name = form.cleaned_data.get('first_name')
+                    last_name = form.cleaned_data.get('last_name')
+                    is_manager = form.cleaned_data.get('is_manager')
+
+                    toggled_user.username = username
+                    toggled_account.firstName = first_name
+                    toggled_account.lastName = last_name
+                    toggled_account.is_admin = is_manager
+
+                    toggled_account.save()
+
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
+
+            context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
+
+            return render(request, "drone_cones/edit_user_manager.html", context)
+        else:
+            return HttpResponseForbidden()
+
     def view_stock(request):
         user = request.user
         associated_account = Account.objects.get(user=user)
@@ -321,6 +364,40 @@ class ManagerView:
 
         if associated_account.is_admin:
             return render(request,  "drone_cones/all_drones.html", context)
+        else:
+            return HttpResponseForbidden()
+
+    def edit_drone(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+
+            drone = Drone.objects.get(id = drone_id)
+
+            if request.method == 'POST':
+                form = EditDroneForm(request.POST)
+                if form.is_valid():
+
+                    drone_name = form.cleaned_data.get('drone_name')
+                    drone_size = form.cleaned_data.get('drone_size')
+                    drone_capacity = form.cleaned_data.get('drone_capacity')
+                    is_active = form.cleaned_data.get('is_active')
+
+                    drone.droneName = drone_name
+                    drone.size = drone_size
+                    drone.scoops = drone_capacity
+                    drone.isActive = is_active
+
+                    drone.save()
+
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
+
+            context = {'drone': Drone.objects.get(id=drone_id), 'drone_id':drone_id, 'account':drone.account, 'username':drone.account.user.username}
+
+            return render(request, "drone_cones/edit_drone_manager.html", context)
         else:
             return HttpResponseForbidden()
 
