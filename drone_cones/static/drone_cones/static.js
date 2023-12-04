@@ -25,9 +25,25 @@ function timer() {
 function writeAddress(checkAddress) {
     var addressOne = document.getElementById("address1");
     var addressTwo = document.getElementById("address2");
+    var city = document.getElementById("city");
+    var state = document.getElementById("state")
+    var zip = document.getElementById("zip")
+
+    if (checkAddress.checked) {
+        fetch('/dronecones/get_account_address/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                addressOne.value = data['address1'];
+                addressTwo.value = data['address2'];
+                city.value = data['city'];
+                state.value = data['state'];
+                zip.value = data['zip'];
+            })
+    }
 
     // Use checkAddress.checked to check if the checkbox is checked
-    addressTwo.value = checkAddress.checked ? addressOne.value : "";
+    // addressTwo.value = checkAddress.checked ? addressOne.value : "";
 }
 
 
@@ -94,8 +110,6 @@ function populate() {
         .catch(error => console.error('Error:', error));
 
 }
-
-var cart = [];
 
 var selectedItems = {
     flavor1: "",
@@ -278,12 +292,19 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 document.getElementById('addToCart').addEventListener('click', function () {
+    var selectedItemsCopy;
+    if (selectedItems.cone == "") {
+        alert("You must at least order a cone if you want your order!")
+        selectedItemsCopy = 'Invalid Order';
+    } else {
+        selectedItemsCopy = selectedItems;
+    }
     fetch('/dronecones/add_to_cart/', {
         method: 'POST',
         headers: {
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify(selectedItems),
+        body: JSON.stringify(selectedItemsCopy),
     })
         .then(response => {
             if (response.headers.get('X-Redirect')) {

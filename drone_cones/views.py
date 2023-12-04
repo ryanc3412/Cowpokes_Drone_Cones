@@ -218,7 +218,6 @@ class UserView:
             }
             return render(request, 'drone_cones/edit_address.html', context)
             
-    
 class DroneView:
     @login_required
     def drone_dash(request):
@@ -321,7 +320,6 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
-    
 class AdminView:
     @login_required
     def admin_dash(request):
@@ -367,19 +365,19 @@ class OrderView:
                 user = request.user
                 account = Account.objects.get(user=user)
 
-                if account.cart is None:
-                    account.cart = []
-                    account.save()
-    
-                account.cart.append(data)
-
-                account.save()
-
-                # Orders.objects.create(user=user, account_id=account.Id, items=account.cart)
-
                 response = JsonResponse({'status': 'success'})
                 redirect_url = '/dronecones/order/'
                 response['X-Redirect'] = redirect_url
+
+                ## if there is no cone ordered, we drone can't carry, thus we don't add to cart.
+                if data == 'Invalid Order':
+                    return response
+                if account.cart is None:
+                    account.cart = []
+                    account.save()
+
+                account.cart.append(data)
+                account.save()
 
                 return response
             except json.JSONDecodeError:
@@ -389,11 +387,37 @@ class OrderView:
 
     def send_order(request):
         if request.method == 'POST':
+            form = OrderForm(request.POST)
             try: 
                 user = request.user
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
-                    Orders.objects.create(user=user, account_id=account.Id, items=account.cart)
+                    if (form.is_valid()):
+                        address = form.cleaned_data['address']
+                        address2 = form.cleaned_data['address2']
+                        city = form.cleaned_data['city']
+                        state = form.cleaned_data['state']
+                        zip_code = form.cleaned_data['zip']
+
+                        time_ordered = datetime.now()
+
+                        time_to_deliver = (datetime.min + timedelta(minutes=10)).time()
+
+                        time_delivered = time_ordered + timedelta(minutes=10)
+
+                        Orders.objects.create(user=user, 
+                                                account_id=account.Id, items=account.cart, 
+                                                address=address,
+                                                address2=address2,
+                                                city=city,
+                                                state=state,
+                                                zip=zip_code,
+                                                timeOrdered=time_ordered,
+                                                timeDelivered= time_delivered,
+                                                timeToDeliver= time_to_deliver)
+                    else:
+                        # Form is not valid, return form errors
+                        return JsonResponse({'status': 'error', 'message': 'Invalid form data', 'errors': form.errors}, status=400)
                     ## empty cart
                     account.cart = []
                     account.save()
@@ -430,3 +454,16 @@ class OrderView:
                 return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'}, status=400)
         else:
             return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+    def get_account_address(request):
+        account = Account.objects.get(user=request.user)
+
+        user_address_one = account.address
+        user_address_two = account.address2
+        user_city = account.city
+        user_state = account.state
+        user_zip = account.zip
+
+        account_address_info = {'address1': user_address_one, 'address2': user_address_two, 'city': user_city, 'state': user_state, 'zip': user_zip}
+
+        return JsonResponse(account_address_info, safe=False)
