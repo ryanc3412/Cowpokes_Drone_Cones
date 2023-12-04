@@ -69,42 +69,56 @@
                     </div>
                     <div>
                         <div class="orderHistoryScoops"> SCOOPS </div>
-							<div class="orderItems">
-									<div class="orderItem" id="flavor1">
-										{{ order.items.0.flavor1 }}
-									</div>
-									<div class="orderItem" id="flavor2">
-										{{ order.items.0.flavor2 }}
-									</div>
-							</div>
+                        {% if order.items.0.flavor1 or order.items.0.flavor2 %}
+                                <div class="orderItems">
+                                        <div class="orderItem" id="flavor1">
+                                            {{ order.items.0.flavor1 }}
+                                        </div>
+                                        <div class="orderItem" id="flavor2">
+                                            {{ order.items.0.flavor2 }}
+                                        </div>
+                                </div>
+                        {% else %}
+                                <div class="orderItems">
+                                    <div class="orderItem">
+                                        No scoops were selected
+                                    </div>
+                                </div>
+                        {% endif %}
                         <div class="orderHistoryToppings"> TOPPINGS </div>
-						{% if order.item.0.toppings %}
-							<div class="orderItems">
-								<div class="orderItem" id="topping1">
-									{{ order.items.0.toppings.first }}
-								</div>
-								<div class="orderItem" id="topping2">
-									{{ order.items.0.toppings.second }}
-								</div>
-								<div class="orderItem" id="topping3">
-									{{ order.items.0.toppings.third }}
-								</div>
-							</div>
-						{% endif %}
-						<div class="orderItems">
-							No toppings were ordered.
-						</div>
-                        <div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
-						{% if order.items.0.cone %}
+                        {% if order.items.0.toppings.first or order.items.0.toppings.second or order.items.0.toppings.third %}
+                            <div class="orderItems">
+                                <div class="orderItem" id="topping1">
+                                    {{ order.items.0.toppings.first }}
+                                </div>
+                                <div class="orderItem" id="topping2">
+                                    {{ order.items.0.toppings.second }}
+                                </div>
+                                <div class="orderItem" id="topping3">
+                                    {{ order.items.0.toppings.third }}
+                                </div>
+                            </div>
+                        {% else %}
                         <div class="orderItems">
-							<div class="orderItem" id="cone">
-								{{ order.items.0.cone }}
-							</div>
+                            <div class="orderItem">
+                                No toppings were selected
+                            </div>
                         </div>
-						{% endif %}
-						<div class="orderItems" id="cone">
-							No cones were ordered
-						</div>
+                        {% endif %}
+                        <div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
+                        {% if order.items.0.cone %}
+                            <div class="orderItems">
+                                <div class="orderItem" id="cone">
+                                    {{ order.items.0.cone }}
+                                </div>
+                            </div>
+                        {% else %}
+                        <div class="orderItems">
+                            <div class="orderItem">
+                                No cones were selected
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="spacer"></div>
                     </div>
                 {% endfor %}
