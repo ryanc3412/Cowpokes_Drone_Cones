@@ -27,5 +27,7 @@ urlpatterns = [
     path('manager/users/', views.ManagerView.view_users, name='all_users'),
     path('manager/finance/', views.ManagerView.view_finances, name='finance'),
     path('manager/stock/', views.ManagerView.view_stock, name='stock'),
-    path('manager/all_drones/', views.ManagerView.view_drones, name='all_drones')
+    path('manager/all_drones/', views.ManagerView.view_drones, name='all_drones'),
+    path('manager/users/edit_user/<int:account_id>', views.ManagerView.edit_user, name="edit_user"),
+    path('manager/all_drones/edit_drone/<int:drone_id>', views.ManagerView.edit_drone, name="edit_drone_manager"),
 ]

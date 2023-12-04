@@ -33,14 +33,26 @@
 		</div>
 
 		<div class = "page-container">
-                        <div class = "outer-border">
+			<div class = "outer-border">
                         {% for drone in drones %}
-                                <div class = "inner-border"> {{drone.droneName}} </div>
+
+                                <div class="inner-border">
+
+                                        <div>
+                                                <h3> {{drone.droneName}} </h3>
+                                                <p> {{drone.size}} </p>
+                                                <div>
+                                                        Is Active: <input type="checkbox" id="is_active" name="is_active" {% if drone.isActive %}checked{% endif %} disabled/>
+                                                </div>
+
+                                        </div>
+                                        <div style="margin-top: 1em; margin-bottom:1em; user-select: none;">
+                                                <a class="order" style="cursor: pointer; margin-left: 0" href="edit_drone/{{drone.id}}"/>EDIT</a>
+                                        </div>
+                                </div>
                         {% endfor %}
-
-                <div>
-
-
+                        </div>
+		</div>
 
 	</body>
 

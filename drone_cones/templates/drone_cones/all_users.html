@@ -11,7 +11,6 @@
 
 	</head>
 
-
 	<body>
 
 		<div class="topnav">
@@ -35,10 +34,24 @@
 		<div class = "page-container">
 			<div class = "outer-border">
 			{% for account in accounts %}
-				<div class = "inner-border"> {{account.firstName}} {{account.lastName}}, {{account.email}} </div>
-			{% endfor %}
 
-		<div>
+				<div class="inner-border">
+
+					<div>
+						<h3> {{account.firstName}} {{account.lastName}} </h3>
+						<p> {{account.email}} </p>
+						<div>
+							Is Manager: <input type="checkbox" id="is_active" name="is_active" {% if account.is_admin %}checked{% endif %} disabled/>
+						</div>
+
+					</div>
+					<div style="margin-top: 1em; margin-bottom:1em; user-select: none;">
+                	                	<a class="order" style="cursor: pointer; margin-left: 0" href="edit_user/{{account.Id}}"/>EDIT</a>
+                       	         	</div>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
 
 	</body>
 
