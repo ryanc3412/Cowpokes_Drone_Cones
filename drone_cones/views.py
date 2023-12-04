@@ -347,6 +347,7 @@ class ManagerView:
             return HttpResponseForbidden()
 
     def view_finances(request):
+
         user = request.user
         associated_account = Account.objects.get(user=user)
 
@@ -408,9 +409,20 @@ class AdminView:
         stock_list = reversed(Products.objects.order_by('-stockAvailable'))
         drone_list = reversed(Drone.objects.order_by('-droneName'))
 
+        # Get data for orders
+        order_list = Orders.objects.all()
+
+        # Calculate total scoops, cones, and toppings
+        total_scoops = sum(order['items']['scoops'] for order in order_list.values('items'))
+        total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
+        total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
+
         context = {
             'stock_list': stock_list,
             'drone_list': drone_list,
+            'total_scoops': total_scoops,
+            'total_cones': total_cones,
+            'total_toppings': total_toppings,
         }
 
         return render(request, 'drone_cones/admin_page.html', context)
