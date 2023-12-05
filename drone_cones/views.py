@@ -290,11 +290,10 @@ class ManagerView:
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        return render(request, "drone_cones/manager_home.html") 
-        # if associated_account.is_admin:
-        #     return render(request, "drone_cones/manager_home.html")
-        # else:
-        #     return HttpResponseForbidden()
+        if associated_account.is_admin:
+            return render(request, "drone_cones/manager_home.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_users(request):
 
@@ -303,48 +302,47 @@ class ManagerView:
 
         context = {'accounts': Account.objects.all()}
 
-        return render(request, "drone_cones/all_users.html", context)
-        # if associated_account.is_admin:
-        #     return render(request, "drone_cones/all_users.html", context)
-        # else:
-        #     return HttpResponseForbidden()
+        if associated_account.is_admin:
+            return render(request, "drone_cones/all_users.html", context)
+        else:
+            return HttpResponseForbidden()
 
     def edit_user(request, account_id):
 
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        # if associated_account.is_admin:
+        if associated_account.is_admin:
 
-        toggled_account = Account.objects.get(Id = account_id)
+            toggled_account = Account.objects.get(Id = account_id)
 
-        toggled_user = toggled_account.user  
+            toggled_user = toggled_account.user  
 
-        if request.method == 'POST':
-            form = EditUserManagerForm(request.POST)
-            if form.is_valid():
-		
-                username = form.cleaned_data.get('username')
-                first_name = form.cleaned_data.get('first_name')
-                last_name = form.cleaned_data.get('last_name')
-                is_manager = form.cleaned_data.get('is_manager')
+            if request.method == 'POST':
+                form = EditUserManagerForm(request.POST)
+                if form.is_valid():
+    		
+                    username = form.cleaned_data.get('username')
+                    first_name = form.cleaned_data.get('first_name')
+                    last_name = form.cleaned_data.get('last_name')
+                    is_manager = form.cleaned_data.get('is_manager')
 
-                toggled_user.username = username
-                toggled_account.firstName = first_name
-                toggled_account.lastName = last_name
-                toggled_account.is_admin = is_manager
+                    toggled_user.username = username
+                    toggled_account.firstName = first_name
+                    toggled_account.lastName = last_name
+                    toggled_account.is_admin = is_manager
 
-                toggled_account.save()
+                    toggled_account.save()
 
-                return HttpResponseRedirect("../")
-            else:
-                return HttpResponseForbidden()
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
 
-        context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
+            context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
 
-        return render(request, "drone_cones/edit_user_manager.html", context)
-        # else:
-        #     return HttpResponseForbidden()
+            return render(request, "drone_cones/edit_user_manager.html", context)
+        else:
+            return HttpResponseForbidden()
 
     def view_stock(request):
         # user = request.user
@@ -368,22 +366,20 @@ class ManagerView:
             'total_toppings': total_toppings,
         }
 
-        return render(request, "drone_cones/stock_page.html")
-        # if associated_account.is_admin:
-        #     return render(request, "drone_cones/stock_page.html")
-        # else:
-        #     return HttpResponseForbidden()
+        if associated_account.is_admin:
+            return render(request, "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
 
     def view_finances(request):
 
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        return render(request,  "drone_cones/finance_page.html")
-        # if associated_account.is_admin:
-        #     return render(request,  "drone_cones/stock_page.html")
-        # else:
-        #     return HttpResponseForbidden()
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/stock_page.html")
+        else:
+            return HttpResponseForbidden()
  
     def view_drones(request):
         user = request.user
@@ -391,23 +387,22 @@ class ManagerView:
 
         context = {'drones': Drone.objects.all()}
 
-        return render(request,  "drone_cones/all_drones.html", context)
-        # if associated_account.is_admin:
-        #     return render(request,  "drone_cones/all_drones.html", context)
-        # else:
-        #     return HttpResponseForbidden()
+        if associated_account.is_admin:
+            return render(request,  "drone_cones/all_drones.html", context)
+        else:
+            return HttpResponseForbidden()
 
     def edit_drone(request, drone_id):
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        # if associated_account.is_admin:
+        if associated_account.is_admin:
 
-        drone = Drone.objects.get(id = drone_id)
+            drone = Drone.objects.get(id = drone_id)
 
-        if request.method == 'POST':
-            form = EditDroneForm(request.POST)
-            if form.is_valid():
+            if request.method == 'POST':
+                form = EditDroneForm(request.POST)
+                if form.is_valid():
 
                     drone_name = form.cleaned_data.get('drone_name')
                     drone_size = form.cleaned_data.get('drone_size')
@@ -429,17 +424,17 @@ class ManagerView:
                     drone.size = drone_size
                     drone.isActive = is_active
 
-                drone.save()
+                    drone.save()
 
-                return HttpResponseRedirect("../")
-            else:
-                return HttpResponseForbidden()
+                    return HttpResponseRedirect("../")
+                else:
+                    return HttpResponseForbidden()
 
-        context = {'drone': Drone.objects.get(id=drone_id), 'drone_id':drone_id, 'account':drone.account, 'username':drone.account.user.username}
+            context = {'drone': Drone.objects.get(id=drone_id), 'drone_id':drone_id, 'account':drone.account, 'username':drone.account.user.username}
 
-        return render(request, "drone_cones/edit_drone_manager.html", context)
-        # else:
-        #     return HttpResponseForbidden()
+            return render(request, "drone_cones/edit_drone_manager.html", context)
+        else:
+            return HttpResponseForbidden()
 
 class AdminView:
     @login_required
