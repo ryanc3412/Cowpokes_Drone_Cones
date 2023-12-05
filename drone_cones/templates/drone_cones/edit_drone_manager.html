@@ -54,13 +54,15 @@
                                         <div>
                                                 Drone Name: <input id="drone_name" type="text" placeholder="{{drone.droneName}}" name="drone_name" maxlength = "100" value="{{drone.droneName}}" required=True required>  </input>
                                         </div>
-                                        <div>
-                                                Size: <input id="drone_size" type="text" name="drone_size" maxlength="100" placeholder="{{drone.size}}" value="{{drone.size}}" required=True required> </input>
-                                        </div>
+					<div>
+                                                Size: <select id="drone_size" name="drone_size">
+                                                        <option value="Large" {% if size == 'Large' %} selected {% endif %}>Large</option>
+                                                        <option value="Medium" {% if size == 'Medium' %} selected {% endif %}>Medium</option>
+                                                        <option value="Small" {% if size == 'Small' %} selected {% endif %}>Small</option>
+                                                </select>
+
 
                                         <div>
-                                                Carrying Capacity: <input id="drone_capacity" type="number" name="drone_capacity" placeholder="{{drone.scoops}}" value="{{drone.scoops}}" required=True required> </input>
-                                        </div>
 
 					<div>	
 						Is Active:
