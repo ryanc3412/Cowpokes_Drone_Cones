@@ -218,7 +218,7 @@ div.inner-border {
 }
 
 .flavor1Display {
-	display: inline;
+	display:inline-block;
 	background-color: darkgrey;
 	margin-right: 50px;
 	border-radius: 25px;
@@ -228,7 +228,7 @@ div.inner-border {
 }
 
 .flavor2Display {
-	display: inline;
+	display:inline-block;
 	background-color: darkgrey;
 	margin-right: 50px;
 	border-radius: 25px;
@@ -238,7 +238,7 @@ div.inner-border {
 }
 
 .coneDisplay {
-	display: inline;
+	display: inline-block;
 	background-color: darkgrey;
 	margin-right: 50px;
 	border-radius: 25px;
@@ -248,7 +248,7 @@ div.inner-border {
 }
 
 .toppingsDisplay {
-	display: inline;
+	display: inline-block;
 	background-color: darkgrey;
 	margin-right: 50px;
 	border-radius: 25px;

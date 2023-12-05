@@ -41,11 +41,7 @@ function writeAddress(checkAddress) {
                 zip.value = data['zip'];
             })
     }
-
-    // Use checkAddress.checked to check if the checkbox is checked
-    // addressTwo.value = checkAddress.checked ? addressOne.value : "";
 }
-
 
 function populate() {
     var flavor1List = [];
@@ -80,12 +76,14 @@ function populate() {
             for (var i = 0; i < flavor1List.length; i++) {
                 var flavor1Div = document.createElement("div");
                 var flavor2Div = document.createElement("div");
+                var iceCreamImagePath = "{% static 'blog/images/ice_cream_cone.png' %}";
                 flavor1Div.setAttribute("class", "flavor1Display");
                 flavor2Div.setAttribute("class", "flavor2Display");
                 flavor1Div.setAttribute("onclick", `selectFlavors1(this, event)`);
                 flavor2Div.setAttribute("onclick", `selectFlavors2(this, event)`);
-                flavor1Div.textContent = flavor1List[i]['flavor'];
-                flavor2Div.textContent = flavor2List[i]['flavor'];
+                flavor1Div.innerHTML = flavor1List[i]['flavor'] + '<br>Cost: $' + flavor1List[i]['cost'];
+                flavor2Div.innerHTML = flavor2List[i]['flavor'] + '<br>Cost: $' + flavor2List[i]['cost'];
+
                 flavors1Div.appendChild(flavor1Div);
                 flavors2Div.appendChild(flavor2Div);
             }
@@ -94,7 +92,7 @@ function populate() {
                 var coneDiv = document.createElement("div");
                 coneDiv.setAttribute("class", "coneDisplay");
                 coneDiv.setAttribute("onclick", `selectCone(this, event)`);
-                coneDiv.textContent = coneList[i]['flavor'];
+                coneDiv.innerHTML = coneList[i]['flavor'] + '<br>Cost: $' + coneList[i]['cost'];
                 conesDiv.appendChild(coneDiv);
             }
 
@@ -103,7 +101,7 @@ function populate() {
                 toppingDiv.setAttribute("class", "toppingsDisplay");
                 toppingDiv.setAttribute("onclick",
                     `selectToppings(this, event)`);
-                toppingDiv.textContent = toppingsList[i]['flavor'];
+                toppingDiv.innerHTML = toppingsList[i]['flavor'] + '<br>Cost: $' + toppingsList[i]['cost'];
                 toppingsDiv.appendChild(toppingDiv);
             }
         })
@@ -122,11 +120,7 @@ var selectedItems = {
     }
 };
 
-var completedFunctions = 0;
-
 function logSelectedItems() {
-    completedFunctions++;
-
     console.log(selectedItems);
 }
 
@@ -139,7 +133,6 @@ function selectFlavors1(item, event) {
             selectedItems.flavor1 = "";
         } else {
             selectedItems.flavor1 = item.textContent;
-            document.getElementById('items').value = selectedItems.flavor1;
             item.style.backgroundColor = "#008080";
         }
 
@@ -162,7 +155,6 @@ function selectFlavors2(item, event) {
         } else {
             selectedItems.flavor2 = item.textContent;
             item.style.backgroundColor = "#008080";
-            document.getElementById('items').value = selectedItems.flavor2;
         }
 
         flavor2Items.forEach(function (el) {
@@ -184,7 +176,6 @@ function selectCone(item, event) {
         } else {
             selectedItems.cone = item.textContent;
             item.style.backgroundColor = "#008080";
-            document.getElementById('items').value = selectedItems.cone;
         }
 
         flavorItems.forEach(function (el) {
@@ -213,15 +204,12 @@ function selectToppings(item, event) {
             }
         } else if (selectedItems.toppings.first == "") {
             selectedItems.toppings.first = item.textContent;
-            document.getElementById('items').value = selectedItems.toppings.first;
             item.style.backgroundColor = "#008080";
         } else if (selectedItems.toppings.second == "") {
             selectedItems.toppings.second = item.textContent;
-            document.getElementById('items').value = selectedItems.toppings.second;
             item.style.backgroundColor = "#008080";
         } else if (selectedItems.toppings.third == "") {
             selectedItems.toppings.third = item.textContent;
-            document.getElementById('items').value = selectedItems.toppings.third;
             item.style.backgroundColor = "#008080";
         } else {
             console.log("Sorry, topping cart is full");

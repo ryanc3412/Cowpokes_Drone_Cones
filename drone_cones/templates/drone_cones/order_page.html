@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="{% static 'drone_cones/style.css' %}">
 
 
-<DOCTYPE html>
+<!DOCTYPE html>
 
 	<html lang="en">
 
@@ -37,36 +37,33 @@
 							Order from our wide variety of ice cream flavors ranging from vanilla to mint chocolate
 							chip!
 						</div>
-
-						<!-- {% csrf_token %} -->
-
-						<label class="spacer" for="Items">
+						<div class="spacer">
 							Choose your flavor of ice cream:
-						</label>
-						<sub class="spacer" for="Items">
+						</div>
+						<sub class="spacer">
 							<br>Scoop 1:
 						</sub>
 						<div class="productBox">
 							<div class="flavors1" id="flavors1">
 							</div>
 						</div>
-						<sub class="spacer" for="Items">
+						<sub class="spacer">
 							<br>Scoop 2:
 						</sub>
 						<div class="productBox">
 							<div class="flavors2" id="flavors2">
 							</div>
 						</div>
-						<label class="spacer" for="Items">
+						<div class="spacer">
 							<br>Choose your cone:
-						</label>
+						</div>
 						<div class="productBox">
 							<div class="cones" id="cones">
 							</div>
 						</div>
-						<label class="spacer" for="Items">
+						<div class="spacer">
 							Pick up to 3 toppings:
-						</label>
+						</div>
 						<div class="productBox">
 							<div class="toppings" id="toppings">
 							</div>
@@ -129,11 +126,11 @@
 						<form action="{% url 'drone_cones:send_order' %}" method="post">
 							{% csrf_token %}
 							{{ form.as_p }}
-							<label for="sameAddress" class="sameAddress"> Use account address? </label>
+							<label for="checkAddress" class="sameAddress"> Use account address? </label>
 							<input type="checkbox" name="sameAddress" id="checkAddress" onclick="writeAddress(this)">
 							<br>
-							<label class="spacer" for="address"> ADDRESS </label>
-							<input id="address1" type="text" name="address" maxlength="30" required>
+							<label class="spacer" for="address1"> ADDRESS </label>
+							<input id="address1" type="text" name="address" maxlength="30" required autocomplete="street-address">
 							<div></div>
 							<label class="spacer" for="address2"> ADDRESS 2 </label>
 							<input id="address2" type="text" name="address2" maxlength="100">
