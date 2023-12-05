@@ -46,5 +46,10 @@ class EditAddressForm(forms.Form):
 class EditDroneForm(forms.Form):
     drone_name = forms.CharField(label="drone_name", max_length = 100)
     drone_size = forms.CharField(label="drone_size", max_length = 100)
-    drone_capacity = forms.IntegerField(label="drone_capacity")
     is_active = forms.BooleanField(label="is_active", required=False)
+
+class EditUserManagerForm(forms.Form):
+    username = forms.CharField(label="username", max_length=100)
+    first_name = forms.CharField(label="first_name", max_length=100)
+    last_name = forms.CharField(label="last_name", max_length=100)
+    is_manager = forms.BooleanField(label="is_manager", required=False)

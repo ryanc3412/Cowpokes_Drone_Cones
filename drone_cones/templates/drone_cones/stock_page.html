@@ -32,6 +32,21 @@
 			<a href="{% url 'drone_cones:all_drones' %}"> <u>D</u>rones </a>
 		</div>
 
+		<div class="page-container">	    	
+	    	<div class="outer-border">
+	    	<div class="inner-border">
+            <div>
+            <h3>Stock Information</h3>
+            <ul>
+                {% for product in stock_list %}
+                    <li>{{ product.type }} - Stock: {{ product.stockAvailable }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        	</div>
+	    	</div>
+		</div>
+
 	</body>
 
 	</html>

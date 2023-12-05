@@ -21,10 +21,15 @@ class Account(models.Model):
     is_admin = models.BooleanField(default=False)
 
 class Drone(models.Model):
+    TYPE_CHOICES = [
+        ('large','Large'),
+        ('medium','Medium'),
+        ('small','Small')
+    ]
     id = models.AutoField(primary_key=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     droneName = models.CharField(max_length=100)
-    size = models.CharField(max_length=100)
+    size = models.CharField(max_length=100, choices=TYPE_CHOICES)
     scoops = models.IntegerField()
     isActive = models.BooleanField(default = False)
     isDelivering = models.BooleanField(default = False)

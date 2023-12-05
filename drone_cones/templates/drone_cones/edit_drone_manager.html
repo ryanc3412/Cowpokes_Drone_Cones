@@ -24,33 +24,55 @@
                 </div>
 
                 <div class="page-container">
-                        <div class="bar"> DRONE </div>
+                        <div class="bar"> OWNER INFORMATION </div>
+
+			<div class="outer-border">
+				<div>
+					Username: {{username}}
+				</div>
+				
+				<div>
+					First: {{account.firstName}}
+ 				</div>
+				
+				<div>
+					Last: {{account.lastName}}
+				</div>
+			
+			</div>
+		</div>
+		<div class = "page-container">
+			<div class="bar"> EDIT DRONE </div>
                         <div class="outer-border">
-                                <div> Edit Drone </div>
-                                <div> ------------ </div>
-
-
-                                <form action="{% url 'drone_cones:edit_drone' drone_id %}" method = "post">
+			
+				
+                                <form action="{% url 'drone_cones:edit_drone_manager' drone_id %}" method = "post">
 
                                         {% csrf_token %}
                                         {{ form }}
 
                                         <div>
-                                                Drone Name: <input id="drone_name" type="text" placeholder="{{name}}" name="drone_name" maxlength = "100" value="{{name}}" required=True required>  </input>
+                                                Drone Name: <input id="drone_name" type="text" placeholder="{{drone.droneName}}" name="drone_name" maxlength = "100" value="{{drone.droneName}}" required=True required>  </input>
                                         </div>
-                                        <div>
+					<div>
                                                 Size: <select id="drone_size" name="drone_size">
-  							<option value="Large" {% if size == 'Large' %} selected {% endif %}>Large</option>
-  							<option value="Medium" {% if size == 'Medium' %} selected {% endif %}>Medium</option>
-  							<option value="Small" {% if size == 'Small' %} selected {% endif %}>Small</option>
-						</select>
+                                                        <option value="Large" {% if size == 'Large' %} selected {% endif %}>Large</option>
+                                                        <option value="Medium" {% if size == 'Medium' %} selected {% endif %}>Medium</option>
+                                                        <option value="Small" {% if size == 'Small' %} selected {% endif %}>Small</option>
+                                                </select>
+
+
+                                        <div>
 
 					<div>	
 						Is Active:
-  						<input type="checkbox" id="is_active" name="is_active" {% if is_active %}checked{% endif %}/>
+  						<input type="checkbox" id="is_active" name="is_active" {% if drone.isActive %}checked{% endif %}/>
 					</div>
 
+					
+
 					<input type="submit" value="SAVE"/>
+				
                         </div>
                 </div>
     </body>
