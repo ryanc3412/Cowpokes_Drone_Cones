@@ -53,3 +53,6 @@ class EditUserManagerForm(forms.Form):
     first_name = forms.CharField(label="first_name", max_length=100)
     last_name = forms.CharField(label="last_name", max_length=100)
     is_manager = forms.BooleanField(label="is_manager", required=False)
+
+class StockUpdate(forms.Form):
+    stockAvailable = forms.IntegerField(label="stockAvailable")
