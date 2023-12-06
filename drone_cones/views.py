@@ -14,6 +14,8 @@ import json
 from django.shortcuts import render
 from drone_cones.models import Products, Drone
 from django.utils import timezone
+from random import randint
+
 
 def addDrone(request):
 
@@ -72,6 +74,16 @@ def addOrder(request):
             # Process the selected flavor as needed
 
             drone = form.cleaned_data['drone']
+
+            # _______________________
+            # | SELECTING DRONE      |
+            # |----------------------|
+            # |______________________|
+
+            drone_set = Drone.objects.all()
+            
+            
+
 
             time_ordered = datetime.now()
 
@@ -559,6 +571,7 @@ class OrderView:
             return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
 
     def send_order(request):
+       
         if request.method == 'POST':
             form = OrderForm(request.POST)
             try: 
@@ -578,6 +591,17 @@ class OrderView:
 
                         time_delivered = time_ordered + timedelta(minutes=10)
 
+                        eligible_drones = []
+                        # filtering drone
+
+                        print(f"There are {len(Drone.objects.all())} registered drones")
+                        for drone in Drone.objects.all():
+                            if (drone.scoops >= len(account.cart)) and (drone.isActive) and (not drone.isDelivering):
+                                eligible_drones.append(drone)   
+                       
+                        print(f"There are {len(eligible_drones)} eligible drones") 
+                        drone = eligible_drones[randint(0, len(eligible_drones)-1)]
+
                         Orders.objects.create(user=user, 
                                                 account_id=account.Id, items=account.cart, 
                                                 address=address,
@@ -585,6 +609,7 @@ class OrderView:
                                                 city=city,
                                                 state=state,
                                                 zip=zip_code,
+                                                drone = drone.id,
                                                 timeOrdered=time_ordered,
                                                 timeDelivered= time_delivered,
                                                 timeToDeliver= time_to_deliver)
