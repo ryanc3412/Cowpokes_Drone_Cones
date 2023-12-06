@@ -312,7 +312,7 @@ class ManagerView:
 	
         user = request.user
         associated_account = Account.objects.get(user=user)
- 
+
         if associated_account.is_admin:
             return render(request, "drone_cones/manager_home.html")
         else:
@@ -324,7 +324,6 @@ class ManagerView:
         associated_account = Account.objects.get(user=user)
 
         context = {'accounts': Account.objects.all()}
-
 
         if associated_account.is_admin:
             return render(request, "drone_cones/all_users.html", context)
@@ -369,8 +368,26 @@ class ManagerView:
             return HttpResponseForbidden()
 
     def view_stock(request):
-        user = request.user
-        associated_account = Account.objects.get(user=user)
+        # user = request.user
+        # associated_account = Account.objects.get(user=user)
+
+        # Get data for stock and drones
+        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+
+        # Get data for orders
+        order_list = Orders.objects.all()
+
+        # Calculate total scoops, cones, and toppings
+        total_scoops = sum(order['items']['scoops'] for order in order_list.values('items'))
+        total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
+        total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
+
+        context = {
+            'stock_list': stock_list,
+            'total_scoops': total_scoops,
+            'total_cones': total_cones,
+            'total_toppings': total_toppings,
+        }
 
         if associated_account.is_admin:
             return render(request, "drone_cones/stock_page.html")
@@ -446,7 +463,7 @@ class AdminView:
     @login_required
     def admin_dash(request):
         # Get data for stock and drones
-        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+        stock_list = reversed(Products.objects.order_by('-type'))
         drone_list = reversed(Drone.objects.order_by('-droneName'))
 
         # Get data for orders
@@ -457,12 +474,31 @@ class AdminView:
         total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
+        # Calculate total cost for each product type
+        total_cost_ice_cream = 25#sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = 5#sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = 15#sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+
+        #costs 
+        total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
+        drone_owner_payout = total_revenue * 0.1 #10% of revenue goes to drone owners
+        inventory_cost = total_revenue * 0.2 #20% of income goes back to restocking inventories
+        net_profit = total_revenue - drone_owner_payout - inventory_cost
+
+
         context = {
             'stock_list': stock_list,
             'drone_list': drone_list,
             'total_scoops': total_scoops,
             'total_cones': total_cones,
             'total_toppings': total_toppings,
+            'total_cost_ice_cream': total_cost_ice_cream,
+            'total_cost_cone': total_cost_cone,
+            'total_cost_topping': total_cost_topping,
+            'total_revenue': total_revenue,
+            'drone_owner_payout': drone_owner_payout,
+            'inventory_cost': inventory_cost,
+            'net_profit': net_profit,
         }
 
         return render(request, 'drone_cones/admin_page.html', context)
