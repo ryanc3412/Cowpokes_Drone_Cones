@@ -32,13 +32,13 @@
 				<div> ------------ </div>
 		
 
-				<form action="{% url 'drone_cones:edit_stock' product_id%}" method = "post">
+				<form action="{% url 'drone_cones:edit_stock' product_id %}" method = "post">
 
 					{% csrf_token %}
 					{{ form }}
 
 					<div>		
-						Amount: <input id="product" type="number" name="stockAvailable" maxlength = "100" value={{ product.stockAvailable }} required=True>  </input>
+						Amount: <input id="product" type="number" name="stockAvailable" value={{ product.stockAvailable }} required=True>  </input>
 					</div>
 					<input type="submit" value="SAVE"/>
 			</div>
