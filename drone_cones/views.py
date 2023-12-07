@@ -319,6 +319,18 @@ class DroneView:
             context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops, 'is_active': drone.isActive, 'account': associated_account}
             return render(request, "drone_cones/edit_drone_page.html", context)
 
+    def drone_breakdown(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+ 
+        drone = Drone.objects.get(id = int(drone_id))
+
+        if drone not in associated_account.drone_set.all():
+            return HttpResponseForbidden()
+
+        context = {'drone': drone, 'account':associated_account}
+        return render(request, "drone_cones/drone_breakdown_page.html", context)
+
 class ManagerView:
     def manager_dash(request):
 	
@@ -471,6 +483,21 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
+    def drone_breakdown(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+        
+            drone = Drone.objects.get(id = drone_id)
+
+            context = {'drone': drone, 'account': associated_account}
+         
+            return render(request, "drone_cones/drone_breakdown_page.html", context)
+        
+        else:
+            return HttpResponseForbidden()
+
 class AdminView:
     @login_required
     def admin_dash(request):
@@ -592,15 +619,14 @@ class OrderView:
                         time_delivered = time_ordered + timedelta(minutes=10)
 
                         eligible_drones = []
-                        # filtering drone
 
-                        print(f"There are {len(Drone.objects.all())} registered drones")
                         for drone in Drone.objects.all():
                             if (drone.scoops >= len(account.cart)) and (drone.isActive) and (not drone.isDelivering):
                                 eligible_drones.append(drone)   
                        
-                        print(f"There are {len(eligible_drones)} eligible drones") 
                         drone = eligible_drones[randint(0, len(eligible_drones)-1)]
+                        drone.orders_delivered += 1
+                        drone.save()
 
                         Orders.objects.create(user=user, 
                                                 account_id=account.Id, items=account.cart, 
