@@ -71,6 +71,9 @@
                     <div class="dateOrdered">
                         Date: {{ order.timeOrdered }}
                     </div>
+                    <div class="cost">
+                        Cost: $ {{ order.orderCost }}
+                    </div>
                     <div>
                         <div class="orderHistoryScoops"> SCOOPS </div>
                         {% if order.items.0.flavor1 or order.items.0.flavor2 %}

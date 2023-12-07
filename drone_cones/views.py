@@ -342,9 +342,12 @@ class ManagerView:
         userCount = 0
         managerCount = 0
         activeDroneCount = 0
+        totalRevenue = 0
 
         accountManagers = Account.objects.filter(is_admin = True)
         activeDrones = Drone.objects.filter(isActive = True)
+
+        orders = Orders.objects.all()
 
         for account in accounts:
             userCount += 1
@@ -355,7 +358,10 @@ class ManagerView:
         for actives in activeDrones:
             activeDroneCount += 1
 
-        context = {'userCount': userCount, 'managerCount': managerCount, 'activeDroneCount': activeDroneCount}
+        for order in orders:
+            totalRevenue += order.orderCost
+
+        context = {'userCount': userCount, 'managerCount': managerCount, 'activeDroneCount': activeDroneCount, 'totalRevenue': totalRevenue}
 
         if associated_account.is_admin:
             return render(request, "drone_cones/manager_home.html", context)

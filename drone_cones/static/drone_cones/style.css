@@ -384,3 +384,7 @@ div.inner-border {
 	font-size: xx-large;
 	color: forestgreen;
   }
+
+  .cost {
+	font-size: large;
+  }
