@@ -6,7 +6,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>Admin Page</title>
+		<title>Stock Page</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'drone_cones/style.css' %}" />
 
 	</head>
@@ -32,19 +32,22 @@
 			<a href="{% url 'drone_cones:all_drones' %}"> <u>D</u>rones </a>
 		</div>
 
-		<div class="page-container">	    	
-	    	<div class="outer-border">
-	    	<div class="inner-border">
-            <div>
-            <h3>Stock Information</h3>
-            <ul>
-                {% for product in stock_list %}
-                    <li>{{ product.type }} - Stock: {{ product.stockAvailable }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        	</div>
-	    	</div>
+		<div class="page-container">
+			<div class="bar">STOCK PAGE</div>    	
+		    	<div class="outer-border">
+				    {% for product in stock_list %}
+			    	<div class="inner-border">
+			            <div>
+				                <h3>{{ product.type }}</h3>
+				                <p>Type: {{ product.flavor }}</p>
+				                <p>In stock: {{ product.stockAvailable }}</p>	      
+				                <div style="margin-top: 1em; margin-bottom:1em; user-select: none;">
+            	                	<a class="order" style="cursor: pointer; margin-left: 0" href="edit_stock/{{product.id}}"/>EDIT</a>
+                   	         	</div>      
+			        	</div>
+		        	</div>
+				    {% endfor %}
+		    	</div>
 		</div>
 
 	</body>

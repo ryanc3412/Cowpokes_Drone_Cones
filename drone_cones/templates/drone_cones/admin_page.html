@@ -23,31 +23,21 @@
 
 
 		<div class="page-container">
-		<div>
-            <h2>Stock Information</h2>
-            <ul>
-                {% for product in stock_list %}
-                    <li>{{ product.type }} - Stock: {{ product.stockAvailable }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div>
-            <h2>Drone Information</h2>
-            <ul>
-                {% for drone in drone_list %}
-                    <li>{{ drone.droneName }} - Size: {{ drone.size }}, Scoops: {{ drone.scoops }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div>
-        	<h2>User Information</h2>
-        	<ul>
-            {% for user in user_list %}
-                <li>{{ user.firstName }} {{ user.lastName }} - Email: {{ user.email }}, Address: {{ user.address }}, City: {{ user.city }}</li>
-            {% endfor %}
-        </ul>
-        </div>
+			<div>
+	            <h2>Stock Information</h2>
+	            {% for product in stock_list %}
+	                <p>{{ product.type }} - {{ product.flavor }}: {{ product.stockAvailable }}</p>	            
+	            {% endfor %}            
+	        </div>
+	        <div>
+		        <h2>Financial Information</h2>
+			        <h3>Gains</h3>
+				        <p>Total Revenue (Before Costs): ${{ total_revenue }}</p>
+				       	<p>Net Profit (After Costs): ${{ net_profit }}</p>
+			       	<h3>Costs</h3>
+				        <p>Drone Owners: ${{ drone_owner_payout }}</p>
+				        <p>Inventory: ${{ inventory_cost }}</p>
+		    </div>
 		</div>
     </body>
 </html>
