@@ -32,6 +32,7 @@ urlpatterns = [
     path('manager/users/edit_user/<int:account_id>', views.ManagerView.edit_user, name="edit_user"),
     path('manager/all_drones/edit_drone/<int:drone_id>', views.ManagerView.edit_drone, name="edit_drone_manager"),
     path('manager/all_drones/drone_breakdown/<int:drone_id>', views.ManagerView.drone_breakdown, name="drone_breakdown"),
+    path('manager/stock/edit_stock/<int:product_id>', views.ManagerView.edit_stock, name="edit_stock"),
     path('get_products/', views.OrderView.get_products, name='get_products'),
     path('add_to_cart/', views.OrderView.add_to_cart, name='add_to_cart'),
     path('send_order/', views.OrderView.send_order, name='send_order'),
