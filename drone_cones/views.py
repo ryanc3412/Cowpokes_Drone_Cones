@@ -414,7 +414,7 @@ class ManagerView:
 
 
     def edit_stock(request, product_id):
-    # Retrieve the logged-in user and associated account
+        # Retrieve the logged-in user and associated account
         user = request.user
         associated_account = Account.objects.get(user=user)
 
@@ -439,7 +439,7 @@ class ManagerView:
                 return HttpResponseForbidden()
 
         context = {
-            'form': form,
+            'form': EditStock(),
             'product': product,
             'product_id': product_id,
         }
