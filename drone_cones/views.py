@@ -381,6 +381,10 @@ class ManagerView:
             return HttpResponseForbidden()
 
     def view_stock(request):
+        # Retrieve the logged-in user and associated account
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
         # Get data for stock and drones
         stock_list = reversed(Products.objects.order_by('-type'))
 
@@ -392,7 +396,7 @@ class ManagerView:
         }
 
         if associated_account.is_admin:
-            return render(request, "drone_cones/stock_page.html")
+            return render(request, "drone_cones/stock_page.html", context)
         else:
             return HttpResponseForbidden()
 
@@ -476,7 +480,7 @@ class ManagerView:
         }
 
         if associated_account.is_admin:
-            return render(request,  "drone_cones/stock_page.html")
+            return render(request,  "drone_cones/finance_page.html", context)
         else:
             return HttpResponseForbidden()
  
