@@ -33,6 +33,8 @@ class Drone(models.Model):
     scoops = models.IntegerField()
     isActive = models.BooleanField(default = False)
     isDelivering = models.BooleanField(default = False)
+    revenue = models.IntegerField(default = 0)
+    orders_delivered = models.IntegerField(default = 0)
     dateRegistered = models.DateTimeField(auto_now_add=True)
 
 class Orders(models.Model):
