@@ -422,8 +422,8 @@ class ManagerView:
         product = Products.objects.get(id = product_id)
         current_stock = product.stockAvailable
 
+        form = EditStock(request.POST)
         if request.method == 'POST':
-            form = EditStock(request.POST)
             if form.is_valid():
                 # Get the new stock value from the form
                 add_stock = form.cleaned_data.get('stockAvailable')
@@ -435,13 +435,16 @@ class ManagerView:
                 # Redirect to a success page or any other desired page
                 return HttpResponseRedirect("../")
 
-        else:
-            return HttpResponseForbidden()
+            else:
+                return HttpResponseForbidden()
 
         context = {
             'form': form,
             'product': product,
+            'product_id': product_id,
         }
+
+        print("EDIT STOCK BABY WHOOO")
 
         return render(request, "drone_cones/edit_stock.html", context)
 
