@@ -215,6 +215,7 @@ class UserView:
             date_joined = user.date_joined.strftime("%m/%d/%Y")
 
             context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account}
+
             return render (request, 'drone_cones/edit_account.html', context)
 
     @login_required
@@ -319,6 +320,18 @@ class DroneView:
             context = {'drone_id': drone_id, 'name': drone.droneName, 'size': drone.size, 'capacity': drone.scoops, 'is_active': drone.isActive, 'account': associated_account}
             return render(request, "drone_cones/edit_drone_page.html", context)
 
+    def drone_breakdown(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+ 
+        drone = Drone.objects.get(id = int(drone_id))
+
+        if drone not in associated_account.drone_set.all():
+            return HttpResponseForbidden()
+
+        context = {'drone': drone, 'account':associated_account}
+        return render(request, "drone_cones/drone_breakdown_page.html", context)
+
 class ManagerView:
     def manager_dash(request):
 	
@@ -399,11 +412,72 @@ class ManagerView:
             return HttpResponseForbidden()
 
     def view_stock(request):
-        # user = request.user
-        # associated_account = Account.objects.get(user=user)
+        # Retrieve the logged-in user and associated account
+        user = request.user
+        associated_account = Account.objects.get(user=user)
 
         # Get data for stock and drones
-        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+        stock_list = reversed(Products.objects.order_by('-type'))
+
+        # Get data for orders
+        order_list = Orders.objects.all()
+
+        context = {
+            'stock_list': stock_list,
+        }
+
+        if associated_account.is_admin:
+            return render(request, "drone_cones/stock_page.html", context)
+        else:
+            return HttpResponseForbidden()
+
+
+    def edit_stock(request, product_id):
+        # Retrieve the logged-in user and associated account
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        # Retrieve the product based on the product_id
+        product = Products.objects.get(id = product_id)
+        current_stock = product.stockAvailable
+
+        form = EditStock(request.POST)
+        if request.method == 'POST':
+            if form.is_valid():
+                # Get the new stock value from the form
+                add_stock = form.cleaned_data.get('stockAvailable')
+
+                # Update the stockAvailable field of the product
+                product.stockAvailable = add_stock + current_stock
+                product.save()
+
+                # Redirect to a success page or any other desired page
+                return HttpResponseRedirect("../")
+
+            else:
+                return HttpResponseForbidden()
+
+        context = {
+            'form': EditStock(),
+            'product': product,
+            'product_id': product_id,
+        }
+
+        print("EDIT STOCK BABY WHOOO")
+
+        return render(request, "drone_cones/edit_stock.html", context)
+
+
+
+
+
+    def view_finances(request):
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        # Get data for stock and drones
+        stock_list = reversed(Products.objects.order_by('-type'))
 
         # Get data for orders
         order_list = Orders.objects.all()
@@ -413,25 +487,34 @@ class ManagerView:
         total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
+        # Calculate total cost for each product type
+        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+
+        #costs 
+        total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
+        drone_owner_payout = total_revenue * 0.1 #10% of revenue goes to drone owners
+        inventory_cost = total_revenue * 0.2 #20% of income goes back to restocking inventories
+        net_profit = total_revenue - drone_owner_payout - inventory_cost
+
+
         context = {
             'stock_list': stock_list,
             'total_scoops': total_scoops,
             'total_cones': total_cones,
             'total_toppings': total_toppings,
+            'total_cost_ice_cream': total_cost_ice_cream,
+            'total_cost_cone': total_cost_cone,
+            'total_cost_topping': total_cost_topping,
+            'total_revenue': total_revenue,
+            'drone_owner_payout': drone_owner_payout,
+            'inventory_cost': inventory_cost,
+            'net_profit': net_profit,
         }
 
         if associated_account.is_admin:
-            return render(request, "drone_cones/stock_page.html")
-        else:
-            return HttpResponseForbidden()
-
-    def view_finances(request):
-
-        user = request.user
-        associated_account = Account.objects.get(user=user)
-
-        if associated_account.is_admin:
-            return render(request,  "drone_cones/stock_page.html")
+            return render(request,  "drone_cones/finance_page.html", context)
         else:
             return HttpResponseForbidden()
  
@@ -490,12 +573,26 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
+    def drone_breakdown(request, drone_id):
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        if associated_account.is_admin:
+        
+            drone = Drone.objects.get(id = drone_id)
+
+            context = {'drone': drone, 'account': associated_account}
+         
+            return render(request, "drone_cones/drone_breakdown_page.html", context)
+        
+        else:
+            return HttpResponseForbidden()
+
 class AdminView:
     @login_required
     def admin_dash(request):
         # Get data for stock and drones
         stock_list = reversed(Products.objects.order_by('-type'))
-        drone_list = reversed(Drone.objects.order_by('-droneName'))
 
         # Get data for orders
         order_list = Orders.objects.all()
@@ -506,9 +603,9 @@ class AdminView:
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
         # Calculate total cost for each product type
-        total_cost_ice_cream = 25#sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
-        total_cost_cone = 5#sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
-        total_cost_topping = 15#sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
 
         #costs 
         total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
@@ -519,7 +616,6 @@ class AdminView:
 
         context = {
             'stock_list': stock_list,
-            'drone_list': drone_list,
             'total_scoops': total_scoops,
             'total_cones': total_cones,
             'total_toppings': total_toppings,
@@ -598,6 +694,40 @@ class OrderView:
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
                     if (form.is_valid()):
+                        costOfOrder = account.cart[0]['totalConeCost']
+
+                        flavor1 = account.cart[0]['flavor1']
+                        flavor2 = account.cart[0]['flavor2']
+                        cone = account.cart[0]['cone']
+                        topping1 = account.cart[0]['toppings']['first']
+                        topping2 = account.cart[0]['toppings']['second']
+                        topping3 = account.cart[0]['toppings']['third']
+
+                        if (flavor1 != ""):
+                            stockFlavor = Products.objects.get(flavor=flavor1)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        if (flavor2 != ""):
+                            stockFlavor = Products.objects.get(flavor=flavor2)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        if (cone != ""):
+                            stockFlavor = Products.objects.get(flavor=cone)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        if (topping1 != ""):
+                            stockFlavor = Products.objects.get(flavor=topping1)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        if (topping2 != ""):
+                            stockFlavor = Products.objects.get(flavor=topping2)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        if (topping3 != ""):
+                            stockFlavor = Products.objects.get(flavor=topping3)
+                            stockFlavor.stockAvailable -= 1
+                            stockFlavor.save()
+                        
                         address = form.cleaned_data['address']
                         address2 = form.cleaned_data['address2']
                         city = form.cleaned_data['city']
@@ -611,15 +741,14 @@ class OrderView:
                         time_delivered = time_ordered + timedelta(minutes=10)
 
                         eligible_drones = []
-                        # filtering drone
 
-                        print(f"There are {len(Drone.objects.all())} registered drones")
                         for drone in Drone.objects.all():
                             if (drone.scoops >= len(account.cart)) and (drone.isActive) and (not drone.isDelivering):
                                 eligible_drones.append(drone)   
                        
-                        print(f"There are {len(eligible_drones)} eligible drones") 
                         drone = eligible_drones[randint(0, len(eligible_drones)-1)]
+                        drone.orders_delivered += 1
+                        drone.save()
 
                         Orders.objects.create(user=user, 
                                                 account_id=account.Id, items=account.cart, 
@@ -629,6 +758,7 @@ class OrderView:
                                                 state=state,
                                                 zip=zip_code,
                                                 drone = drone.id,
+                                                orderCost=costOfOrder,
                                                 timeOrdered=time_ordered,
                                                 timeDelivered= time_delivered,
                                                 timeToDeliver= time_to_deliver)
