@@ -215,6 +215,7 @@ class UserView:
             date_joined = user.date_joined.strftime("%m/%d/%Y")
 
             context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account}
+
             return render (request, 'drone_cones/edit_account.html', context)
 
     @login_required
@@ -325,10 +326,11 @@ class ManagerView:
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        if associated_account.is_admin:
-            return render(request, "drone_cones/manager_home.html")
-        else:
-            return HttpResponseForbidden()
+        return render(request, "drone_cones/manager_home.html")
+        # if associated_account.is_admin:
+        #     return render(request, "drone_cones/manager_home.html")
+        # else:
+        #     return HttpResponseForbidden()
 
     def view_users(request):
 
@@ -337,54 +339,110 @@ class ManagerView:
 
         context = {'accounts': Account.objects.all()}
 
-        if associated_account.is_admin:
-            return render(request, "drone_cones/all_users.html", context)
-        else:
-            return HttpResponseForbidden()
+        return render(request, "drone_cones/all_users.html", context)
+        # if associated_account.is_admin:
+        #     return render(request, "drone_cones/all_users.html", context)
+        # else:
+        #     return HttpResponseForbidden()
 
     def edit_user(request, account_id):
 
         user = request.user
         associated_account = Account.objects.get(user=user)
 
-        if associated_account.is_admin:
+        # if associated_account.is_admin:
 
-            toggled_account = Account.objects.get(Id = account_id)
+        toggled_account = Account.objects.get(Id = account_id)
 
-            toggled_user = toggled_account.user  
+        toggled_user = toggled_account.user  
 
-            if request.method == 'POST':
-                form = EditUserManagerForm(request.POST)
-                if form.is_valid():
-    		
-                    username = form.cleaned_data.get('username')
-                    first_name = form.cleaned_data.get('first_name')
-                    last_name = form.cleaned_data.get('last_name')
-                    is_manager = form.cleaned_data.get('is_manager')
+        if request.method == 'POST':
+            form = EditUserManagerForm(request.POST)
+            if form.is_valid():
+		
+                username = form.cleaned_data.get('username')
+                first_name = form.cleaned_data.get('first_name')
+                last_name = form.cleaned_data.get('last_name')
+                is_manager = form.cleaned_data.get('is_manager')
 
-                    toggled_user.username = username
-                    toggled_account.firstName = first_name
-                    toggled_account.lastName = last_name
-                    toggled_account.is_admin = is_manager
+                toggled_user.username = username
+                toggled_account.firstName = first_name
+                toggled_account.lastName = last_name
+                toggled_account.is_admin = is_manager
 
-                    toggled_account.save()
+                toggled_account.save()
 
-                    return HttpResponseRedirect("../")
-                else:
-                    return HttpResponseForbidden()
+                return HttpResponseRedirect("../")
+            else:
+                return HttpResponseForbidden()
 
-            context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
+        context = {'account':Account.objects.get(Id=account_id), 'id':account_id, 'username':toggled_user.username}
 
-            return render(request, "drone_cones/edit_user_manager.html", context)
+        return render(request, "drone_cones/edit_user_manager.html", context)
+        # else:
+        #     return HttpResponseForbidden()
+
+    def view_stock(request):
+        # Get data for stock and drones
+        stock_list = reversed(Products.objects.order_by('-type'))
+
+        # Get data for orders
+        order_list = Orders.objects.all()
+
+        context = {
+            'stock_list': stock_list,
+        }
+
+        return render(request, "drone_cones/stock_page.html", context)
+        # if associated_account.is_admin:
+        #     return render(request, "drone_cones/stock_page.html")
+        # else:
+        #     return HttpResponseForbidden()
+
+
+    def edit_stock(request, product_id):
+    # Retrieve the logged-in user and associated account
+        user = request.user
+        associated_account = Account.objects.get(user=user)
+
+        # Retrieve the product based on the product_id
+        product = Products.objects.get(id = product_id)
+        current_stock = product.stockAvailable
+
+        if request.method == 'POST':
+            form = EditStock(request.POST)
+            if form.is_valid():
+                # Get the new stock value from the form
+                add_stock = form.cleaned_data.get('stockAvailable')
+
+                # Update the stockAvailable field of the product
+                product.stockAvailable = add_stock + current_stock
+                product.save()
+
+                # Redirect to a success page or any other desired page
+                return HttpResponseRedirect("../")
+
         else:
             return HttpResponseForbidden()
 
-    def view_stock(request):
-        # user = request.user
-        # associated_account = Account.objects.get(user=user)
+        context = {
+            'form': form,
+            'product': product,
+        }
+
+        return render(request, "drone_cones/edit_stock.html", context)
+
+
+
+
+
+    def view_finances(request):
+
+        user = request.user
+        associated_account = Account.objects.get(user=user)
 
         # Get data for stock and drones
-        stock_list = reversed(Products.objects.order_by('-stockAvailable'))
+        stock_list = reversed(Products.objects.order_by('-type'))
 
         # Get data for orders
         order_list = Orders.objects.all()
@@ -394,27 +452,37 @@ class ManagerView:
         total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
+        # Calculate total cost for each product type
+        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+
+        #costs 
+        total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
+        drone_owner_payout = total_revenue * 0.1 #10% of revenue goes to drone owners
+        inventory_cost = total_revenue * 0.2 #20% of income goes back to restocking inventories
+        net_profit = total_revenue - drone_owner_payout - inventory_cost
+
+
         context = {
             'stock_list': stock_list,
             'total_scoops': total_scoops,
             'total_cones': total_cones,
             'total_toppings': total_toppings,
+            'total_cost_ice_cream': total_cost_ice_cream,
+            'total_cost_cone': total_cost_cone,
+            'total_cost_topping': total_cost_topping,
+            'total_revenue': total_revenue,
+            'drone_owner_payout': drone_owner_payout,
+            'inventory_cost': inventory_cost,
+            'net_profit': net_profit,
         }
 
-        if associated_account.is_admin:
-            return render(request, "drone_cones/stock_page.html")
-        else:
-            return HttpResponseForbidden()
-
-    def view_finances(request):
-
-        user = request.user
-        associated_account = Account.objects.get(user=user)
-
-        if associated_account.is_admin:
-            return render(request,  "drone_cones/stock_page.html")
-        else:
-            return HttpResponseForbidden()
+        return render(request,  "drone_cones/finance_page.html", context)
+        # if associated_account.is_admin:
+        #     return render(request,  "drone_cones/stock_page.html")
+        # else:
+        #     return HttpResponseForbidden()
  
     def view_drones(request):
         user = request.user
@@ -476,7 +544,6 @@ class AdminView:
     def admin_dash(request):
         # Get data for stock and drones
         stock_list = reversed(Products.objects.order_by('-type'))
-        drone_list = reversed(Drone.objects.order_by('-droneName'))
 
         # Get data for orders
         order_list = Orders.objects.all()
@@ -487,9 +554,9 @@ class AdminView:
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
         # Calculate total cost for each product type
-        total_cost_ice_cream = 25#sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
-        total_cost_cone = 5#sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
-        total_cost_topping = 15#sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
 
         #costs 
         total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
@@ -500,7 +567,6 @@ class AdminView:
 
         context = {
             'stock_list': stock_list,
-            'drone_list': drone_list,
             'total_scoops': total_scoops,
             'total_cones': total_cones,
             'total_toppings': total_toppings,

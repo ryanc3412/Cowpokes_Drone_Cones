@@ -38,12 +38,13 @@
 		      	<div class="outer-border">
 			    	<div class="inner-border">
 				      	<div style="margin-bottom: 10px">
-				      		<h3>Finance Information</h3>
-				        	<ul>
-				                {% for product in stock_list %}
-				                    <li>{{ product.type }} - {{ product.flavor }}: {{ product.stockAvailable }}</li>
-				                {% endfor %}
-				            </ul>
+					        <h2>Financial Information</h2>
+						        <h3>Gains</h3>
+							        <p>Total Revenue (Before Costs): ${{ total_revenue }}</p>
+							       	<p>Net Profit (After Costs): ${{ net_profit }}</p>
+						       	<h3>Costs</h3>
+							        <p>Drone Owners: ${{ drone_owner_payout }}</p>
+							        <p>Inventory: ${{ inventory_cost }}</p>
 				        </div>
 				    </div>
 				</div>
