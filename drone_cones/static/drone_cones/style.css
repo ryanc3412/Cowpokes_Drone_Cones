@@ -379,3 +379,8 @@ div.inner-border {
 	margin-top: 15px;
 	font-size: medium;
   }
+
+  .managerNums {
+	font-size: xx-large;
+	color: forestgreen;
+  }
