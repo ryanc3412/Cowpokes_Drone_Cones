@@ -675,6 +675,9 @@ class OrderView:
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
                     if (form.is_valid()):
+                        costOfOrder = account.cart[0]['totalConeCost']
+
+
                         address = form.cleaned_data['address']
                         address2 = form.cleaned_data['address2']
                         city = form.cleaned_data['city']
@@ -705,6 +708,7 @@ class OrderView:
                                                 state=state,
                                                 zip=zip_code,
                                                 drone = drone.id,
+                                                orderCost=costOfOrder,
                                                 timeOrdered=time_ordered,
                                                 timeDelivered= time_delivered,
                                                 timeToDeliver= time_to_deliver)

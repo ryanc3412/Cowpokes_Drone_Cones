@@ -48,6 +48,7 @@ class Orders(models.Model):
     zip = models.CharField(max_length=100, blank=True, null=True)
     items = models.JSONField(blank=True, null=True)
     drone = models.IntegerField(blank=True, null=True)
+    orderCost = models.IntegerField(default=0)
     deliverySuccessful = models.BooleanField(blank=True, null=True)
     timeOrdered = models.TimeField(blank=True, null=True)
     timeDelivered = models.TimeField(blank=True, null=True)
