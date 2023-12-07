@@ -75,13 +75,24 @@ function populate() {
             // Create a div for each flavor and append it to the "flavors" div
             for (var i = 0; i < flavor1List.length; i++) {
                 var flavor1Div = document.createElement("div");
+                var flavor1ImageDiv = document.createElement("img");
                 var flavor2Div = document.createElement("div");
-                var iceCreamImagePath = "{% static 'blog/images/ice_cream_cone.png' %}";
+                var costDiv = document.createElement("div");
+                // var iceCreamImagePath = "`{%` static 'drone_cones/images/ice_cream_cone.png' `%}`";
+
                 flavor1Div.setAttribute("class", "flavor1Display");
                 flavor2Div.setAttribute("class", "flavor2Display");
                 flavor1Div.setAttribute("onclick", `selectFlavors1(this, event)`);
                 flavor2Div.setAttribute("onclick", `selectFlavors2(this, event)`);
-                flavor1Div.innerHTML = flavor1List[i]['flavor'] + '<br>Cost: $' + flavor1List[i]['cost'];
+                costDiv.setAttribute("class", "costVal");
+                // flavor1ImageDiv.setAttribute("class", "flavorImage");
+
+                flavor1Div.textContent = flavor1List[i]['flavor'];
+                // flavor1ImageDiv.src = iceCreamImagePath;
+                costDiv.textContent = "Cost: $" + flavor1List[i]['cost'];
+                flavor1Div.appendChild(costDiv);
+                // flavor1Div.appendChild(flavor1ImageDiv);
+                // flavor1Div.innerHTML = '<img src="' + iceCreamImagePath + '" alt="ice cream image"><br>' + '<br>' + flavor1List[i]['flavor'] + '<br><div>Cost: $' + flavor1List[i]['cost'] + '</div>';
                 flavor2Div.innerHTML = flavor2List[i]['flavor'] + '<br>Cost: $' + flavor2List[i]['cost'];
 
                 flavors1Div.appendChild(flavor1Div);
@@ -128,16 +139,19 @@ function selectFlavors1(item, event) {
     if (event && event.type == 'click') {
         var flavor1Items = document.querySelectorAll('.flavor1Display');
 
-        if (selectedItems['flavor1'] == item.textContent) {
+        var parentTextContent = item.firstChild.textContent.trim();
+
+        if (selectedItems['flavor1'] == parentTextContent) {
             item.style.backgroundColor = '';
             selectedItems.flavor1 = "";
         } else {
-            selectedItems.flavor1 = item.textContent;
+            selectedItems.flavor1 = parentTextContent;
             item.style.backgroundColor = "#008080";
         }
 
         flavor1Items.forEach(function (el) {
-            if (selectedItems['flavor1'] != el.textContent) {
+            var elParentTextContent = el.firstChild.textContent.trim();
+            if (selectedItems['flavor1'] != elParentTextContent) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
@@ -149,16 +163,19 @@ function selectFlavors2(item, event) {
     if (event && event.type == 'click') {
         var flavor2Items = document.querySelectorAll('.flavor2Display');
 
-        if (selectedItems['flavor2'] == item.textContent) {
+        var parentTextContent = item.firstChild.textContent.trim();
+
+        if (selectedItems['flavor2'] == parentTextContent) {
             item.style.backgroundColor = '';
             selectedItems.flavor2 = "";
         } else {
-            selectedItems.flavor2 = item.textContent;
+            selectedItems.flavor2 = parentTextContent;
             item.style.backgroundColor = "#008080";
         }
 
         flavor2Items.forEach(function (el) {
-            if (selectedItems['flavor2'] != el.textContent) {
+            var elParentTextContent = el.firstChild.textContent.trim();
+            if (selectedItems['flavor2'] != elParentTextContent) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
@@ -170,16 +187,19 @@ function selectCone(item, event) {
     if (event && event.type == 'click') {
         var flavorItems = document.querySelectorAll('.coneDisplay');
 
-        if (selectedItems['cone'] == item.textContent) {
+        var parentTextContent = item.firstChild.textContent.trim();
+
+        if (selectedItems['cone'] == parentTextContent) {
             item.style.backgroundColor = '';
             selectedItems.cone = "";
         } else {
-            selectedItems.cone = item.textContent;
+            selectedItems.cone = parentTextContent;
             item.style.backgroundColor = "#008080";
         }
 
         flavorItems.forEach(function (el) {
-            if (selectedItems['cone'] != el.textContent) {
+            var elParentTextContent = el.firstChild.textContent.trim();
+            if (selectedItems['cone'] != elParentTextContent) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
@@ -190,33 +210,35 @@ function selectCone(item, event) {
 function selectToppings(item, event) {
     if (event && event.type == 'click') {
         var flavorItems = document.querySelectorAll('.toppingsDisplay');
+        var parentTextContent = item.firstChild.textContent.trim();
 
-        if (Object.values(selectedItems['toppings']).includes(item.textContent)) {
+        if (Object.values(selectedItems['toppings']).includes(parentTextContent)) {
             item.style.backgroundColor = '';
-            if (item.textContent == selectedItems.toppings.first) {
+            if (parentTextContent == selectedItems.toppings.first) {
                 selectedItems.toppings.first = "";
             }
-            if (item.textContent == selectedItems.toppings.second) {
+            if (parentTextContent == selectedItems.toppings.second) {
                 selectedItems.toppings.second = "";
             }
-            if (item.textContent == selectedItems.toppings.third) {
+            if (parentTextContent == selectedItems.toppings.third) {
                 selectedItems.toppings.third = "";
             }
         } else if (selectedItems.toppings.first == "") {
-            selectedItems.toppings.first = item.textContent;
+            selectedItems.toppings.first = parentTextContent;
             item.style.backgroundColor = "#008080";
         } else if (selectedItems.toppings.second == "") {
-            selectedItems.toppings.second = item.textContent;
+            selectedItems.toppings.second = parentTextContent;
             item.style.backgroundColor = "#008080";
         } else if (selectedItems.toppings.third == "") {
-            selectedItems.toppings.third = item.textContent;
+            selectedItems.toppings.third = parentTextContent;
             item.style.backgroundColor = "#008080";
         } else {
             console.log("Sorry, topping cart is full");
         }
 
         flavorItems.forEach(function (el) {
-            if (!Object.values(selectedItems).includes(el.textContent)) {
+            var elParentTextContent = el.firstChild.textContent.trim();
+            if (!Object.values(selectedItems).includes(elParentTextContent)) {
                 el.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
@@ -338,3 +360,4 @@ function removeItemFromOrder(itemId) {
             alert('An error occurred. Please try again.');
         });
 }
+
