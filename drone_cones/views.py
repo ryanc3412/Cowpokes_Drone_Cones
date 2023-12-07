@@ -338,8 +338,33 @@ class ManagerView:
         user = request.user
         associated_account = Account.objects.get(user=user)
 
+        accounts = Account.objects.all()
+        userCount = 0
+        managerCount = 0
+        activeDroneCount = 0
+        totalRevenue = 0
+
+        accountManagers = Account.objects.filter(is_admin = True)
+        activeDrones = Drone.objects.filter(isActive = True)
+
+        orders = Orders.objects.all()
+
+        for account in accounts:
+            userCount += 1
+
+        for managers in accountManagers:
+            managerCount += 1
+
+        for actives in activeDrones:
+            activeDroneCount += 1
+
+        for order in orders:
+            totalRevenue += order.orderCost
+
+        context = {'userCount': userCount, 'managerCount': managerCount, 'activeDroneCount': activeDroneCount, 'totalRevenue': totalRevenue}
+
         if associated_account.is_admin:
-            return render(request, "drone_cones/manager_home.html")
+            return render(request, "drone_cones/manager_home.html", context)
         else:
             return HttpResponseForbidden()
 
