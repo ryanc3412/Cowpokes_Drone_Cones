@@ -33,7 +33,6 @@ function writeAddress(checkAddress) {
         fetch('/dronecones/get_account_address/')
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 addressOne.value = data['address1'];
                 addressTwo.value = data['address2'];
                 city.value = data['city'];
@@ -52,7 +51,6 @@ function populate() {
     fetch('/dronecones/get_products/')
         .then(response => response.json())
         .then(data => {
-            console.log(data); // handle the data as needed
             for (var i = 0; i < data.length; i++) {
                 if (data[i]['stockAvailable'] > 0) {
                     if (data[i]['type'] == 'Ice Cream') {
@@ -65,9 +63,6 @@ function populate() {
                     }
                 }
             }
-            console.log(flavor1List);
-            console.log(coneList);
-            console.log(toppingsList);
             // Get the "flavors" div
             var flavors1Div = document.getElementById("flavors1");
             var flavors2Div = document.getElementById("flavors2");
@@ -406,8 +401,6 @@ document.getElementById('addToCart').addEventListener('click', function () {
         })
         .then(data => {
             console.log('Success:', data);
-            console.log(data);
-
         })
         .catch(error => {
             console.error('Error:', error);
@@ -416,7 +409,6 @@ document.getElementById('addToCart').addEventListener('click', function () {
 });
 
 function removeItemFromOrder(itemId) {
-    console.log(itemId);
     fetch('/dronecones/remove_from_order/', {
         method: 'POST',
         headers: {
@@ -434,7 +426,6 @@ function removeItemFromOrder(itemId) {
         })
         .then(data => {
             console.log('Success:', data);
-            console.log(data);
         })
         .catch(error => {
             console.error('Error:', error);
