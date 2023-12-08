@@ -202,8 +202,13 @@ class UserView:
                 last_name = form.cleaned_data.get('last_name')
 
                 if user.username != user_name:
-                   user.username = user_name
-                   user.save()
+                    try:
+                        user.username = user_name
+                        user.save()
+                    except:
+                        context = {'first_name':first_name, 'last_name':last_name, 'username':user_name, 'date_joined':user.date_joined.strftime("%m/%d/%Y"), 'account':associated_account, 'edit_taken_error': True}
+                        print("THINGS WENT HAYWIRE")
+                        return render(request, 'drone_cones/edit_account.html', context)
                 
                 associated_account.firstName = first_name
                 associated_account.lastName = last_name
@@ -214,7 +219,7 @@ class UserView:
         else:
             date_joined = user.date_joined.strftime("%m/%d/%Y")
 
-            context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account}
+            context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account, 'edit_taken_error': False, 'taken_username': ""}
 
             return render (request, 'drone_cones/edit_account.html', context)
 
@@ -437,7 +442,6 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
-
     def edit_stock(request, product_id):
         # Retrieve the logged-in user and associated account
         user = request.user
@@ -473,10 +477,6 @@ class ManagerView:
 
         return render(request, "drone_cones/edit_stock.html", context)
 
-
-
-
-
     def view_finances(request):
 
         user = request.user
@@ -487,36 +487,56 @@ class ManagerView:
 
         # Get data for orders
         order_list = Orders.objects.all()
+        product_list = Products.objects.all()
+        inventory_cost = 0.0
+        net = 0.0
 
-        # Calculate total scoops, cones, and toppings
-        total_scoops = sum(order['items']['scoops'] for order in order_list if 'items' in order and 'scoops' in order['items'])
-        total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
-        total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
+        for product in product_list:
+            inventory_cost += (product.companyCost * product.stockAvailable)
+            product.netRevenue = product.cost - product.companyCost
+            product.save() 
+        
+        total_revenue = 0.0
 
-        # Calculate total cost for each product type
-        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
-        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
-        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+        ## get product cost
+        for order in order_list:
+            for i in range(len(order.items)):
+                flavor1 = order.items[i]['flavor1']
+                flavor2 = order.items[i]['flavor2']
+                cone = order.items[i]['cone']
+                topping1 = order.items[i]['toppings']['first']
+                topping2 = order.items[i]['toppings']['second']
+                topping3 = order.items[i]['toppings']['third']
 
-        #costs 
-        total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
-        drone_owner_payout = total_revenue * 0.1 #10% of revenue goes to drone owners
-        inventory_cost = total_revenue * 0.2 #20% of income goes back to restocking inventories
-        net_profit = total_revenue - drone_owner_payout - inventory_cost
+                if flavor1 != '':
+                    product_info_flavor1_cost = Products.objects.get(flavor=flavor1).cost
+                    total_revenue += product_info_flavor1_cost
+                if flavor2 != '':
+                    product_info_flavor2_cost = Products.objects.get(flavor=flavor2).cost
+                    total_revenue += product_info_flavor2_cost
+                if cone != '':
+                    product_info_cone_cost = Products.objects.get(flavor=cone).cost
+                    total_revenue += product_info_cone_cost
+                if topping1 != '':
+                    product_info_topping1_cost = Products.objects.get(flavor=topping1).cost
+                    total_revenue += product_info_topping1_cost
+                if topping2 != '':
+                    product_info_topping2_cost = Products.objects.get(flavor=topping2).cost
+                    total_revenue += product_info_topping2_cost
+                if topping3 != '':
+                    product_info_topping3_cost = Products.objects.get(flavor=topping3).cost
+                    total_revenue += product_info_topping3_cost
 
+        ## drones take 5%
+        drone_owner_payout = total_revenue * .05
+            
+        net = total_revenue - inventory_cost - drone_owner_payout
 
         context = {
-            'stock_list': stock_list,
-            'total_scoops': total_scoops,
-            'total_cones': total_cones,
-            'total_toppings': total_toppings,
-            'total_cost_ice_cream': total_cost_ice_cream,
-            'total_cost_cone': total_cost_cone,
-            'total_cost_topping': total_cost_topping,
-            'total_revenue': total_revenue,
-            'drone_owner_payout': drone_owner_payout,
-            'inventory_cost': inventory_cost,
-            'net_profit': net_profit,
+            'total_revenue': round(total_revenue,2),
+            'inventory_cost': round(inventory_cost,2),
+            'net_profit': round(net,2),
+            'drone_owner_payout': round(drone_owner_payout,2),
         }
 
         if associated_account.is_admin:
@@ -644,18 +664,23 @@ class OrderView:
 
         product_list = reversed(Products.objects.order_by("-id"))
         cart = Account.objects.get(user=request.user).cart
+        total_cost = 0.00
+
+        for i in range(len(cart)):
+            total_cost += cart[i]['totalConeCost']
 
         context = {
             'product_list': product_list, 
             'cart': cart,
-            'account': associated_account
+            'account': associated_account,
+            'total_cost': total_cost
         }
 
         return render(request, 'drone_cones/order_page.html', context)
 
     @login_required
     def order_confirmation(request):
-        order = Orders.objects.first()
+        order = Orders.objects.last()
         context = {'order': order}
         return render(request, 'drone_cones/confirmation_page.html', context)
 
@@ -700,42 +725,49 @@ class OrderView:
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
                     if (form.is_valid()):
-                        costOfOrder = account.cart[0]['totalConeCost']
+                        costOfOrder = 0.0
+                        for i in range(len(account.cart)):
+                            costOfOrder += account.cart[i]['totalConeCost']
 
-                        flavor1 = account.cart[0]['flavor1']
-                        flavor2 = account.cart[0]['flavor2']
-                        cone = account.cart[0]['cone']
-                        topping1 = account.cart[0]['toppings']['first']
-                        topping2 = account.cart[0]['toppings']['second']
-                        topping3 = account.cart[0]['toppings']['third']
+                            flavor1 = account.cart[0]['flavor1']
+                            flavor2 = account.cart[0]['flavor2']
+                            cone = account.cart[0]['cone']
+                            topping1 = account.cart[0]['toppings']['first']
+                            topping2 = account.cart[0]['toppings']['second']
+                            topping3 = account.cart[0]['toppings']['third']
 
-                        if (flavor1 != ""):
-                            stockFlavor = Products.objects.get(flavor=flavor1)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (flavor2 != ""):
-                            stockFlavor = Products.objects.get(flavor=flavor2)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (cone != ""):
-                            stockFlavor = Products.objects.get(flavor=cone)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping1 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping1)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping2 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping2)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping3 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping3)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
+                            if (flavor1 != ""):
+                                stockFlavor = Products.objects.get(flavor=flavor1)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (flavor2 != ""):
+                                stockFlavor = Products.objects.get(flavor=flavor2)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (cone != ""):
+                                stockFlavor = Products.objects.get(flavor=cone)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping1 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping1)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping2 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping2)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping3 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping3)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
                         
                         address = form.cleaned_data['address']
-                        address2 = form.cleaned_data['address2']
+
+                        if form.cleaned_data['address2']:
+                            address2 = form.cleaned_data['address2']
+                        else:
+                            address2 = ""
+
                         city = form.cleaned_data['city']
                         state = form.cleaned_data['state']
                         zip_code = form.cleaned_data['zip']
@@ -778,7 +810,7 @@ class OrderView:
                     account.save()
                     
                 response = JsonResponse({'status': 'success'})
-                redirect_url = '/dronecones/order/'
+                redirect_url = '/dronecones/order_confirmation'
                 response['X-Redirect'] = redirect_url
 
                 return redirect(redirect_url)

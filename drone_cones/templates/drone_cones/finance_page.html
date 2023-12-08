@@ -21,7 +21,11 @@
 			<a href="{% url 'drone_cones:account' %}"> <u>A</u>ccount </a>
 			<a href="{% url 'drone_cones:manager' %}"> <u>M</u>anager</a>
 			<a href="/dronecones/logout">Logout</a>
-			<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="test">
+
+			<a href="{% url 'drone_cones:account' %}">
+                                <img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" style="cursor: pointer" alt="computer">
+                        </a>
+
 			<img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="test">
 		</div>
 
@@ -34,20 +38,22 @@
 
 
 		<div class="page-container">
-	      	<div class="bar">FINANCIAL PAGE</div>
-		      	<div class="outer-border">
-			    	<div class="inner-border">
-				      	<div style="margin-bottom: 10px">
-					        <h2>Financial Information</h2>
-						        <h3>Gains</h3>
-							        <p>Total Revenue (Before Costs): ${{ total_revenue }}</p>
-							       	<p>Net Profit (After Costs): ${{ net_profit }}</p>
-						       	<h3>Costs</h3>
-							        <p>Drone Owners: ${{ drone_owner_payout }}</p>
-							        <p>Inventory: ${{ inventory_cost }}</p>
-				        </div>
-				    </div>
+			<div class="bar">FINANCIAL PAGE</div>
+			<div class="outer-border">
+				<div class="inner-border">
+					<div style="margin-bottom: 10px">
+						<h2>Financial Information</h2>
+						<h3>Gains</h3>
+						<p>Total Revenue (Before Costs): ${{ total_revenue }}</p>
+						<h3>Costs</h3>
+						<p>Drone Owners: ${{ drone_owner_payout }}</p>
+						<p>Inventory: ${{ inventory_cost }}</p>
+						<h3>Net</h3>
+						<p>Net Profit (After Costs): ${{ net_profit }}</p>
+					</div>
 				</div>
+			</div>
 		</div>
 	</body>
+
 	</html>

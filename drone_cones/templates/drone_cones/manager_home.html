@@ -21,7 +21,11 @@
 			<a href="{% url 'drone_cones:account' %}"> <u>A</u>ccount </a>
 			<a href="{% url 'drone_cones:manager' %}"> <u>M</u>anager</a>
 			<a href="/dronecones/logout">Logout</a>
-			<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" alt="test">
+
+			<a href="{% url 'drone_cones:account' %}">
+                                <img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" style="cursor: pointer" alt="computer">
+                        </a>
+
 			<img class="peopleicon" src="{% static 'drone_cones/images/address_book_users.png' %}" alt="test">
 		</div>
 

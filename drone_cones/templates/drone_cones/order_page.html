@@ -25,8 +25,11 @@
 		<a href="{% url 'drone_cones:manager' %}"> <u>M</u>anager</a>
 		{% endif %}
 		<a href="/dronecones/logout">Logout</a>
-		<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" onclick="location.href='account'"
-			style="cursor: pointer" alt="computer">
+
+		<a href="{% url 'drone_cones:account' %}">
+                	<img class="baricon" src="{% static 'drone_cones/images/computer.png' %}" style="cursor: pointer" alt="computer">
+                </a>
+
 		<img class="peopleicon" src="{% static 'drone_cones/images/drone_cones_logo.png' %}" alt="address book">
 	</div>
 
@@ -112,12 +115,14 @@
 							<p>Topping 1: {{ item.toppings.first }} - ${{ item.toppings.firstCost }}</p>
 							<p>Topping 2: {{ item.toppings.second }} - ${{ item.toppings.secondCost }}</p>
 							<p>Topping 3: {{ item.toppings.third }} - ${{ item.toppings.thirdCost }}</p>
-							<p>ORDER TOTAL: ${{ item.totalConeCost }}</p>
+							<p>CONE TOTAL: ${{ item.totalConeCost }}</p>
 							<button onclick="removeItemFromOrder('{{forloop.counter}}')">REMOVE</button>
 						</div>
 						{% endfor %}
 						{% endif %}
 					</div>
+					<h3>TOTAL COST</h3>
+					<p>${{ total_cost }}</p>
 				</div>
 			</div>
 		</div>
