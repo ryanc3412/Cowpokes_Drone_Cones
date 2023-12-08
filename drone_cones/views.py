@@ -742,7 +742,12 @@ class OrderView:
                             stockFlavor.save()
                         
                         address = form.cleaned_data['address']
-                        address2 = form.cleaned_data['address2']
+
+                        if form.cleaned_data['address2']:
+                            address2 = form.cleaned_data['address2']
+                        else:
+                            address2 = ""
+
                         city = form.cleaned_data['city']
                         state = form.cleaned_data['state']
                         zip_code = form.cleaned_data['zip']
