@@ -490,8 +490,6 @@ class ManagerView:
 
         # Calculate total scoops, cones, and toppings
         total_scoops = sum(order['items']['scoops'] for order in order_list if 'items' in order and 'scoops' in order['items'])
-
-
         total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
