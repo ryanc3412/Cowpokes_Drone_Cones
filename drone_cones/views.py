@@ -442,7 +442,6 @@ class ManagerView:
         else:
             return HttpResponseForbidden()
 
-
     def edit_stock(request, product_id):
         # Retrieve the logged-in user and associated account
         user = request.user
@@ -478,10 +477,6 @@ class ManagerView:
 
         return render(request, "drone_cones/edit_stock.html", context)
 
-
-
-
-
     def view_finances(request):
 
         user = request.user
@@ -497,7 +492,7 @@ class ManagerView:
         net = 0.0
 
         for product in product_list:
-            inventory_cost += product.companyCost
+            inventory_cost += (product.companyCost * product.stockAvailable)
             product.netRevenue = product.cost - product.companyCost
             product.save() 
         
@@ -733,7 +728,6 @@ class OrderView:
                         costOfOrder = 0.0
                         for i in range(len(account.cart)):
                             costOfOrder += account.cart[i]['totalConeCost']
-                        # costOfOrder = account.cart[0]['totalConeCost']
 
                             flavor1 = account.cart[0]['flavor1']
                             flavor2 = account.cart[0]['flavor2']
