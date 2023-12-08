@@ -489,7 +489,9 @@ class ManagerView:
         order_list = Orders.objects.all()
 
         # Calculate total scoops, cones, and toppings
-        total_scoops = sum(order['items']['scoops'] for order in order_list.values('items'))
+        total_scoops = sum(order['items']['scoops'] for order in order_list if 'items' in order and 'scoops' in order['items'])
+
+
         total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
         total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
 
@@ -754,7 +756,6 @@ class OrderView:
                        
                         drone = eligible_drones[randint(0, len(eligible_drones)-1)]
                         drone.orders_delivered += 1
-                        drone.save()
 
                         Orders.objects.create(user=user, 
                                                 account_id=account.Id, items=account.cart, 
@@ -768,6 +769,9 @@ class OrderView:
                                                 timeOrdered=time_ordered,
                                                 timeDelivered= time_delivered,
                                                 timeToDeliver= time_to_deliver)
+
+                        drone.revenue += (costOfOrder * 0.05)
+                        drone.save()                         
                     else:
                         # Form is not valid, return form errors
                         return JsonResponse({'status': 'error', 'message': 'Invalid form data', 'errors': form.errors}, status=400)

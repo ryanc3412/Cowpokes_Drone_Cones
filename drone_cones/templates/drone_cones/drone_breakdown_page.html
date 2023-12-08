@@ -29,37 +29,81 @@
 
 
                 <div class="page-container">
-                        <div class="bar"> DRONE BREAKDOWN </div>
+                        <div class="bar"> DRONE INFO </div>
                         <div class="outer-border">
-                                <div> INFO</div>
-                                <div> ------------ </div>
 
+				<div class="inner-border">
                                         <div>
                                                 Drone Name: <h3 style="display: inline;"> {{drone.droneName}} </h3>
                                         </div>
                                         <div>
 						Drone Size: {{drone.size}}
-                                        <div>
+                                        </div>
 
                                         <div>
                                                 Drone Capacity: {{drone.scoops}} cones
                                         </div>
-
-                                        <div>
-						Revenue Earned: ${{drone.revenue}}
+				</div>
+				<div class="inner-border">
+					<div>
+						Drone Registered: {{drone.dateRegistered}}
 					</div>
+				
+				</div>		
+				</div>
+				</div>
+			</div>
+		</div>
+
+		<div class = "page-container">
+			<div class="bar"> DRONE FINANCIALS </div>
+				<div class="outer-border">
+					<div class="inner-border">
+                                        	<div>
+							Revenue Earned: ${{drone.revenue|floatformat:2}}
+						</div>
 			
-					<div>
-						Total Orders Delivered: {{drone.orders_delivered}}	
-					</div>
+						<div>
+							Total Orders Delivered: {{drone.orders_delivered}}	
+						</div>
 
-					<div>
-						Date Registered: {{drone.dateRegistered}}
+						<div>
+							Date Registered: {{drone.dateRegistered}}
+						</div>
 					</div>
-					<div style="margin-left:0; margin-top: 20px; margin-bottom: 20px">
-						<a class="order" href="../">BACK</a>
-					</div>
+				</div>
                         </div>
                 </div>
+		
+		<div class = "page-container">
+			<div class="bar"> DRONE OWNER </div>
+				<div class="outer-border">
+					<div class="inner-border">
+						<div>
+							Drone Owner Username: {{drone.account.user.username}}
+						</div>
+						
+						<div>
+							Drone Owner Full: {{drone.account.firstName}} {{drone.account.lastName}}
+						</div>
+				
+						<div>
+							Total Drones Owned: {{ drone.account.drone_set.all|length }}
+ 
+						</div>
+			
+						<div>
+							Account Registered: {{ drone.account.user.date_joined|date:"m/d/Y" }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class = "page-container">
+			<div style="margin-left:0; margin-top: 20px; margin-bottom: 20px">
+                                                <a class="order" href="../">BACK</a>
+                                        </div>
+		</div>
     </body>
 </html>
