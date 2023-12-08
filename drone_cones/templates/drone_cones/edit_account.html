@@ -35,6 +35,11 @@
 				<div> Edit Account </div>
 				<div> ------------ </div>
 		
+                                <div>
+                                    {% if edit_taken_error %}
+                                    <p style="color: red"> The username {{username}} is not available </p>
+	                            {% endif %}
+                                </div>                                
 
 				<form action="{% url 'drone_cones:edit_account'%}" method = "post">
 

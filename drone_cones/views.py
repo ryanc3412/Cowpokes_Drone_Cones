@@ -202,8 +202,13 @@ class UserView:
                 last_name = form.cleaned_data.get('last_name')
 
                 if user.username != user_name:
-                   user.username = user_name
-                   user.save()
+                    try:
+                        user.username = user_name
+                        user.save()
+                    except:
+                        context = {'first_name':first_name, 'last_name':last_name, 'username':user_name, 'date_joined':user.date_joined.strftime("%m/%d/%Y"), 'account':associated_account, 'edit_taken_error': True}
+                        print("THINGS WENT HAYWIRE")
+                        return render(request, 'drone_cones/edit_account.html', context)
                 
                 associated_account.firstName = first_name
                 associated_account.lastName = last_name
@@ -214,7 +219,7 @@ class UserView:
         else:
             date_joined = user.date_joined.strftime("%m/%d/%Y")
 
-            context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account}
+            context = {'first_name':associated_account.firstName, 'last_name':associated_account.lastName, 'username':user.username, 'date_joined':date_joined, 'account':associated_account, 'edit_taken_error': False, 'taken_username': ""}
 
             return render (request, 'drone_cones/edit_account.html', context)
 
