@@ -31,32 +31,40 @@
           	</div>
 
 		
-			<div>
-				<p>Debug: {{order}} </p>
-				{% if order %}
-					<div> YOUR ORDER IS ON THE WAY! </div>
-					<div class="page-container">
-						{{ order.address }}
-					</div>
-				{% else %}
-					<p>No orders available</p>
-				{% endif %}
-			</div>
-		
 			<div class="page-container">
-			<div> Confirmation 
-				<p>Delivery In:</p>
-				<h1 id = "count"></h1>
-				<button onclick="getLocation()">Location</button>
- 				<p id="latLon"></p>
- 				<p id = "address">Change Me</p>
-				<script>
-	        		window.onload = function() {
-	            		timer(); // Displays 10 minute timer
-	        		};
- 	 	  		</script>
-    		</div>
+				<div class="bar"> ORDER STATUS </div>
+				<div class="outer-border">
+					<div style="text-align: center">
+						<h2> YOUR ORDER IS ON THE WAY!</h2>
+						<p> DELIVERY In: </p>
+						<h1 id = "count"></h1>
+					</div>
+					<div style="outer-border">
+						<div style="width: 50%; margin: 0 auto; text-align: center;">
+							<!-- ice cream gif here -->
+							<div class="inner-border">
+								<img src="{% static 'drone_cones/images/earth.gif' %}"  alt="address book">
+							</div>
+							<p> DELIVERING TO: </p>
+							<div class="inner-border" style="margin-bottom: 2em">
+								<p> {{order.address}} </p>
+								{% if order.address2 %}
+									<p> {{order.address2}} </p>
+								{% endif %}
+								<p> {{order.city}}, {{order.state}} </p>
+								<p> {{order.zip}} </p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
+                                <script>
+                                window.onload = function() {
+                                timer(); // Displays 10 minute timer
+                                };
+                                </script>
+                </div>
+
 		</div>
 		<script src="{% static 'drone_cones/static.js' %}"></script>
     </body>

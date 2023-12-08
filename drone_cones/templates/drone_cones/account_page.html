@@ -64,75 +64,79 @@
                 </div>
             </div>
         </div>
+	</div>
 
-        <div class="outer-border">
-            <div class="inner-border">
-                <div> Order History </div>
-                <div> ------------ </div>
-
-                {% for order in orderList %}
-                    <div class="dateOrdered">
-                        Date: {{ order.timeOrdered }}
-                    </div>
-                    <div class="cost">
-                        Cost: $ {{ order.orderCost }}
-                    </div>
-                    <div>
-                        <div class="orderHistoryScoops"> SCOOPS </div>
-                        {% if order.items.0.flavor1 or order.items.0.flavor2 %}
-                                <div class="orderItems">
-                                        <div class="orderItem" id="flavor1">
-                                            {{ order.items.0.flavor1 }}
-                                        </div>
-                                        <div class="orderItem" id="flavor2">
-                                            {{ order.items.0.flavor2 }}
-                                        </div>
-                                </div>
-                        {% else %}
-                                <div class="orderItems">
-                                    <div class="orderItem">
-                                        No scoops were selected
-                                    </div>
-                                </div>
-                        {% endif %}
-                        <div class="orderHistoryToppings"> TOPPINGS </div>
-                        {% if order.items.0.toppings.first or order.items.0.toppings.second or order.items.0.toppings.third %}
-                            <div class="orderItems">
-                                <div class="orderItem" id="topping1">
-                                    {{ order.items.0.toppings.first }}
-                                </div>
-                                <div class="orderItem" id="topping2">
-                                    {{ order.items.0.toppings.second }}
-                                </div>
-                                <div class="orderItem" id="topping3">
-                                    {{ order.items.0.toppings.third }}
-                                </div>
-                            </div>
-                        {% else %}
-                        <div class="orderItems">
-                            <div class="orderItem">
-                                No toppings were selected
-                            </div>
-                        </div>
-                        {% endif %}
-                        <div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
-                        {% if order.items.0.cone %}
-                            <div class="orderItems">
-                                <div class="orderItem" id="cone">
-                                    {{ order.items.0.cone }}
-                                </div>
-                            </div>
-                        {% else %}
-                        <div class="orderItems">
-                            <div class="orderItem">
-                                No cones were selected
-                            </div>
-                        </div>
-                        {% endif %}
-                        <div class="spacer"></div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+	<div class = "page-container">
+		<div class="bar"> ORDER HISTORY </div>
+        	<div class="outer-border">
+		
+			
+                	{% for order in orderList %}
+			<div class = "inner-border">
+                    		<div class="dateOrdered">
+                    	    		Date: {{ order.timeOrdered }}
+                    		</div>
+                    		<div class="cost">
+                        		Cost: $ {{ order.orderCost }}
+                    		</div>
+                    		<div>
+                        		<div class="orderHistoryScoops"> SCOOPS </div>
+                        		{% if order.items.0.flavor1 or order.items.0.flavor2 %}
+                                		<div class="orderItems">
+                                        		<div class="orderItem" id="flavor1">
+                                            			{{ order.items.0.flavor1 }}
+                                        		</div>
+                                       	 		<div class="orderItem" id="flavor2">
+                                           			{{ order.items.0.flavor2 }}
+                                        		</div>
+                                		</div>
+                        		{% else %}
+                                		<div class="orderItems">
+                                    			<div class="orderItem">
+                                       			 	No scoops were selected
+                                    			</div>
+                                		</div>
+                        		{% endif %}
+				<div class="orderHistoryToppings"> TOPPINGS </div>
+				{% if order.items.0.toppings.first or order.items.0.toppings.second or order.items.0.toppings.third %}
+				    <div class="orderItems">
+					<div class="orderItem" id="topping1">
+					    {{ order.items.0.toppings.first }}
+					</div>
+					<div class="orderItem" id="topping2">
+					    {{ order.items.0.toppings.second }}
+					</div>
+					<div class="orderItem" id="topping3">
+					    {{ order.items.0.toppings.third }}
+					</div>
+				    </div>
+				{% else %}
+				<div class="orderItems">
+				    <div class="orderItem">
+					No toppings were selected
+				    </div>
+				</div>
+				{% endif %}
+				<div class="orderHistoryConeFlavors"> CONE FLAVORS </div>
+				{% if order.items.0.cone %}
+				    <div class="orderItems">
+					<div class="orderItem" id="cone">
+					    {{ order.items.0.cone }}
+					</div>
+				    </div>
+				{% else %}
+				<div class="orderItems">
+				    <div class="orderItem">
+					No cones were selected
+				    </div>
+				</div>
+				{% endif %}
+				<div class="spacer"></div>
+			    </div>
+			    </div>
+			{% endfor %}
+            		</div>
+			</div>
+        	</div>
 </body>
 </html>
