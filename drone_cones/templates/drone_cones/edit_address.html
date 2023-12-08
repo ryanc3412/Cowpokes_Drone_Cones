@@ -46,23 +46,35 @@
                                 		{{ form }}
 
 						<div>		
-							Address 1: <input id="address_1" type="text" placeholder={{address_1}} name="address_1" maxlength = "100" value={{address_1}} required=True>  </input>
+							Address 1: <input id="address_1" type="text" placeholder={{address_1}} name="address_1" maxlength = "100" value={{address_1}} required>  </input>
 						</div>
 
                                                 <div>
-                                                        Address 2: <input id="address_2" type="text" placeholder={{address_2}} name="address_2" maxlength = "100" value={{address_2}} required=False>  </input>
+                                                        Address 2: <input id="address_2" type="text" placeholder=
+							{% if address_2 %}
+								{{address_2}} 
+							{% else %}
+								""
+							{% endif %}
+							name="address_2" maxlength = "100" 
+							value=
+							{% if address_2 %}
+								{{address_2}}
+							{% else %}
+								""
+							{% endif %}> </input>
                                                 </div>
 
 						<div>
-                                                        City: <input id="city" type="text" placeholder={{city}} name="city" maxlength = "100" value={{city}} required=True>  </input>
+                                                        City: <input id="city" type="text" placeholder={{city}} name="city" maxlength = "100" value={{city}} required>  </input>
                                                 </div>
 
 						<div>
-                                                        State: <input id="state" type="text" placeholder={{state}} name="state" maxlength = "100" value={{state}} required=True>  </input>
+                                                        State: <input id="state" type="text" placeholder={{state}} name="state" maxlength = "100" value={{state}} required>  </input>
                                                 </div>
 
 						<div>
-                                                        ZIP: <input id="zip" type="text" placeholder={{zip}} name="zip" maxlength = "100" value={{zip}} required=True>  </input>
+                                                        ZIP: <input id="zip" type="text" placeholder={{zip}} name="zip" maxlength = "100" value={{zip}} required>  </input>
                                                 </div> 
 
 						<input type="submit" value="SAVE"/>
