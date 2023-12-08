@@ -487,36 +487,56 @@ class ManagerView:
 
         # Get data for orders
         order_list = Orders.objects.all()
+        product_list = Products.objects.all()
+        inventory_cost = 0.0
+        net = 0.0
 
-        # Calculate total scoops, cones, and toppings
-        total_scoops = sum(order['items'][0]['scoops'] for order in order_list.values('items'))
-        total_cones = sum(order['items'][0]['cones'] for order in order_list.values('items'))
-        total_toppings = sum(order['items'][0]['toppings'] for order in order_list.values('items'))
+        for product in product_list:
+            inventory_cost += product.companyCost
+            product.netRevenue = product.cost - product.companyCost
+            product.save() 
+        
+        total_revenue = 0.0
 
-        # Calculate total cost for each product type
-        total_cost_ice_cream = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
-        total_cost_cone = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Cone').values('items'))
-        total_cost_topping = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+        ## get product cost
+        for order in order_list:
+            for i in range(len(order.items)):
+                flavor1 = order.items[i]['flavor1']
+                flavor2 = order.items[i]['flavor2']
+                cone = order.items[i]['cone']
+                topping1 = order.items[i]['toppings']['first']
+                topping2 = order.items[i]['toppings']['second']
+                topping3 = order.items[i]['toppings']['third']
 
-        #costs 
-        total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
-        drone_owner_payout = total_revenue * 0.1 #10% of revenue goes to drone owners
-        inventory_cost = total_revenue * 0.2 #20% of income goes back to restocking inventories
-        net_profit = total_revenue - drone_owner_payout - inventory_cost
+                if flavor1 != '':
+                    product_info_flavor1_cost = Products.objects.get(flavor=flavor1).cost
+                    total_revenue += product_info_flavor1_cost
+                if flavor2 != '':
+                    product_info_flavor2_cost = Products.objects.get(flavor=flavor2).cost
+                    total_revenue += product_info_flavor2_cost
+                if cone != '':
+                    product_info_cone_cost = Products.objects.get(flavor=cone).cost
+                    total_revenue += product_info_cone_cost
+                if topping1 != '':
+                    product_info_topping1_cost = Products.objects.get(flavor=topping1).cost
+                    total_revenue += product_info_topping1_cost
+                if topping2 != '':
+                    product_info_topping2_cost = Products.objects.get(flavor=topping2).cost
+                    total_revenue += product_info_topping2_cost
+                if topping3 != '':
+                    product_info_topping3_cost = Products.objects.get(flavor=topping3).cost
+                    total_revenue += product_info_topping3_cost
 
+        ## drones take 5%
+        drone_owner_payout = total_revenue * .05
+            
+        net = total_revenue - inventory_cost - drone_owner_payout
 
         context = {
-            'stock_list': stock_list,
-            'total_scoops': total_scoops,
-            'total_cones': total_cones,
-            'total_toppings': total_toppings,
-            'total_cost_ice_cream': total_cost_ice_cream,
-            'total_cost_cone': total_cost_cone,
-            'total_cost_topping': total_cost_topping,
-            'total_revenue': total_revenue,
-            'drone_owner_payout': drone_owner_payout,
-            'inventory_cost': inventory_cost,
-            'net_profit': net_profit,
+            'total_revenue': round(total_revenue,2),
+            'inventory_cost': round(inventory_cost,2),
+            'net_profit': round(net,2),
+            'drone_owner_payout': round(drone_owner_payout,2),
         }
 
         if associated_account.is_admin:
@@ -644,11 +664,16 @@ class OrderView:
 
         product_list = reversed(Products.objects.order_by("-id"))
         cart = Account.objects.get(user=request.user).cart
+        total_cost = 0.00
+
+        for i in range(len(cart)):
+            total_cost += cart[i]['totalConeCost']
 
         context = {
             'product_list': product_list, 
             'cart': cart,
-            'account': associated_account
+            'account': associated_account,
+            'total_cost': total_cost
         }
 
         return render(request, 'drone_cones/order_page.html', context)

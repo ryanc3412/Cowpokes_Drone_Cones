@@ -112,12 +112,14 @@
 							<p>Topping 1: {{ item.toppings.first }} - ${{ item.toppings.firstCost }}</p>
 							<p>Topping 2: {{ item.toppings.second }} - ${{ item.toppings.secondCost }}</p>
 							<p>Topping 3: {{ item.toppings.third }} - ${{ item.toppings.thirdCost }}</p>
-							<p>ORDER TOTAL: ${{ item.totalConeCost }}</p>
+							<p>CONE TOTAL: ${{ item.totalConeCost }}</p>
 							<button onclick="removeItemFromOrder('{{forloop.counter}}')">REMOVE</button>
 						</div>
 						{% endfor %}
 						{% endif %}
 					</div>
+					<h3>TOTAL COST</h3>
+					<p>${{ total_cost }}</p>
 				</div>
 			</div>
 		</div>
