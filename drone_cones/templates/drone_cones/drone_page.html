@@ -41,7 +41,7 @@
 
 					<div> Size: {{drone.size}} </div>
 
-					<div> Revenue: <h3 style="display: inline"> ${{drone.revenue}} </h3> </div>
+					<div> Revenue: <h3 style="display: inline"> ${{ drone.revenue|floatformat:2 }} </h3> </div>
 
 					{% if drone.isActive %}
 					<div> Status: Active </div>
