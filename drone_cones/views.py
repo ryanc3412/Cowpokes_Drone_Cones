@@ -730,39 +730,42 @@ class OrderView:
                 account = Account.objects.get(user=user)
                 if (account.cart != []):
                     if (form.is_valid()):
-                        costOfOrder = account.cart[0]['totalConeCost']
+                        costOfOrder = 0.0
+                        for i in range(len(account.cart)):
+                            costOfOrder += account.cart[i]['totalConeCost']
+                        # costOfOrder = account.cart[0]['totalConeCost']
 
-                        flavor1 = account.cart[0]['flavor1']
-                        flavor2 = account.cart[0]['flavor2']
-                        cone = account.cart[0]['cone']
-                        topping1 = account.cart[0]['toppings']['first']
-                        topping2 = account.cart[0]['toppings']['second']
-                        topping3 = account.cart[0]['toppings']['third']
+                            flavor1 = account.cart[0]['flavor1']
+                            flavor2 = account.cart[0]['flavor2']
+                            cone = account.cart[0]['cone']
+                            topping1 = account.cart[0]['toppings']['first']
+                            topping2 = account.cart[0]['toppings']['second']
+                            topping3 = account.cart[0]['toppings']['third']
 
-                        if (flavor1 != ""):
-                            stockFlavor = Products.objects.get(flavor=flavor1)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (flavor2 != ""):
-                            stockFlavor = Products.objects.get(flavor=flavor2)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (cone != ""):
-                            stockFlavor = Products.objects.get(flavor=cone)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping1 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping1)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping2 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping2)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
-                        if (topping3 != ""):
-                            stockFlavor = Products.objects.get(flavor=topping3)
-                            stockFlavor.stockAvailable -= 1
-                            stockFlavor.save()
+                            if (flavor1 != ""):
+                                stockFlavor = Products.objects.get(flavor=flavor1)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (flavor2 != ""):
+                                stockFlavor = Products.objects.get(flavor=flavor2)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (cone != ""):
+                                stockFlavor = Products.objects.get(flavor=cone)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping1 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping1)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping2 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping2)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
+                            if (topping3 != ""):
+                                stockFlavor = Products.objects.get(flavor=topping3)
+                                stockFlavor.stockAvailable -= 1
+                                stockFlavor.save()
                         
                         address = form.cleaned_data['address']
 
