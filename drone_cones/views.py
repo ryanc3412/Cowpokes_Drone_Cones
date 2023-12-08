@@ -464,14 +464,14 @@ class ManagerView:
         order_list = Orders.objects.all()
 
         # Calculate total scoops, cones, and toppings
-        total_scoops = sum(order['items']['scoops'] for order in order_list.values('items'))
-        total_cones = sum(order['items']['cones'] for order in order_list.values('items'))
-        total_toppings = sum(order['items']['toppings'] for order in order_list.values('items'))
+        total_scoops = sum(order['items'][0]['scoops'] for order in order_list.values('items'))
+        total_cones = sum(order['items'][0]['cones'] for order in order_list.values('items'))
+        total_toppings = sum(order['items'][0]['toppings'] for order in order_list.values('items'))
 
         # Calculate total cost for each product type
-        total_cost_ice_cream = sum(order['items']['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
-        total_cost_cone = sum(order['items']['cost'] for order in order_list.filter(items__type='Cone').values('items'))
-        total_cost_topping = sum(order['items']['cost'] for order in order_list.filter(items__type='Topping').values('items'))
+        total_cost_ice_cream = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Ice Cream').values('items'))
+        total_cost_cone = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Cone').values('items'))
+        total_cost_topping = sum(order['items'][0]['cost'] for order in order_list.filter(items__type='Topping').values('items'))
 
         #costs 
         total_revenue = total_cost_ice_cream + total_cost_cone + total_cost_topping
