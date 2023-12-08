@@ -680,7 +680,7 @@ class OrderView:
 
     @login_required
     def order_confirmation(request):
-        order = Orders.objects.first()
+        order = Orders.objects.last()
         context = {'order': order}
         return render(request, 'drone_cones/confirmation_page.html', context)
 
@@ -810,7 +810,7 @@ class OrderView:
                     account.save()
                     
                 response = JsonResponse({'status': 'success'})
-                redirect_url = '/dronecones/order/'
+                redirect_url = '/dronecones/order_confirmation'
                 response['X-Redirect'] = redirect_url
 
                 return redirect(redirect_url)
