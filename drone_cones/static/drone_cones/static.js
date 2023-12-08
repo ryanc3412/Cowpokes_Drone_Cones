@@ -54,13 +54,15 @@ function populate() {
         .then(data => {
             console.log(data); // handle the data as needed
             for (var i = 0; i < data.length; i++) {
-                if (data[i]['type'] == 'Ice Cream') {
-                    flavor1List.push(data[i]);
-                    flavor2List.push(data[i]);
-                } else if (data[i]['type'] == 'Cone') {
-                    coneList.push(data[i]);
-                } else if (data[i]['type'] == 'Topping') {
-                    toppingsList.push(data[i]);
+                if (data[i]['stockAvailable'] > 0) {
+                    if (data[i]['type'] == 'Ice Cream') {
+                        flavor1List.push(data[i]);
+                        flavor2List.push(data[i]);
+                    } else if (data[i]['type'] == 'Cone') {
+                        coneList.push(data[i]);
+                    } else if (data[i]['type'] == 'Topping') {
+                        toppingsList.push(data[i]);
+                    }
                 }
             }
             console.log(flavor1List);
@@ -187,8 +189,6 @@ function selectFlavors1(item, event) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
-
-        logSelectedItems();
     }
 }
 function selectFlavors2(item, event) {
@@ -223,8 +223,6 @@ function selectFlavors2(item, event) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
-
-        logSelectedItems();
     }
 }
 function selectCone(item, event) {
@@ -259,8 +257,6 @@ function selectCone(item, event) {
                 el.style.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
-
-        logSelectedItems();
     }
 }
 function selectToppings(item, event) {
@@ -331,9 +327,6 @@ function selectToppings(item, event) {
                 el.backgroundColor = '';  // Reset background color to default (empty string)
             }
         });
-
-
-        logSelectedItems();
     }
 }
 
