@@ -22,7 +22,7 @@ class DroneRegisterForm(forms.Form):
 class OrderForm(forms.Form):
     #items = forms.CharField(label = "items", max_length=1024)
     address = forms.CharField(label = "address", max_length=30)
-    address2 = forms.CharField(label = "address2", max_length=30)
+    address2 = forms.CharField(label = "address2", max_length=30, required=False)
     city = forms.CharField(label = "city", max_length=30)
     state = forms.CharField(label = "state", max_length=30)
     zip = forms.IntegerField(label = "zip")
